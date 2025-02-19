@@ -1,19 +1,24 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState } from "react"; 
+import Navbar from "./components/Navbar";
+import Button from "./components/Button";
 import LandingPage from "./pages/LandingPage";
+import Dashboard from "./pages/Dashboard";
+import Employees from "./pages/Employees";
 import Endproducts from "./pages/Endproducts";
 import Futterplatz from "./pages/Futterplatz";
-import Orders from "./pages/Orders";
-import Employees from "./pages/Employees";
 import Inventory from "./pages/Inventory";
-import Recipes from "./pages/Recipes";
+import Orders from "./pages/Orders";
 import Products from "./pages/Products";
-import Dashboard from "./pages/Dashboard";
-import Navbar from "./components/Navbar";
+import Recipes from "./pages/Recipes";
 
 function App() {
+  const [menuOpen, setMenuOpen] = useState(false); // Definiere den State hier
+
   return (
     <Router>
-      <Navbar />
+      <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+    
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/endproducts" element={<Endproducts />} />

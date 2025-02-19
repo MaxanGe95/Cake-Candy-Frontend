@@ -1,0 +1,24 @@
+.background-video {
+  position: relative;
+  height: 100vh; /* oder die Höhe, die du möchtest */
+  overflow: hidden;
+}
+
+.background-video video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  z-index: -2;
+  transform: translate(-50%, -50%);
+  object-fit: cover;
+}
+
+.content {
+  position: relative;
+  z-index: -1;
+  color: white; /* oder eine andere Farbe, die sichtbar ist */
+}
