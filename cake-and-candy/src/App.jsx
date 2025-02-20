@@ -17,19 +17,18 @@ function App() {
 
   return (
     <Router>
-      <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-    
-      <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/endproducts" element={<Endproducts />} />
-        <Route path="/futterplatz" element={<Futterplatz />} />
-        <Route path="/orders" element={<Orders />} />
-        <Route path="/employees" element={<Employees />} />
-        <Route path="/inventory" element={<Inventory />} />
-        <Route path="/recipes" element={<Recipes />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-      </Routes>
+       <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/endproducts" element={<Endproducts />} />
+          <Route path="/futterplatz" element={<Futterplatz />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/employees" element={<Employees />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
     </Router>
   );
 }

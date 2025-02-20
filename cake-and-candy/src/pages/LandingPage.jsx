@@ -1,7 +1,7 @@
 // LandingPage.js
 import { useState } from "react";
 import Button from "../components/Button";
-import Navbar from "../components/Navbar";
+import Navbar from "../components/Navbar.jsx";
 import muffinImage from "../assets/muffin.jpg";
 import Start from "../components/Start";
 

@@ -9,11 +9,20 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
         <FaBars />
       </button>
       <h1 className="text-xl md:text-2xl font-semibold tracking-wide">Cake&Candy</h1>
+          <Link to="/">Landing Page</Link>
+          <Link to="/endproducts">EndProdukte</Link>
+          <Link to="/futterplatz">Futterplatz</Link>
+          <Link to="/orders">Bestellungen</Link>
+          <Link to="/employees">Mitarbeiter</Link>
+          <Link to="/inventory">Lager Bestand</Link>
+          <Link to="/recipes">Rezepte</Link>
+          <Link to="/products">Produkte</Link>
+          <Link to="/dashboard">Dashboard</Link>
       <div className="hidden md:flex gap-6">
         <Link to="/"><FaSearch className="text-xl cursor-pointer" /></Link>
         <Link to="/employees"><FaUser className="text-xl cursor-pointer" /></Link>
         <Link to="/cart"><FaShoppingCart className="text-xl cursor-pointer" /></Link>
       </div>
-    </div>
+    </div>   
   );
 }
