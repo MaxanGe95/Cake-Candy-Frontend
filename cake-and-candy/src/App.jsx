@@ -1,5 +1,5 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useState } from "react"; 
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import Button from "./components/Button";
 import LandingPage from "./pages/LandingPage";
@@ -11,26 +11,31 @@ import Inventory from "./pages/Inventory";
 import Orders from "./pages/Orders";
 import Products from "./pages/Products";
 import Recipes from "./pages/Recipes";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Layout from "./components/Layout";
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false); // Definiere den State hier
 
   return (
     <Router>
-       <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-       <div className="pt-16">
-    <Routes>
-    <Route path="/" element={<LandingPage />} />
-    <Route path="/endproducts" element={<Endproducts />} />
-    <Route path="/futterplatz" element={<Futterplatz />} />
-    <Route path="/orders" element={<Orders />} />
-    <Route path="/employees" element={<Employees />} />
-    <Route path="/inventory" element={<Inventory />} />
-    <Route path="/recipes" element={<Recipes />} />
-    <Route path="/products" element={<Products />} />
-    <Route path="/dashboard" element={<Dashboard />} />
-  </Routes>
-</div>
+      <Layout>
+        <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+        <Routes>
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/endproducts" element={<Endproducts />} />
+          <Route path="/futterplatz" element={<Futterplatz />} />
+          <Route path="/orders" element={<Orders />} />
+          <Route path="/employees" element={<Employees />} />
+          <Route path="/inventory" element={<Inventory />} />
+          <Route path="/recipes" element={<Recipes />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+      </Layout>
     </Router>
   );
 }
