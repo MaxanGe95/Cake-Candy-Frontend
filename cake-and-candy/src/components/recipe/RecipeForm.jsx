@@ -63,7 +63,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
 
   return (
     <div className="mb-4">
-      <h2 className="text-xl font-semibold text-teal-500">{recipe.id ? 'Rezept bearbeiten' : 'Neues Rezept'}</h2>
+      <h2 className="text-xl font-semibold text-teal-300">{recipe.id ? 'Rezept bearbeiten' : 'Neues Rezept'}</h2>
       <input
         type="text"
         placeholder="Rezeptname"

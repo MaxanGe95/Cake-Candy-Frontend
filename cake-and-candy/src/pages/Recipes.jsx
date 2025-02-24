@@ -58,7 +58,7 @@ const Recipes = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold text-teal-600 mb-4">Rezeptübersicht</h1>
+      <h1 className="text-2xl font-bold text-teal-200 mb-4">Rezeptübersicht</h1>
       <button onClick={() => setShowNewRecipeForm(true)} className="bg-teal-600 text-white p-2 mb-4">
         Neu
       </button>

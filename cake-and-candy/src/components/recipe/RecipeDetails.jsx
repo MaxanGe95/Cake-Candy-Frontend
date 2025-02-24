@@ -30,7 +30,7 @@ const RecipeDetails = ({ recipe, onEdit }) => {
         onChange={(e) => setScaleAmount(e.target.value)}
         className="border p-2 mb-2 w-full"
       />
-      <button onClick={() => onEdit(recipe)} className="bg-teal-500 text-white p-2">Rezept bearbeiten</button>
+      <button onClick={() => onEdit(recipe)} className="bg-teal-300 text-white p-2">Rezept bearbeiten</button>
     </div>
   );
 };
