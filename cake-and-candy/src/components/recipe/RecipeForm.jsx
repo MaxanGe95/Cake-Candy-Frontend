@@ -1,13 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
 import { IconChevronDown } from "@tabler/icons-react";
+import { fetchZutaten } from "../../api/zutaten"; // Importiere die Methode
 
-const ingredientsList = ["Mehl", "Zucker", "Eier", "Milch", "Butter"];
 const unitsList = ["g", "kg", "ml", "l", "Stück"];
 
 const RecipeForm = ({ recipe, onSave, onCancel }) => {
   const [newRecipe, setNewRecipe] = useState(recipe);
   const [errors, setErrors] = useState({});
+  const [ingredientsList, setIngredientsList] = useState([]); // Zustand für Zutatenliste
+
+  useEffect(() => {
+    const loadZutaten = async () => {
+      try {
+        const data = await fetchZutaten();
+        setIngredientsList(data); // Zutatenliste im Zustand setzen
+      } catch (error) {
+        console.error("Fehler beim Laden der Zutaten:", error);
+      }
+    };
+
+    loadZutaten(); // Zutatenliste beim Laden der Komponente abrufen
+  }, []);
 
   const addIngredient = () => {
     setNewRecipe({
@@ -105,9 +119,9 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
               }`}
             >
               <option value="">Zutat wählen</option>
-              {ingredientsList.map((ingredientName) => (
-                <option key={ingredientName} value={ingredientName}>
-                  {ingredientName}
+              {ingredientsList.map((ingredientItem) => (
+                <option key={ingredientItem._id} value={ingredientItem.name}>
+                  {ingredientItem.name}
                 </option>
               ))}
             </select>
