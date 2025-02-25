@@ -7,7 +7,6 @@ import Dashboard from "./pages/Dashboard";
 import Employees from "./pages/Employees";
 import Endproducts from "./pages/Endproducts";
 import Futterplatz from "./pages/Futterplatz";
-import Inventory from "./pages/Inventory";
 import Orders from "./pages/Orders";
 import Products from "./pages/Products";
 import Recipes from "./pages/Recipes";
@@ -28,7 +27,6 @@ function App() {
           <Route path="/futterplatz" element={<Futterplatz />} />
           <Route path="/orders" element={<Orders />} />
           <Route path="/employees" element={<Employees />} />
-          <Route path="/inventory" element={<Inventory />} />
           <Route path="/recipes" element={<Recipes />} />
           <Route path="/products" element={<Products />} />
           <Route path="/dashboard" element={<Dashboard />} />

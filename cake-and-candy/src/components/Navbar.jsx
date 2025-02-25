@@ -44,12 +44,6 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
       </Link>
       <Link
         className="transition ease-in-out hover:scale-110 hover:text-teal-50"
-        to="/inventory"
-      >
-        Lager Bestand
-      </Link>
-      <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
         to="/recipes"
       >
         Rezepte
