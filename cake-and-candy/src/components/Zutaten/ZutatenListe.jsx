@@ -58,10 +58,10 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
   };
 
   return (
-    <div className="mt-4 border p-4 rounded">
-      <h2 className="text-lg font-semibold mb-2">Zutaten-Liste</h2>
-      <table className="w-full border-collapse border rounded-lg">
-        <thead className="bg-green-900 text-yellow-400">
+    <div className="mt-4 border p-4 rounded bg-[#2a6d73]">
+      <h2 className="text-lg font-semibold mb-2 text-[#5eeaff]">Zutaten-Liste</h2>
+      <table className="w-full border-collapse  rounded-lg">
+        <thead className="bg-[#2F4A4C] text-[#BEA86C] border p-2 rounded">
           <tr>
             <th className="p-2">Produkt</th>
             <th className="p-2">Typ</th>
@@ -74,7 +74,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
             <th className="p-2">Löschen</th>
           </tr>
         </thead>
-        <tbody className="bg-gray-700 text-white">
+        <tbody className="bg-[#2a6d73] text-[#5eeaff]">
           {zutatenState.map((zutat) => (
             <tr key={zutat._id} className="border-b">
               <td className="p-2">{zutat.name}</td>
@@ -89,7 +89,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   type="number"
                   value={zutat.b2bPreis || ""}
                   onChange={(e) => handleUpdate(zutat._id, "b2bPreis", e.target.value)}
-                  className="w-16 p-1 bg-gray-600 text-white border rounded"
+                  className="w-16 p-1  text-[#5eeaff] border rounded focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
                 />
               </td>
               <td className="p-2">
@@ -97,7 +97,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   type="number"
                   value={zutat.b2cPreis || ""}
                   onChange={(e) => handleUpdate(zutat._id, "b2cPreis", e.target.value)}
-                  className="w-16 p-1 bg-gray-600 text-white border rounded"
+                  className="w-16 p-1  text-[#5eeaff] border rounded focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
                 />
               </td>
               <td className="p-2">{zutat.istlagerbestand || "0"}</td>
@@ -106,14 +106,14 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   type="number"
                   value={zutat.solllagerbestand || ""}
                   onChange={(e) => handleUpdate(zutat._id, "solllagerbestand", e.target.value)}
-                  className="w-16 p-1 bg-gray-600 text-white border rounded"
+                  className="w-16 p-1  text- border rounded focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
                 />
               </td>
               <td className="p-2">{zutat.zusatz || "-"}</td>
               <td className="p-2">
                 <button
                   onClick={() => handleDelete(zutat._id)}
-                  className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-700"
+                  className=" text-[#5eeaff] px-3 py-1 rounded hover:bg-[#5eeaff]"
                 >
                   ✖
                 </button>

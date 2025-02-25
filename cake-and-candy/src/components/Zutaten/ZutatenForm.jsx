@@ -33,7 +33,7 @@ const ZutatenForm = ({ onAdd }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded">
+    <form onSubmit={handleSubmit} className="p-4 border rounded bg-[#2a6d73]">
       <div>
         <label>Zutatname:</label>
         <input
@@ -41,13 +41,13 @@ const ZutatenForm = ({ onAdd }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
           required
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff]  focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
         />
       </div>
 
       <div>
         <label>Typ:</label>
-        <input type="text" value={typ} disabled className="border p-2 rounded w-full bg-gray-200" />
+        <input type="text" value={typ} disabled className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff]" />
       </div>
 
       <div>
@@ -57,12 +57,12 @@ const ZutatenForm = ({ onAdd }) => {
           value={ekPreis}
           onChange={(e) => setEkPreis(e.target.value)}
           required
-          className="border p-2 rounded w-full"
+          className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff] focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
           step="0.01"
         />
       </div>
 
-      <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded mt-2">
+      <button type="submit" className="bg-[#2F4A4C] text-[#5eeaff] px-4 py-2 rounded mt-2">
         Zutat hinzufügen
       </button>
     </form>

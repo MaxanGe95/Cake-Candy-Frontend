@@ -13,49 +13,49 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
         <FaBars />
       </button>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-xl md:text-2xl font-semibold tracking-wide"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-xl md:text-2xl font-semibold tracking-wide text-[#5eeaff]"
         to="/"
       >
         Cake & Candy
       </Link>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"
         to="/endproducts"
       >
         -- Kunden Produkte --
       </Link>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"
         to="/futterplatz"
       >
         Futterplatz
       </Link>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"
         to="/orders"
       >
         Bestellungen
       </Link>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"
         to="/employees"
       >
         Mitarbeiter
       </Link>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"
         to="/recipes"
       >
         Rezepte
       </Link>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"
         to="/products"
       >
         Zutaten
       </Link>
       <Link
-        className="transition ease-in-out hover:scale-110 hover:text-teal-50"
+        className="transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"
         to="/dashboard"
       >
         Dashboard
@@ -63,10 +63,10 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
       <div className="hidden md:flex gap-6">
         <div className="relative">
           <button onClick={() => setIsSearchOpen(!isSearchOpen)}>
-            <FaSearch className="text-xl cursor-pointer transition ease-in-out hover:scale-110 hover:text-teal-50" />
+            <FaSearch className="text-xl cursor-pointer transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]"  />
           </button>
           {isSearchOpen && (
-            <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg text-black">
+            <div className="absolute right-0 mt-2 w-64 bg-white rounded-md shadow-lg text-black text-[#5eeaff]">
               <input
                 type="text"
                 className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -76,10 +76,10 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
           )}
         </div>
         <Link to="/login">
-          <FaUser className="text-xl cursor-pointer transition ease-in-out hover:scale-110 hover:text-teal-50" />
+          <FaUser className="text-xl cursor-pointer transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]" />
         </Link>
         <Link to="/cart">
-          <FaShoppingCart className="text-xl cursor-pointer transition ease-in-out hover:scale-110 hover:text-teal-50" />
+          <FaShoppingCart className="text-xl cursor-pointer transition ease-in-out hover:scale-110 hover:text-teal-50 text-[#5eeaff]" />
         </Link>
       </div>
     </div>
