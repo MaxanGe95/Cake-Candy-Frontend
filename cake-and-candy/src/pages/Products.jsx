@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import ZutatenForm from "../components/ZutatenForm";
-import ZutatenListe from "../components/ZutatenListe";
+import ZutatenForm from "../components/Zutaten/ZutatenForm";
+import ZutatenListe from "../components/Zutaten/ZutatenListe";
 
 const Products = () => {
   const [zutaten, setZutaten] = useState([]);

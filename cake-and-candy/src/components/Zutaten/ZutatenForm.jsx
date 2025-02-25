@@ -51,7 +51,7 @@ const ZutatenForm = ({ onAdd }) => {
       </div>
 
       <div>
-        <label>EK-Preis (€):</label>
+        <label>EK-Preis ($):</label>
         <input
           type="number"
           value={ekPreis}

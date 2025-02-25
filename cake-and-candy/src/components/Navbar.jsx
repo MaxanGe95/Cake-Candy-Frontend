@@ -22,7 +22,7 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
         className="transition ease-in-out hover:scale-110 hover:text-teal-50"
         to="/endproducts"
       >
-        EndProdukte
+        -- Kunden Produkte --
       </Link>
       <Link
         className="transition ease-in-out hover:scale-110 hover:text-teal-50"
@@ -52,7 +52,7 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
         className="transition ease-in-out hover:scale-110 hover:text-teal-50"
         to="/products"
       >
-        Produkte
+        Zutaten
       </Link>
       <Link
         className="transition ease-in-out hover:scale-110 hover:text-teal-50"

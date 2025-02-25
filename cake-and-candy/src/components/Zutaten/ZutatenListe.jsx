@@ -71,7 +71,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
             <th className="p-2">Istlager</th>
             <th className="p-2">Solllager</th>
             <th className="p-2">Zusatz</th>
-            <th className="p-2">Aktion</th>
+            <th className="p-2">Löschen</th>
           </tr>
         </thead>
         <tbody className="bg-gray-700 text-white">
