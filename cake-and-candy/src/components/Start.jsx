@@ -50,7 +50,7 @@ export default function Start() {
       </video>
       <div className="z-15 content text-stone-200 h-screen w-screen flex flex-col justify-center">
         <div className="mx-auto text-center flex flex-col gap-4 mb-5">
-          <h2 className="text-5xl mb-4">Süßes Glück in jedem Bissen</h2>
+          <h2 className="text-5xl mb-4">Weil Genuss unsere Leidenschaft ist.</h2>
           <div>
             <button
               type="button"
