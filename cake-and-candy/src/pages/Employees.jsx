@@ -123,19 +123,19 @@ const MitarbeiterTabelle = () => {
       <table className="min-w-full table-auto rounded-lg shadow-md table-auto text-center">
         <thead className=" border-2">
           <tr className=" border-2">
-            <th className="px-4 py-2">Mitarbeitername</th>
-            <th className="px-4 py-2">Gehalt</th>
-            <th className="px-4 py-2">Wochen/h</th>
-            <th className="px-4 py-2">Wochenlohn</th>
-            <th className="px-4 py-2">Monats/h</th>
-            <th className="px-4 py-2">Monatslohn</th>
+            <th className="px-4 py-2 text-lg">Mitarbeitername</th>
+            <th className="px-4 py-2 text-lg">Gehalt</th>
+            <th className="px-4 py-2 text-lg">Wochen/h</th>
+            <th className="px-4 py-2 text-lg">Wochenlohn</th>
+            <th className="px-4 py-2 text-lg">Monats/h</th>
+            <th className="px-4 py-2 text-lg">Monatslohn</th>
           </tr>
         </thead>
         <tbody>
           {data.map((row) => (
             <React.Fragment key={row.id}>
               <tr
-                className="border-2 cursor-pointer hover:bg-[#555555]"
+                className="border-2 cursor-pointer hover:bg-[#6eadb3]"
                 onClick={() => toggleDropdown(row.id)}
               >
                 <td className="px-4 py-2">{row.name}</td>
@@ -148,7 +148,7 @@ const MitarbeiterTabelle = () => {
               {selectedRow === row.id && (
                 <tr>
                   <td colSpan="6" className="p-4">
-                    <div className=" rounded-lg shadow-lg p-4">
+                    <div className="bg-teal-950 rounded-lg shadow-lg p-4">
                       <p>
                         <strong>Datum:</strong> {row.datum}
                       </p>
