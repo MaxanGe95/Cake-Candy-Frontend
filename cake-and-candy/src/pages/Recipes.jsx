@@ -3,22 +3,7 @@ import RecipeForm from '../components/recipe/RecipeForm';
 import RecipeList from '../components/recipe/RecipeList';
 import RecipeDetails from '../components/recipe/RecipeDetails';
 
-const initialRecipes = [
-  {
-    id: 1,
-    name: 'Pfannkuchen',
-    description: 'Leckere Pfannkuchen mit Zucker und Zimt.',
-    ingredients: [
-      { name: 'Mehl', amount: 200, unit: 'g' },
-      { name: 'Milch', amount: 300, unit: 'ml' },
-      { name: 'Eier', amount: 2, unit: 'Stück' },
-      { name: 'Zucker', amount: 50, unit: 'g' },
-      { name: 'Butter', amount: 20, unit: 'g' }
-    ],
-    tools: ['Pfanne', 'Schneebesen'],
-    totalAmount: 4
-  }
-];
+const initialRecipes = [];
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState(initialRecipes);
@@ -37,6 +22,7 @@ const Recipes = () => {
     setShowNewRecipeForm(false);
     setSelectedRecipe(null);
   };
+  
 
   const handleEditRecipe = (recipe) => {
     setSelectedRecipe(recipe);
@@ -64,7 +50,7 @@ const Recipes = () => {
       </button>
       {showNewRecipeForm && (
         <RecipeForm
-          recipe={selectedRecipe || { name: '', description: '', ingredients: [{ name: '', amount: 0, unit: '' }], tools: [], totalAmount: 1 }}
+          recipe={selectedRecipe || { name: '',ingredients: [{ name: '', amount: 0}], tools: [], totalAmount: 1 }}
           onSave={handleSaveRecipe}
           onCancel={handleCancel}
         />

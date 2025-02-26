@@ -1,5 +1,5 @@
 import React from "react";
-import { FaTrash } from "react-icons/fa";
+// import { FaTrash } from "react-icons/fa";
 
 const RecipeList = ({ recipes, onSelect, onDelete }) => {
   return (
@@ -20,7 +20,8 @@ const RecipeList = ({ recipes, onSelect, onDelete }) => {
               onClick={() => onDelete(recipe.id)}
               className="bg-red-500 text-white p-2 ml-2 cursor-pointer transition ease-in-out hover:scale-110 "
             >
-              <FaTrash />
+              {/* <FaTrash /> */}
+              X
             </button>
           </li>
         ))}
