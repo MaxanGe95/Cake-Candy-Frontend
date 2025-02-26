@@ -114,7 +114,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
               onChange={(e) =>
                 handleIngredientChange(index, "name", e.target.value)
               }
-              className={`block appearance-none w-full border px-4 py-2 pr-8 rounded shadow leading-tight h-10 focus:outline-none focus:shadow-outline ${
+              className={`block appearance-none bg-teal-400/10 w-full border px-4 py-2 pr-8 rounded shadow leading-tight h-10 focus:outline-none focus:shadow-outline ${
                 errors[`ingredient${index}name`] ? "border-red-500" : ""
               }`}
             >
@@ -136,7 +136,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             onChange={(e) =>
               handleIngredientChange(index, "amount", e.target.value)
             }
-            className={`border p-2 m-1 w-1/4 h-10 rounded ${
+            className={`border bg-teal-400/10 p-2 m-1 w-1/4 h-10 rounded ${
               errors[`ingredient${index}amount`] ? "border-red-500" : ""
             }`}
           />
@@ -146,7 +146,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
               onChange={(e) =>
                 handleIngredientChange(index, "unit", e.target.value)
               }
-              className={`block appearance-none w-full border px-4 py-2 pr-8 rounded shadow leading-tight h-10 focus:outline-none focus:shadow-outline ${
+              className={`block appearance-none bg-teal-400/10 w-full border px-4 py-2 pr-8 rounded shadow leading-tight h-10 focus:outline-none focus:shadow-outline ${
                 errors[`ingredient${index}unit`] ? "border-red-500" : ""
               }`}
             >
