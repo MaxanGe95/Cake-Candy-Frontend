@@ -112,6 +112,28 @@ const MitarbeiterTabelle = () => {
       datum: "01.02.2025",
       gearbeiteteStunden: 35,
     },
+    {
+      id: 3,
+      name: "Joe Doe",
+      gehalt: "2.800€",
+      wochenstunden: 35,
+      wochenlohn: "600€",
+      monatsstunden: 140,
+      monatslohn: "2.800€",
+      datum: "01.02.2025",
+      gearbeiteteStunden: 35,
+    },
+    {
+      id: 4,
+      name: "Ernesto Ernst",
+      gehalt: "2.800€",
+      wochenstunden: 35,
+      wochenlohn: "600€",
+      monatsstunden: 140,
+      monatslohn: "2.800€",
+      datum: "01.02.2025",
+      gearbeiteteStunden: 35,
+    },
   ];
 
   const toggleDropdown = (id) => {
