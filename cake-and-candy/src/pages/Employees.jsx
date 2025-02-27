@@ -142,30 +142,30 @@ const MitarbeiterTabelle = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <table className="min-w-full text-amber-100 table-auto border-collapse border rounded-md shadow-md text-center">
-        <thead className="bg-teal-950">
-          <tr className="">
-            <th className="px-4 py-2 text-lg">Mitarbeitername</th>
-            <th className="px-4 py-2 text-lg">Gehalt</th>
-            <th className="px-4 py-2 text-lg">Wochen/h</th>
-            <th className="px-4 py-2 text-lg">Wochenlohn</th>
-            <th className="px-4 py-2 text-lg">Monats/h</th>
-            <th className="px-4 py-2 text-lg">Monatslohn</th>
+      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+        <thead>
+          <tr className="bg-teal-950">
+            <th className=" p-2">Mitarbeitername</th>
+            <th className=" p-2">Gehalt</th>
+            <th className=" p-2">Wochen/h</th>
+            <th className=" p-2">Wochenlohn</th>
+            <th className=" p-2">Monats/h</th>
+            <th className=" p-2">Monatslohn</th>
           </tr>
         </thead>
         <tbody>
           {data.map((row) => (
             <React.Fragment key={row.id}>
               <tr
-                className="border cursor-pointer hover:bg-[#7ec6cc80]"
+                className="border rounded-md cursor-pointer hover:bg-[#7ec6cc80]"
                 onClick={() => toggleDropdown(row.id)}
               >
-                <td className="px-4 py-2">{row.name}</td>
-                <td className="px-4 py-2">{row.gehalt}</td>
-                <td className="px-4 py-2">{row.wochenstunden}</td>
-                <td className="px-4 py-2">{row.wochenlohn}</td>
-                <td className="px-4 py-2">{row.monatsstunden}</td>
-                <td className="px-4 py-2">{row.monatslohn}</td>
+                <td className=" p-2 text-center">{row.name}</td>
+                <td className=" p-2 text-center">{row.gehalt}</td>
+                <td className=" p-2 text-center">{row.wochenstunden}</td>
+                <td className=" p-2 text-center">{row.wochenlohn}</td>
+                <td className=" p-2 text-center">{row.monatsstunden}</td>
+                <td className=" p-2 text-center">{row.monatslohn}</td>
               </tr>
               {selectedRow === row.id && (
                 <tr>
