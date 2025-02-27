@@ -37,7 +37,7 @@ const ZutatenForm = ({ onAdd }) => {
   return (
     <form onSubmit={handleSubmit} className="mt-6 text-amber-100">
       <div className="flex">
-        <div>
+        <div className="mr-1">
           <input
             type="text"
             value={name}
@@ -47,35 +47,25 @@ const ZutatenForm = ({ onAdd }) => {
             className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           />
         </div>
-        <div>
+        <div className="mr-1">
           <input
-            type="text"
-            value={typ}
-            disabled
-            placeholder="Typ"
+            type="number"
+            value={ekPreis}
+            onChange={(e) => setEkPreis(e.target.value)}
+            placeholder="EK-Preis"
+            required
             className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
+            step="0.01"
           />
         </div>
-      </div>
 
-      <div>
-        <input
-          type="number"
-          value={ekPreis}
-          onChange={(e) => setEkPreis(e.target.value)}
-          placeholder="EK-Preis"
-          required
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
-          step="0.01"
-        />
+        <button
+          type="submit"
+          className="bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200"
+        >
+          Zutat hinzufügen
+        </button>
       </div>
-
-      <button
-        type="submit"
-        className="bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200"
-      >
-        Zutat hinzufügen
-      </button>
     </form>
   );
 };
