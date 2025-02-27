@@ -169,7 +169,7 @@ const MitarbeiterTabelle = () => {
               </tr>
               {selectedRow === row.id && (
                 <tr>
-                  <td colSpan="6" className="p-4">
+                  <td colSpan="6" className="p-4 text-center">
                     <div className="bg-teal-950 rounded-md shadow-lg p-4">
                       <p>
                         <strong>Datum:</strong> {row.datum}
