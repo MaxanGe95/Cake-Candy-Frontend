@@ -14,8 +14,16 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
     tools: recipe?.tools || [],
     category: recipe?.category || "",
     totalAmount: recipe?.totalAmount || "",
+    totalCost: recipe?.totalCost || 0,
+    unitPrice: recipe?.unitPrice || 0,
+    b2bPreis: recipe?.b2bPreis || 0,
+    b2cPreis: recipe?.b2cPreis || 0,
+    istlagerbestand: recipe?.istlagerbestand || 0,
+    solllagerbestand: recipe?.solllagerbestand || 0,
+    zusatz: recipe?.zusatz || "",
     ingredients: recipe?.ingredients || []
   });
+  
 
   const [errors, setErrors] = useState({});
   const [ingredientsList, setIngredientsList] = useState([]);
