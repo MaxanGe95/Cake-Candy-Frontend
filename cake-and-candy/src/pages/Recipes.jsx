@@ -42,25 +42,27 @@ const Recipes = () => {
   };
 
   const handleSaveRecipe = (recipe) => {
-    // Berechne totalPrice für jede Zutat
     const updatedIngredients = recipe.ingredients.map((ingredient) => ({
       ...ingredient,
       totalprice: calculateIngredientTotalPrice(ingredient),
     }));
   
-    // Berechne den Gesamtpreis des Rezepts
     const totalCost = calculateTotalPrice(updatedIngredients);
-    const totalAmount = parseFloat(recipe.totalAmount) || 1; // Sicherstellen, dass totalAmount eine Zahl ist
-    const unitPrice = totalCost / totalAmount; // Berechnung des Einzelpreises
+    const totalAmount = parseFloat(recipe.totalAmount) || 1;
+    const unitPrice = totalCost / totalAmount;
+  
+    // Bestimmen des Rezepttyps basierend auf der gewählten Kategorie
+    const recipeType = recipe.category === "Zwischenprodukte" ? "Zwischenprodukt" : "Endprodukt";
   
     const updatedRecipe = {
       ...recipe,
       ingredients: updatedIngredients,
-      totalCost: Number(totalCost.toFixed(2)), // Als Zahl speichern
-      unitPrice: Number(unitPrice.toFixed(2)), // Einheitspreis mit 2 Nachkommastellen als Zahl
+      totalCost: Number(totalCost.toFixed(2)),
+      unitPrice: Number(unitPrice.toFixed(2)),
+      typ: recipeType, // Hier wird das Feld 'type' hinzugefügt
     };
   
-    console.log("Gespeichertes Rezept:", updatedRecipe); // Debugging-Ausgabe
+    console.log("Gespeichertes Rezept:", updatedRecipe);
   
     if (editMode) {
       const updatedRecipes = recipes.map((r) => (r.id === recipe.id ? updatedRecipe : r));
@@ -73,6 +75,7 @@ const Recipes = () => {
     setShowNewRecipeForm(false);
     setSelectedRecipe(null);
   };
+  
   
   
 

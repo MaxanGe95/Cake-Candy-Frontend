@@ -10,11 +10,20 @@ const categoryOptions = [
 
 const RecipeForm = ({ recipe, onSave, onCancel }) => {
   const [newRecipe, setNewRecipe] = useState({
-    ...recipe,
-    tools: recipe.tools || "",
-    category: recipe.category || "",
-    totalAmount: recipe.totalAmount || "",
+    name: recipe?.name || "",
+    tools: recipe?.tools || [],
+    category: recipe?.category || "",
+    totalAmount: recipe?.totalAmount || "",
+    totalCost: recipe?.totalCost || 0,
+    unitPrice: recipe?.unitPrice || 0,
+    b2bPreis: recipe?.b2bPreis || 0,
+    b2cPreis: recipe?.b2cPreis || 0,
+    istlagerbestand: recipe?.istlagerbestand || 0,
+    solllagerbestand: recipe?.solllagerbestand || 0,
+    zusatz: recipe?.zusatz || "",
+    ingredients: recipe?.ingredients || []
   });
+  
 
   const [errors, setErrors] = useState({});
   const [ingredientsList, setIngredientsList] = useState([]);
@@ -35,68 +44,109 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
   const addIngredient = () => {
     setNewRecipe({
       ...newRecipe,
-      ingredients: [...newRecipe.ingredients, { name: "", amount: 0, ekPreis: 0 }],
+      ingredients: [...newRecipe.ingredients, { name: "", amount: 0, ekPreis: 0 }]
     });
   };
 
   const removeIngredient = (index) => {
-    const updatedIngredients = newRecipe.ingredients.filter((_, i) => i !== index);
-    setNewRecipe({ ...newRecipe, ingredients: updatedIngredients });
+    setNewRecipe((prev) => ({
+      ...prev,
+      ingredients: prev.ingredients.filter((_, i) => i !== index)
+    }));
   };
 
   const handleIngredientChange = (index, field, value) => {
-    const updatedIngredients = newRecipe.ingredients.map((ingredient, i) =>
-      i === index ? { ...ingredient, [field]: value } : ingredient
-    );
-    setNewRecipe({ ...newRecipe, ingredients: updatedIngredients });
+    setNewRecipe((prev) => ({
+      ...prev,
+      ingredients: prev.ingredients.map((ing, i) =>
+        i === index ? { ...ing, [field]: value } : ing
+      )
+    }));
   };
 
   const handleIngredientSelect = (index, ingredientName) => {
-    const selectedIngredient = ingredientsList.find((ingredient) => ingredient.name === ingredientName);
+    const selectedIngredient = ingredientsList.find((ing) => ing.name === ingredientName);
     if (selectedIngredient) {
-      const updatedIngredients = newRecipe.ingredients.map((ingredient, i) =>
-        i === index
-          ? { ...ingredient, name: ingredientName, ekPreis: selectedIngredient.ekPreis }
-          : ingredient
-      );
-      setNewRecipe({ ...newRecipe, ingredients: updatedIngredients });
+      setNewRecipe((prev) => ({
+        ...prev,
+        ingredients: prev.ingredients.map((ing, i) =>
+          i === index ? { ...ing, name: ingredientName, ekPreis: selectedIngredient.ekPreis } : ing
+        )
+      }));
     }
   };
 
   const handleRecipeChange = (field, value) => {
-    setNewRecipe({ ...newRecipe, [field]: value });
+    setNewRecipe((prev) => ({ ...prev, [field]: value }));
   };
 
   const validateRecipe = () => {
     const newErrors = {};
     if (!newRecipe.name) newErrors.name = true;
     if (!newRecipe.totalAmount) newErrors.totalAmount = true;
+
     newRecipe.ingredients.forEach((ingredient, index) => {
-      if (!ingredient.name) newErrors[`ingredient${index}name`] = true;
-      if (!ingredient.amount) newErrors[`ingredient${index}amount`] = true;
+      if (!ingredient.name) newErrors[`ingredient${index}_name`] = true;
+      if (!ingredient.amount) newErrors[`ingredient${index}_amount`] = true;
     });
+
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  const saveRecipe = () => {
+  const saveRecipe = async () => {
     if (!validateRecipe()) {
       alert("Bitte füllen Sie alle Pflichtfelder aus.");
       return;
     }
 
-    const totalCost = newRecipe.ingredients.reduce((sum, ing) => sum + ing.amount * ing.ekPreis, 0);
-    const finalRecipe = { ...newRecipe, totalCost };
+    const totalCost = newRecipe.ingredients.reduce((sum, ingredient) => {
+      return sum + (ingredient.amount * ingredient.ekPreis);
+    }, 0);
 
-    console.log("Rezept-Daten vor dem Speichern:", JSON.stringify(finalRecipe, null, 2));
-    onSave(finalRecipe);
+    const unitPrice = totalCost / newRecipe.totalAmount;
+
+    if (isNaN(unitPrice) || unitPrice <= 0) {
+      alert("Der unitPrice ist ungültig.");
+      return;
+    }
+
+    const recipeType = newRecipe.category === "Zwischenprodukte" ? "Zwischenprodukt" : "Endprodukt";
+
+    const finalRecipe = {
+      ...newRecipe,
+      totalCost,
+      unitPrice,
+      typ: recipeType,
+    };
+
+    try {
+      const response = await fetch("http://localhost:5000/api/rezepte", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(finalRecipe),
+      });
+
+      if (!response.ok) {
+        throw new Error(`Fehler beim Speichern des Rezepts: ${response.statusText}`);
+      }
+
+      const savedRecipe = await response.json();
+      onSave(savedRecipe);
+    } catch (error) {
+      console.error("Fehler beim Speichern des Rezepts:", error);
+      alert(`Es gab einen Fehler beim Speichern des Rezepts: ${error.message}`);
+    }
   };
 
   return (
     <div className="mb-4">
       <h2 className="text-xl font-semibold text-teal-300">
-        {recipe.id ? "Rezept bearbeiten" : "Neues Rezept"}
+        {recipe?.id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
+
       <input
         type="text"
         placeholder="Rezeptname"
@@ -104,6 +154,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         onChange={(e) => handleRecipeChange("name", e.target.value)}
         className={`border p-2 mb-2 w-full ${errors.name ? "border-red-500" : ""}`}
       />
+
       <select
         value={newRecipe.category}
         onChange={(e) => handleRecipeChange("category", e.target.value)}
@@ -142,10 +193,10 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
 
       <h3 className="text-lg font-semibold text-teal-400">Hilfsmittel</h3>
       <select
-  value={Array.isArray(newRecipe.tools) ? newRecipe.tools[0] || "" : newRecipe.tools} 
-  onChange={(e) => handleRecipeChange("tools", e.target.value)}
-  className="border p-2 mb-2 w-full bg-amber-400 appearance-none w-full border px-4 py-2 pr-8 rounded shadow leading-tight"
->
+        value={Array.isArray(newRecipe.tools) ? newRecipe.tools[0] || "" : newRecipe.tools}
+        onChange={(e) => handleRecipeChange("tools", [e.target.value])}
+        className="border p-2 mb-2 w-full bg-amber-400"
+      >
         <option value="">Hilfsmittel wählen</option>
         {toolsList.map((tool) => (
           <option key={tool} value={tool}>{tool}</option>
@@ -160,6 +211,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         onChange={(e) => handleRecipeChange("totalAmount", e.target.value)}
         className="border p-2 mb-2 w-full"
       />
+
       <button onClick={saveRecipe} className="bg-teal-600 text-white p-2">Speichern</button>
       <button onClick={onCancel} className="bg-gray-500 text-white p-2 ml-2">Abbrechen</button>
     </div>
