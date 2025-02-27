@@ -10,7 +10,7 @@ function Futterplatz() {
           name="work-experience"
           rows="10"
           cols="150"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          className="border border-gray-300 p-2 m-5 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
         <button
           type="submit"
@@ -62,7 +62,7 @@ function Futterplatz() {
           name="work-experience2"
           rows="10"
           cols="150"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          className="border border-gray-300 p-2 m-5 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
         <button
           type="submit"
@@ -80,7 +80,7 @@ function Futterplatz() {
           name="work-experience3"
           rows="10"
           cols="150"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          className="border border-gray-300 p-2 m-5 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
         <button
           type="submit"
