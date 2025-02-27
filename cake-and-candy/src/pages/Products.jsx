@@ -51,9 +51,10 @@ const Products = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Produkte & Zutaten</h1>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold text-teal-200 mt-6">Zutaten hinzufügen</h1>
       <ZutatenForm onAdd={handleAddZutat} />
+      <h2 className="text-2xl font-bold text-teal-200 mt-6">Zutaten-Liste</h2>
       <ZutatenListe zutaten={zutaten} onDelete={handleDeleteZutat} />
     </div>
   );

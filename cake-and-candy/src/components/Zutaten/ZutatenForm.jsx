@@ -29,40 +29,51 @@ const ZutatenForm = ({ onAdd }) => {
         setName("");
         setEkPreis("");
       })
-      .catch((error) => console.error("Fehler beim Hinzufügen der Zutat:", error));
+      .catch((error) =>
+        console.error("Fehler beim Hinzufügen der Zutat:", error)
+      );
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded bg-[#2a6d73]">
-      <div>
-        <label>Zutatname:</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff]  focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
-        />
+    <form onSubmit={handleSubmit} className="mt-6 text-amber-100">
+      <div className="flex">
+        <div>
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Zutatname"
+            required
+            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          />
+        </div>
+        <div>
+          <input
+            type="text"
+            value={typ}
+            disabled
+            placeholder="Typ"
+            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          />
+        </div>
       </div>
 
       <div>
-        <label>Typ:</label>
-        <input type="text" value={typ} disabled className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff]" />
-      </div>
-
-      <div>
-        <label>EK-Preis ($):</label>
         <input
           type="number"
           value={ekPreis}
           onChange={(e) => setEkPreis(e.target.value)}
+          placeholder="EK-Preis"
           required
-          className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff] focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
+          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
           step="0.01"
         />
       </div>
 
-      <button type="submit" className="bg-[#2F4A4C] text-[#5eeaff] px-4 py-2 rounded mt-2">
+      <button
+        type="submit"
+        className="bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200"
+      >
         Zutat hinzufügen
       </button>
     </form>
