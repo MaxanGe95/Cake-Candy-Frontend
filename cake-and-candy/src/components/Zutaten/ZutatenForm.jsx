@@ -44,7 +44,7 @@ const ZutatenForm = ({ onAdd }) => {
             onChange={(e) => setName(e.target.value)}
             placeholder="Zutatname"
             required
-            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           />
         </div>
         <div>
@@ -53,7 +53,7 @@ const ZutatenForm = ({ onAdd }) => {
             value={typ}
             disabled
             placeholder="Typ"
-            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+            className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           />
         </div>
       </div>
@@ -65,7 +65,7 @@ const ZutatenForm = ({ onAdd }) => {
           onChange={(e) => setEkPreis(e.target.value)}
           placeholder="EK-Preis"
           required
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           step="0.01"
         />
       </div>
