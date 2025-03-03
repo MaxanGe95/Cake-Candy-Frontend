@@ -25,7 +25,7 @@ const PrimaryButton = ({ onClick, children, className = "" }) => {
   return (
     <button
       onClick={onClick}
-      className={`bg-teal-950 text-amber-100 border rounded p-2 cursor-pointer transition ease-in-out hover:scale-110 ${className}`}
+      className={`bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200 ${className}`}
     >
       {children}
     </button>
@@ -35,7 +35,7 @@ const SecondaryButton = ({ onClick, children, className = "" }) => {
   return (
     <button
       onClick={onClick}
-      className={`bg-teal-900 text-amber-100 border rounded p-2  cursor-pointer transition ease-in-out hover:scale-110 ${className}`}
+      className={`bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200 ${className}`}
     >
       {children}
     </button>
