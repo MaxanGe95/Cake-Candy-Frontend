@@ -127,12 +127,15 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       return sum + ingredient.amount * ingredient.ekPreis;
     }, 0);
 
-    const unitPrice = totalCost / newRecipe.totalAmount;
+    let unitPrice = totalCost / newRecipe.totalAmount;
 
     if (isNaN(unitPrice) || unitPrice <= 0) {
       alert("Der unitPrice ist ungültig.");
       return;
     }
+
+    // runden auf 2 Nachkommastellen
+    unitPrice = unitPrice.toFixed(2);
 
     const recipeType =
       newRecipe.category === "Zwischenprodukte"

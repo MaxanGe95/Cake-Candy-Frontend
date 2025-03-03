@@ -26,6 +26,10 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
     );
   };
 
+  const round = (calc) => {
+    return "$" + (calc || 0).toFixed(2)
+  }
+
   const handleSelectRecipe = (recipe) => {
     setSelectedRecipe(recipe);
     setScaleAmount(recipe.totalAmount);
@@ -53,6 +57,8 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
             <th className="p-2">Kategorie</th>
             <th className="p-2">Hilfsmittel</th>
             <th className="p-2">Output</th>
+            <th className="p-2">Stückpreis</th>
+            <th className="p-2">Gesamtpreis</th>
             <th className="p-2">Zutaten</th>
             {/* <th className="p-2">Menge</th> */}
             <th className="p-2">Istbestand</th>
@@ -71,6 +77,8 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                 <td className="p-2 text-center">{recipe.category}</td>
                 <td className="p-2 text-center">{recipe.tools?.join(", ")}</td>
                 <td className="p-2 text-center">{recipe.totalAmount}</td>
+                <td className="p-2 text-center">{round(recipe.unitPrice)}</td>
+                <td className="p-2 text-center">{round(recipe.totalCost)}</td>
                 <td className="p-2 text-center">Zutaten anzeigen</td>
                 {/* <td className="p-2 text-center">{recipe.totalAmount}</td> */}
                 <td className="p-2 text-center">{recipe.istlagerbestand}</td>
