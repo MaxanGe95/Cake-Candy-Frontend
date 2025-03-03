@@ -33,35 +33,35 @@ const Dashboard = () => {
         </div>
 
         {/* Tabellen für Einnahmen und Ausgaben */}
-        <div className="mt-8">
-          <h2 className="text-xl font-bold mb-4 bg-teal-950">Top Einnahmen & Ausgaben</h2>
+        <div className="mt-4">
+          <h2 className="text-xl font-bold mb-4 bg-teal-950 rounded p-2">Top Einnahmen & Ausgaben</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className=" p-6 rounded-xl shadow-lg">
+            <div className=" p-6 rounded-xl shadow-lg bg-teal-950 ">
               <h3 className="font-semibold text-amber-100">Top Einnahmen</h3>
               <ul>
                 <li className="flex justify-between text-amber-100">
-                  Gehalt <span className="text-green-600">7.750 €</span>
+                  Produkt 1 <span className="text-green-600">7.750 €</span>
                 </li>
                 <li className="flex justify-between text-amber-100">
-                  Mieteinnahmen <span className="text-green-600">3.700 €</span>
+                  Produkt 3 <span className="text-green-600">3.700 €</span>
                 </li>
                 <li className="flex justify-between text-amber-100">
-                  Kindergeld <span className="text-green-600">2.522 €</span>
+                  Steuerrückerstattung <span className="text-green-600">2.522 €</span>
                 </li>
               </ul>
             </div>
 
-            <div className=" p-6 rounded-xl shadow-lg">
+            <div className=" p-6 rounded-xl shadow-lg bg-teal-950 ">
               <h3 className="font-semibold text-amber-100">Top Ausgaben</h3>
               <ul>
                 <li className="flex justify-between text-amber-100">
-                  Wohnkosten <span className="text-red-600">6.951 €</span>
+                  Miete <span className="text-red-600">6.951 €</span>
                 </li>
                 <li className="flex justify-between text-amber-100">
-                  Lebensmittel <span className="text-red-600">2.840 €</span>
+                  Gehälter <span className="text-red-600">2.840 €</span>
                 </li>
                 <li className="flex justify-between text-amber-100">
-                  Mobilität <span className="text-red-600">2.080 €</span>
+                  Steuern <span className="text-red-600">2.080 €</span>
                 </li>
               </ul>
             </div>
