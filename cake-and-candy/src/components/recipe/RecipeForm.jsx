@@ -112,13 +112,13 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
     }
 
     const recipeType = newRecipe.category === "Zwischenprodukte" ? "Zwischenprodukt" : "Endprodukt";
-
     const finalRecipe = {
       ...newRecipe,
       totalCost,
       unitPrice,
-      typ: recipeType,
+      typ: recipeType,  // Wird gesetzt, aber überprüfe, ob es auch wirklich enthalten ist
     };
+    
 
     try {
       const response = await fetch("http://localhost:5000/api/rezepte", {
