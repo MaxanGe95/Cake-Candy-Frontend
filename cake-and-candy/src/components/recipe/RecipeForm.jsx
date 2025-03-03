@@ -1,15 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { FaTrash } from "react-icons/fa";
+import { useState, useEffect } from "react";
 import { fetchZutaten } from "../../api/zutaten";
+import { DeleteButton, PrimaryButton, SecondaryButton } from "../form/Buttons";
+import { addRezept, updateRezept } from "../../api/rezepte";
+import {
+  DropdownInput,
+  InputNumber,
+  InputString,
+  InputTextarea,
+  InputCurrency,
+  MultipleDropdownInput,
+} from "../form/Inputs";
 
-const toolsList = ["Industrietopf", "Pralinenform", "Tafelform", "Kaffeemühle", "Backblech"];
+const toolsList = [
+  "Industrietopf",
+  "Pralinenform",
+  "Tafelform",
+  "Kaffeemühle",
+  "Backblech",
+];
 const categoryOptions = [
-  "Pralinen", "Tafeln", "Kuchen", "Torten", "Backwaren", "Süßes", "Getränke", 
-  "Zwischenprodukte", "Kooperationsprodukte", "Saisonprodukte", "Sonstiges"
+  "Pralinen",
+  "Tafeln",
+  "Kuchen",
+  "Torten",
+  "Backwaren",
+  "Süßes",
+  "Getränke",
+  "Zwischenprodukte",
+  "Kooperationsprodukte",
+  "Saisonprodukte",
+  "Sonstiges",
 ];
 
 const RecipeForm = ({ recipe, onSave, onCancel }) => {
   const [newRecipe, setNewRecipe] = useState({
+    _id: recipe?._id,
     name: recipe?.name || "",
     tools: recipe?.tools || [],
     category: recipe?.category || "",
@@ -21,9 +46,8 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
     istlagerbestand: recipe?.istlagerbestand || 0,
     solllagerbestand: recipe?.solllagerbestand || 0,
     zusatz: recipe?.zusatz || "",
-    ingredients: recipe?.ingredients || []
+    ingredients: recipe?.ingredients || [],
   });
-  
 
   const [errors, setErrors] = useState({});
   const [ingredientsList, setIngredientsList] = useState([]);
@@ -44,14 +68,17 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
   const addIngredient = () => {
     setNewRecipe({
       ...newRecipe,
-      ingredients: [...newRecipe.ingredients, { name: "", amount: 0, ekPreis: 0 }]
+      ingredients: [
+        ...newRecipe.ingredients,
+        { name: "", amount: 0, ekPreis: 0 },
+      ],
     });
   };
 
   const removeIngredient = (index) => {
     setNewRecipe((prev) => ({
       ...prev,
-      ingredients: prev.ingredients.filter((_, i) => i !== index)
+      ingredients: prev.ingredients.filter((_, i) => i !== index),
     }));
   };
 
@@ -60,20 +87,8 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       ...prev,
       ingredients: prev.ingredients.map((ing, i) =>
         i === index ? { ...ing, [field]: value } : ing
-      )
+      ),
     }));
-  };
-
-  const handleIngredientSelect = (index, ingredientName) => {
-    const selectedIngredient = ingredientsList.find((ing) => ing.name === ingredientName);
-    if (selectedIngredient) {
-      setNewRecipe((prev) => ({
-        ...prev,
-        ingredients: prev.ingredients.map((ing, i) =>
-          i === index ? { ...ing, name: ingredientName, ekPreis: selectedIngredient.ekPreis } : ing
-        )
-      }));
-    }
   };
 
   const handleRecipeChange = (field, value) => {
@@ -101,7 +116,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
     }
 
     const totalCost = newRecipe.ingredients.reduce((sum, ingredient) => {
-      return sum + (ingredient.amount * ingredient.ekPreis);
+      return sum + ingredient.amount * ingredient.ekPreis;
     }, 0);
 
     const unitPrice = totalCost / newRecipe.totalAmount;
@@ -111,30 +126,27 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       return;
     }
 
-    const recipeType = newRecipe.category === "Zwischenprodukte" ? "Zwischenprodukt" : "Endprodukt";
+    const recipeType =
+      newRecipe.category === "Zwischenprodukte"
+        ? "Zwischenprodukt"
+        : "Endprodukt";
+
     const finalRecipe = {
       ...newRecipe,
       totalCost,
       unitPrice,
-      typ: recipeType,  // Wird gesetzt, aber überprüfe, ob es auch wirklich enthalten ist
+      typ: recipeType,
     };
-    
 
     try {
-      const response = await fetch("http://localhost:5000/api/rezepte", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(finalRecipe),
-      });
-
-      if (!response.ok) {
-        throw new Error(`Fehler beim Speichern des Rezepts: ${response.statusText}`);
+      console.log(JSON.stringify(finalRecipe));
+      let recipe;
+      if (finalRecipe._id) {
+        recipe = await updateRezept(finalRecipe);
+      } else {
+        recipe = await addRezept(finalRecipe);
       }
-
-      const savedRecipe = await response.json();
-      onSave(savedRecipe);
+      onSave(recipe);
     } catch (error) {
       console.error("Fehler beim Speichern des Rezepts:", error);
       alert(`Es gab einen Fehler beim Speichern des Rezepts: ${error.message}`);
@@ -143,77 +155,148 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
 
   return (
     <div className="mb-4">
-      <h2 className="text-xl font-semibold text-teal-300">
-        {recipe?.id ? "Rezept bearbeiten" : "Neues Rezept"}
+      <h2 className="text-xl font-semibold">
+        {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
 
-      <input
-        type="text"
+      <InputString
         placeholder="Rezeptname"
         value={newRecipe.name}
-        onChange={(e) => handleRecipeChange("name", e.target.value)}
-        className={`border p-2 mb-2 w-full ${errors.name ? "border-red-500" : ""}`}
+        onChange={(v) => handleRecipeChange("name", v)}
+        error={errors.name}
+        className="mb-1"
       />
 
-      <select
+      <h3 className="text-lg font-semibold">Zusatztext</h3>
+      <InputTextarea
+        placeholder="Zusatz"
+        value={newRecipe.zusatz}
+        onChange={(v) => handleRecipeChange("zusatz", v)}
+        error={errors.zusatz}
+        className="mb-1"
+      />
+      <h3 className="text-lg font-semibold">Kategorie</h3>
+      <DropdownInput
+        className="w-full"
+        options={categoryOptions}
         value={newRecipe.category}
-        onChange={(e) => handleRecipeChange("category", e.target.value)}
-        className="border p-2 mb-2 w-full bg-amber-400"
-      >
-        <option value="">Kategorie wählen</option>
-        {categoryOptions.map((category) => (
-          <option key={category} value={category}>{category}</option>
-        ))}
-      </select>
+        onChange={(v) => handleRecipeChange("category", v)}
+        placeholder="Kategorie wählen"
+        error={errors.name}
+      />
 
-      <h3 className="text-lg font-semibold text-teal-400">Zutaten</h3>
-      {newRecipe.ingredients.map((ingredient, index) => (
-        <div key={index} className="flex mb-2 items-center">
-          <select
-            value={ingredient.name}
-            onChange={(e) => handleIngredientSelect(index, e.target.value)}
-            className="border p-2 mb-2 w-1/2 bg-amber-400"
-          >
-            <option value="">Zutat wählen</option>
-            {ingredientsList.map((item) => (
-              <option key={item._id} value={item.name}>{item.name}</option>
-            ))}
-          </select>
-          <input
-            type="number"
-            placeholder="Menge"
-            value={ingredient.amount}
-            onChange={(e) => handleIngredientChange(index, "amount", e.target.value)}
-            className="border p-2 mb-2 w-1/4"
-          />
-          <button onClick={() => removeIngredient(index)} className="bg-red-500 text-white p-2">X</button>
-        </div>
-      ))}
-      <button onClick={addIngredient} className="bg-teal-500 text-white p-2">Zutat hinzufügen</button>
+      <h3 className="text-lg font-semibold">Hilfsmittel</h3>
+      <MultipleDropdownInput
+        className="w-full"
+        options={toolsList}
+        value={newRecipe.tools}
+        onChange={(e) => handleRecipeChange("tools", e)}
+        placeholder="Hilfsmittel wählen"
+        error={errors.name}
+      />
 
-      <h3 className="text-lg font-semibold text-teal-400">Hilfsmittel</h3>
-      <select
-        value={Array.isArray(newRecipe.tools) ? newRecipe.tools[0] || "" : newRecipe.tools}
-        onChange={(e) => handleRecipeChange("tools", [e.target.value])}
-        className="border p-2 mb-2 w-full bg-amber-400"
-      >
-        <option value="">Hilfsmittel wählen</option>
-        {toolsList.map((tool) => (
-          <option key={tool} value={tool}>{tool}</option>
-        ))}
-      </select>
+      <h3 className="text-lg font-semibold">Stückpreis</h3>
+      <InputCurrency
+        placeholder="Stückpreis"
+        value={newRecipe.unitPrice}
+        onChange={(v) => handleRecipeChange("unitPrice", v)}
+        error={errors.unitPrice}
+        className="mb-2"
+      />
 
-      <h3 className="text-lg font-semibold text-teal-400">Outputmenge</h3>
-      <input
-        type="number"
+      <h3 className="text-lg font-semibold">Gesamtmenge</h3>
+      <InputNumber
         placeholder="Gesamtmenge"
         value={newRecipe.totalAmount}
-        onChange={(e) => handleRecipeChange("totalAmount", e.target.value)}
-        className="border p-2 mb-2 w-full"
+        onChange={(v) => handleRecipeChange("totalAmount", v)}
+        error={errors.name}
+        className="mb-2"
       />
 
-      <button onClick={saveRecipe} className="bg-teal-600 text-white p-2">Speichern</button>
-      <button onClick={onCancel} className="bg-gray-500 text-white p-2 ml-2">Abbrechen</button>
+      <h3 className="text-lg font-semibold">Gesamtkosten</h3>
+      <InputCurrency
+        placeholder="Gesamtkosten"
+        value={newRecipe.totalCost}
+        onChange={(v) => handleRecipeChange("totalCost", v)}
+        error={errors.totalCost}
+        className="mb-2"
+      />
+
+      <h3 className="text-lg font-semibold">B2B-Preis</h3>
+      <InputCurrency
+        placeholder="B2B-Preis"
+        value={newRecipe.b2bPreis}
+        onChange={(v) => handleRecipeChange("b2bPreis", v)}
+        error={errors.b2bPreis}
+        className="mb-2"
+      />
+
+      <h3 className="text-lg font-semibold">B2C-Preis</h3>
+      <InputCurrency
+        placeholder="B2C-Preis"
+        value={newRecipe.b2cPreis}
+        onChange={(v) => handleRecipeChange("b2cPreis", v)}
+        error={errors.b2cPreis}
+        className="mb-2"
+      />
+
+      <h3 className="text-lg font-semibold">Lagerbestand-Ist</h3>
+      <InputNumber
+        placeholder="Lagerbestand-Ist"
+        value={newRecipe.istlagerbestand}
+        onChange={(v) => handleRecipeChange("istlagerbestand", v)}
+        error={errors.istlagerbestand}
+        className="mb-2"
+      />
+
+      <h3 className="text-lg font-semibold">Lagerbestand-Soll</h3>
+      <InputNumber
+        placeholder="Lagerbestand-Soll"
+        value={newRecipe.solllagerbestand}
+        onChange={(v) => handleRecipeChange("solllagerbestand", v)}
+        error={errors.solllagerbestand}
+        className="mb-2"
+      />
+
+      <h3 className="text-lg font-semibold">Zutaten</h3>
+      {newRecipe.ingredients.map((ingredient, index) => (
+        <div key={index} className="flex mb-2 items-center">
+          <DropdownInput
+            className="w-3/4 mr-1"
+            options={ingredientsList}
+            value={ingredient.name}
+            onChange={(v) => handleIngredientChange(index, "name", v)}
+            valueKey="name"
+            nameKey="name"
+            placeholder="Zutat wählen"
+            error={errors[`ingredient${index}_name`]}
+          />{" "}
+          <InputNumber
+            placeholder="Menge"
+            value={ingredient.amount}
+            onChange={(v) => handleIngredientChange(index, "amount", v)}
+            error={errors[`ingredient${index}_amount`]}
+            className="w-1/4 mr-1"
+          />
+          <InputCurrency
+            placeholder="EK-Preis"
+            value={ingredient.ekPreis}
+            onChange={(v) => handleIngredientChange(index, "ekPreis", v)}
+            error={errors[`ingredient${index}_ekPreis`]}
+            className="w-1/4"
+          />
+          <DeleteButton onClick={() => removeIngredient(index)} />
+        </div>
+      ))}
+      <PrimaryButton onClick={addIngredient} className="mr-1">
+        Zutat hinzufügen
+      </PrimaryButton>
+
+      <br />
+      <PrimaryButton onClick={saveRecipe} className="mr-1 mt-2">
+        Speichern
+      </PrimaryButton>
+      <SecondaryButton onClick={onCancel}>Abbrechen</SecondaryButton>
     </div>
   );
 };

@@ -1,12 +1,9 @@
-import React from "react";
-// import { FaTrash } from "react-icons/fa";
+import { DeleteButton, EditButton } from "../form/Buttons";
 
-const RecipeList = ({ recipes, onSelect, onDelete }) => {
+const RecipeList = ({ recipes, onSelect, onDelete, onEdit }) => {
   return (
     <div>
-      <h2 className="text-xl font-semibold text-teal-500">
-        Gespeicherte Rezepte
-      </h2>
+      <h2 className="text-xl font-semibold">Gespeicherte Rezepte</h2>
       <ul>
         {recipes.map((recipe, index) => (
           <li
@@ -16,13 +13,13 @@ const RecipeList = ({ recipes, onSelect, onDelete }) => {
             <span className="cursor-pointer" onClick={() => onSelect(recipe)}>
               {recipe.name}
             </span>
-            <button
-              onClick={() => onDelete(recipe.id)}
-              className="bg-red-500 text-white p-2 ml-2 cursor-pointer transition ease-in-out hover:scale-110 "
-            >
-              {/* <FaTrash /> */}
-              X
-            </button>
+
+            <div>
+              <EditButton onClick={() => onEdit(recipe)}>
+                Rezept bearbeiten{" "}
+              </EditButton>
+              <DeleteButton onClick={() => onDelete(recipe._id)} />
+            </div>
           </li>
         ))}
       </ul>

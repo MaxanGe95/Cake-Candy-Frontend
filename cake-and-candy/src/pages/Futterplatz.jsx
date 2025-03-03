@@ -1,6 +1,6 @@
 function Futterplatz() {
   return (
-    <div className="container mx-auto p-6 ">
+    <div className="container mx-auto p-6 text-amber-100">
       <h1>Willkommen bei Futterplatz</h1>
       <form action="submit" name="work-experience" className="text-center">
         <label htmlFor="work-experience" className="text-center text-sm">
