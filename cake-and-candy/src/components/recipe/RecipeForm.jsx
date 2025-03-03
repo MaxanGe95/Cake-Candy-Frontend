@@ -8,7 +8,6 @@ import {
   InputString,
   InputTextarea,
   InputCurrency,
-  MultipleDropdownInput,
 } from "../form/Inputs";
 
 const toolsList = [
@@ -82,7 +81,16 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
     }));
   };
 
-  const handleIngredientChange = (index, field, value) => {
+  const handleIngredientChange = (index, value) => {
+    setNewRecipe((prev) => ({
+      ...prev,
+      ingredients: prev.ingredients.map((ing, i) =>
+        i === index ? { ...ing, name: value.name, ekPreis: value.ekPreis } : ing
+      ),
+    }));
+  };
+
+  const handleIngredientChangeField = (index, field, value) => {
     setNewRecipe((prev) => ({
       ...prev,
       ingredients: prev.ingredients.map((ing, i) =>
@@ -139,7 +147,6 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
     };
 
     try {
-      console.log(JSON.stringify(finalRecipe));
       let recipe;
       if (finalRecipe._id) {
         recipe = await updateRezept(finalRecipe);
@@ -167,14 +174,6 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         className="mb-1"
       />
 
-      <h3 className="text-lg font-semibold">Zusatztext</h3>
-      <InputTextarea
-        placeholder="Zusatz"
-        value={newRecipe.zusatz}
-        onChange={(v) => handleRecipeChange("zusatz", v)}
-        error={errors.zusatz}
-        className="mb-1"
-      />
       <h3 className="text-lg font-semibold">Kategorie</h3>
       <DropdownInput
         className="w-full"
@@ -186,75 +185,21 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       />
 
       <h3 className="text-lg font-semibold">Hilfsmittel</h3>
-      <MultipleDropdownInput
+      <DropdownInput
         className="w-full"
         options={toolsList}
-        value={newRecipe.tools}
-        onChange={(e) => handleRecipeChange("tools", e)}
+        value={newRecipe.tools[0]}
+        onChange={(e) => handleRecipeChange("tools", [e])}
         placeholder="Hilfsmittel wählen"
         error={errors.name}
       />
 
-      <h3 className="text-lg font-semibold">Stückpreis</h3>
-      <InputCurrency
-        placeholder="Stückpreis"
-        value={newRecipe.unitPrice}
-        onChange={(v) => handleRecipeChange("unitPrice", v)}
-        error={errors.unitPrice}
-        className="mb-2"
-      />
-
-      <h3 className="text-lg font-semibold">Gesamtmenge</h3>
+      <h3 className="text-lg font-semibold">Ergebnismenge</h3>
       <InputNumber
-        placeholder="Gesamtmenge"
+        placeholder="Ergebnismenge"
         value={newRecipe.totalAmount}
         onChange={(v) => handleRecipeChange("totalAmount", v)}
         error={errors.name}
-        className="mb-2"
-      />
-
-      <h3 className="text-lg font-semibold">Gesamtkosten</h3>
-      <InputCurrency
-        placeholder="Gesamtkosten"
-        value={newRecipe.totalCost}
-        onChange={(v) => handleRecipeChange("totalCost", v)}
-        error={errors.totalCost}
-        className="mb-2"
-      />
-
-      <h3 className="text-lg font-semibold">B2B-Preis</h3>
-      <InputCurrency
-        placeholder="B2B-Preis"
-        value={newRecipe.b2bPreis}
-        onChange={(v) => handleRecipeChange("b2bPreis", v)}
-        error={errors.b2bPreis}
-        className="mb-2"
-      />
-
-      <h3 className="text-lg font-semibold">B2C-Preis</h3>
-      <InputCurrency
-        placeholder="B2C-Preis"
-        value={newRecipe.b2cPreis}
-        onChange={(v) => handleRecipeChange("b2cPreis", v)}
-        error={errors.b2cPreis}
-        className="mb-2"
-      />
-
-      <h3 className="text-lg font-semibold">Lagerbestand-Ist</h3>
-      <InputNumber
-        placeholder="Lagerbestand-Ist"
-        value={newRecipe.istlagerbestand}
-        onChange={(v) => handleRecipeChange("istlagerbestand", v)}
-        error={errors.istlagerbestand}
-        className="mb-2"
-      />
-
-      <h3 className="text-lg font-semibold">Lagerbestand-Soll</h3>
-      <InputNumber
-        placeholder="Lagerbestand-Soll"
-        value={newRecipe.solllagerbestand}
-        onChange={(v) => handleRecipeChange("solllagerbestand", v)}
-        error={errors.solllagerbestand}
         className="mb-2"
       />
 
@@ -265,7 +210,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             className="w-3/4 mr-1"
             options={ingredientsList}
             value={ingredient.name}
-            onChange={(v) => handleIngredientChange(index, "name", v)}
+            onChangeObject={(v) => handleIngredientChange(index, v)}
             valueKey="name"
             nameKey="name"
             placeholder="Zutat wählen"
@@ -274,16 +219,9 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
           <InputNumber
             placeholder="Menge"
             value={ingredient.amount}
-            onChange={(v) => handleIngredientChange(index, "amount", v)}
+            onChange={(v) => handleIngredientChangeField(index, "amount", v)}
             error={errors[`ingredient${index}_amount`]}
             className="w-1/4 mr-1"
-          />
-          <InputCurrency
-            placeholder="EK-Preis"
-            value={ingredient.ekPreis}
-            onChange={(v) => handleIngredientChange(index, "ekPreis", v)}
-            error={errors[`ingredient${index}_ekPreis`]}
-            className="w-1/4"
           />
           <DeleteButton onClick={() => removeIngredient(index)} />
         </div>

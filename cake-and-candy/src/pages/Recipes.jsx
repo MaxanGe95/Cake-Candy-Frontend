@@ -81,7 +81,7 @@ const Recipes = () => {
           ingredientsList={ingredientsList} // Zutatenliste als Prop an RecipeForm übergeben
         />
       )}
-      {!selectedRecipe && (
+      {!selectedRecipe && !showNewRecipeForm && (
         <div>
           <PrimaryButton
             onClick={() => setShowNewRecipeForm(true)}

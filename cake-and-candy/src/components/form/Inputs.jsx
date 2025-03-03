@@ -5,6 +5,7 @@ const DropdownInput = ({
   options,
   value,
   onChange,
+  onChangeObject,
   valueKey,
   nameKey,
   placeholder = "Wähle einen Wert",
@@ -82,7 +83,8 @@ const DropdownInput = ({
                 key={index}
                 className="p-2 hover:bg-teal-400 cursor-pointer"
                 onClick={() => {
-                  onChange(valueKey ? option[valueKey] : option);
+                  onChange?.(valueKey ? option[valueKey] : option);
+                  onChangeObject?.(option);
                   setIsOpen(false);
                   setSearch("");
                 }}
