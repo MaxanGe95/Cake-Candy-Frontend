@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import RecipeForm from "../components/recipe/RecipeForm";
 import RecipeList from "../components/recipe/RecipeList";
-import RecipeDetails from "../components/recipe/RecipeDetails";
+// import RecipeDetails from "../components/recipe/RecipeDetails";
 import { fetchZutaten } from "../api/zutaten";
 import { fetchRezepte, deleteRezept } from "../api/rezepte";
 import { PrimaryButton } from "../components/form/Buttons";
@@ -65,7 +65,7 @@ const Recipes = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 text-amber-100">
+    <div className="p-8 text-amber-100">
       {showNewRecipeForm && (
         <RecipeForm
           recipe={
@@ -85,9 +85,9 @@ const Recipes = () => {
         <div>
           <PrimaryButton
             onClick={() => setShowNewRecipeForm(true)}
-            className="mb-4"
+            className="mb-4 mt-10"
           >
-            Neu
+            Neues Rezept hinzufügen
           </PrimaryButton>
           <RecipeList
             recipes={recipes}

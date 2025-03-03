@@ -154,8 +154,8 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
   };
 
   return (
-    <div className="mb-4">
-      <h2 className="text-xl font-semibold">
+    <div className="p-6">
+      <h2 className="text-xl font-semibold mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
 
