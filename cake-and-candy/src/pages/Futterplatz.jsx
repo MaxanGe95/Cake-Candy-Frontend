@@ -13,22 +13,61 @@ function Futterplatz() {
 
   // Invoice parsing function
   function parseInvoiceData(text) {
-    const regex = /(\d{2}\.\d{2}\.\d{4})\s+Rechnung\s+([\w\s-]+)\s+([\d,.]+) €/g;
+    // Regex für Produkte und Preise, der auch mit verschiedenen Trennzeichen arbeitet
+    const productRegex = /([A-Za-zÄÖÜäöüß0-9\s\(\)-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
+    const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/; // Regex für den Gesamtbetrag
+  
     let matches;
-    const result = [];
-
-    while ((matches = regex.exec(text)) !== null) {
-      result.push({
-        date: matches[1],
-        clientName: matches[2].trim(),
-        amount: parseFloat(matches[3].replace(',', '.')),
-        isB2B: isB2B,
-        isB2C: isB2C,
-        company: selectedCompany
+    const products = [];
+    let totalAmount = 0;
+  
+    console.log("Verarbeite den folgenden Text:", text);
+  
+    // Extrahiere die Produkte und deren Preise
+    while ((matches = productRegex.exec(text)) !== null) {
+      console.log("Produkt-Regex-Matches:", matches);
+  
+      const productName = matches[1].trim();
+      const pricePerUnit = parseFloat(matches[2].replace(',', '.'));
+      const quantity = parseInt(matches[3]);
+      const totalPrice = parseFloat(matches[4].replace(',', '.'));
+  
+      console.log(`Produkt gefunden: ${productName} - ${pricePerUnit} $ / Stk., ${quantity} Stk., Gesamtpreis: ${totalPrice}`);
+  
+      products.push({
+        productName,
+        pricePerUnit,
+        quantity,
+        totalPrice,
       });
+  
+      totalAmount += totalPrice; // Summe der Produktpreise
     }
-    return result;
+  
+    // Extrahiere den Gesamtbetrag
+    const amountMatches = text.match(amountRegex);
+    if (amountMatches && amountMatches[1]) {
+      totalAmount = parseFloat(amountMatches[1].replace(',', '.')); // Gesamtbetrag setzen
+    }
+  
+    // Debugging-Log für das Endergebnis
+    console.log("Produkte:", products);
+    console.log("Gesamtbetrag:", totalAmount);
+  
+    return {
+      products,
+      totalAmount,
+      company: selectedCompany, // Die Firma aus der Auswahl
+      customerType: isB2B ? "B2B" : "B2C", // Der Kundentyp aus der Auswahl
+    };
   }
+  
+  
+  
+  
+  
+  
+  
 
   // Salary parsing function
   function parseSalaryData(text) {
@@ -77,37 +116,44 @@ function Futterplatz() {
   // Handle form submission and send data to backend
   async function handleSubmit(e, inputData, inputType) {
     e.preventDefault();
-  
+
     let extractedData;
     if (inputType === "invoice") {
       extractedData = parseInvoiceData(inputData);
+      
+      // Zusätzliche Daten für Rechnungen hinzufügen
+      extractedData = {
+        ...extractedData,
+        company: selectedCompany, // Firma aus dem Dropdown
+        customerType: isB2B ? "B2B" : isB2C ? "B2C" : "", // Kundentyp
+      };
     } else if (inputType === "salary") {
       extractedData = parseSalaryData(inputData);
       // Datum ins richtige Format konvertieren
       extractedData = extractedData.map(data => ({
         ...data,
-        date: data.date 
+        date: data.date
       }));
     } else if (inputType === "inventory") {
       extractedData = parseInventoryData(inputData);
     }
-  
+
     console.log("Extrahierte Daten:", extractedData);  // Daten prüfen
-  
+
     try {
       const url =
         inputType === "salary"
           ? "http://localhost:5000/api/salaries"
           : inputType === "invoice"
           ? "http://localhost:5000/api/invoices"
-          : "http://localhost:5000/api/inventory"; // Beispiel für Inventar
-  
+          : "http://localhost:5000/api/inventory"; 
+
       const response = await fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(extractedData),
       });
-  
+
       if (response.ok) {
         console.log("Daten erfolgreich gesendet");
       } else {
@@ -118,6 +164,7 @@ function Futterplatz() {
       console.error("Fehler:", error);
     }
   }
+
 
   // Check if data exists before submitting
   async function checkIfDataExists(data, inputType) {
