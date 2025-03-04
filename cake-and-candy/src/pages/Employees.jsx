@@ -180,7 +180,7 @@ const MitarbeiterTabelle = () => {
           {data.map((row) => (
             <React.Fragment key={row.employeeName}>
               <tr
-                className="border rounded-md cursor-pointer hover:bg-[#7ec6cc80]"
+                className="border rounded-md cursor-pointer hover:bg-teal-950"
                 onClick={() => toggleDropdown(row.employeeName)}
               >
                 <td className="p-2 text-center">{row.employeeName}</td>
