@@ -75,7 +75,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
         </thead>
         <tbody>
           {zutatenState.map((zutat) => (
-            <tr key={zutat._id} className="border">
+            <tr key={zutat._id} className="border hover:bg-[#7ec6cc80] transition duration-200">
               <td className="border p-2 text-center">{zutat.name}</td>
               <td className="border p-2 text-center">{zutat.typ}</td>
               <td className="border p-2 text-center">
