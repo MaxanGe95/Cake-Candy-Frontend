@@ -94,7 +94,7 @@ const Orders = () => {
         </button>
       </form>
       <h1 className="text-2xl font-bold text-teal-200 mt-6">
-        Bestellübersicht
+        Bestell-Übersicht
       </h1>
       <OrderList orders={orders} />
     </div>
