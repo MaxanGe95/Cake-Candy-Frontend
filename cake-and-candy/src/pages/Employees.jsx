@@ -1,88 +1,4 @@
-/* function Employees() {
-  return (
-    <div className="flex justify-center flex-col">
-      <h1 className="text-center p-5 text-2xl">
-        Willkommen bei Mitarbeiter Gehalt
-      </h1>
-
-      <table className="table-auto text-center">
-        <thead className="bg-red-200">
-          <tr className="border-2">
-            <th className="p-2">Name</th>
-            <th className="p-2">Gehalt</th>
-            <th className="p-2">Wochen/h</th>
-            <th className="p-2">Wochen/Lohn</th>
-            <th className="p-2">Monats/h</th>
-            <th className="p-2">Monat/Lohn</th>
-          </tr>
-        </thead>
-
-        <tbody>
-          <tr className="border-2 cursor-crosshair">
-            <td className="p-2">Max Mustermann</td>
-            <td className="p-2">60€</td>
-            <td className="p-2">32h</td>
-            <td className="p-2">632€</td>
-            <td className="p-2">127h</td>
-            <td className="p-2">1347€</td>
-          </tr>
-          <tr className="border-2 cursor-pointer">
-            <td className="p-2">Malcolm Lockyer</td>
-            <td className="p-2 flex justify-center">60€</td>
-            <td className="p-2">32h</td>
-            <td className="p-2">632€</td>
-            <td className="p-2">127h</td>
-            <td className="p-2">1347€</td>
-          </tr>
-          <tr className="border-2 cursor-pointer">
-            <td className="p-2">Mustermann Max</td>
-            <td className="p-2">60€</td>
-            <td className="p-2">32h</td>
-            <td className="p-2">632€</td>
-            <td className="p-2">127h</td>
-            <td className="p-2">1347€</td>
-          </tr>{" "}
-          <tr className="border-2 cursor-pointer">
-            <td className="p-2">Mustermann Max</td>
-            <td className="p-2">60€</td>
-            <td className="p-2">32h</td>
-            <td className="p-2">632€</td>
-            <td className="p-2">127h</td>
-            <td className="p-2">1347€</td>
-          </tr>{" "}
-          <tr className="border-2 cursor-pointer">
-            <td className="p-2">Mustermann Max</td>
-            <td className="p-2">60€</td>
-            <td className="p-2">32h</td>
-            <td className="p-2">632€</td>
-            <td className="p-2">127h</td>
-            <td className="p-2">1347€</td>
-          </tr>{" "}
-          <tr className="border-2 cursor-pointer">
-            <td className="p-2">Mustermann Max</td>
-            <td className="p-2">60€</td>
-            <td className="p-2">32h</td>
-            <td className="p-2">632€</td>
-            <td className="p-2">127h</td>
-            <td className="p-2">1347€</td>
-          </tr>{" "}
-          <tr className="border-2 cursor-pointer">
-            <td className="p-2">Mustermann Max</td>
-            <td className="p-2">60€</td>
-            <td className="p-2">32h</td>
-            <td className="p-2">632€</td>
-            <td className="p-2">127h</td>
-            <td className="p-2">1347€</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-export default Employees;
- */
-
+/* 
 
 import React, { useState } from "react";
 
@@ -180,6 +96,109 @@ const MitarbeiterTabelle = () => {
                       <p>
                         <strong>Gesamtes Gehalt:</strong> {row.gehalt}
                       </p>
+                    </div>
+                  </td>
+                </tr>
+              )}
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default MitarbeiterTabelle;
+ */
+
+import React, { useState, useEffect } from "react";
+
+const MitarbeiterTabelle = () => {
+  const [selectedRow, setSelectedRow] = useState(null);
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/salaries");
+        const result = await response.json();
+        console.log(result);
+
+        const groupedData = groupData(result);
+        setData(groupedData);
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Daten:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const groupData = (data) => {
+    const grouped = {};
+
+    data.forEach((entry) => {
+      if (!grouped[entry.employeeName]) {
+        grouped[entry.employeeName] = {
+          employeeName: entry.employeeName,
+          totalSalary: 0,
+          totalWorkingHours: 0,
+          details: [],
+        };
+      }
+      grouped[entry.employeeName].totalSalary += entry.salary;
+      grouped[entry.employeeName].totalWorkingHours += entry.workingHours;
+      grouped[entry.employeeName].details.push({
+        salary: entry.salary,
+        workingHours: entry.workingHours,
+        date: entry.date,
+      });
+    });
+
+    Object.values(grouped).forEach((employee) => {
+      employee.details.sort((a, b) => new Date(b.date) - new Date(a.date));
+    });
+
+    return Object.values(grouped);
+  };
+
+  const toggleDropdown = (employeeName) => {
+    setSelectedRow(selectedRow === employeeName ? null : employeeName);
+  };
+
+  return (
+    <div className="container mx-auto p-6">
+      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+        <thead>
+          <tr className="bg-teal-950">
+            <th className="p-2">Mitarbeitername</th>
+            <th className="p-2">Gesamtgehalt</th>
+            <th className="p-2">Gesamte Wochenstunden</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((row) => (
+            <React.Fragment key={row.employeeName}>
+              <tr
+                className="border rounded-md cursor-pointer hover:bg-[#7ec6cc80]"
+                onClick={() => toggleDropdown(row.employeeName)}
+              >
+                <td className="p-2 text-center">{row.employeeName}</td>
+                <td className="p-2 text-center">{row.totalSalary}€</td>
+                <td className="p-2 text-center">{row.totalWorkingHours} h</td>
+              </tr>
+              {selectedRow === row.employeeName && (
+                <tr>
+                  <td colSpan="3" className="p-4 text-center">
+                    <div className="bg-teal-950 rounded-md shadow-lg p-4">
+                      <h3 className="text-lg font-bold mb-2">Details</h3>
+                      <ul>
+                        {row.details.map((detail, index) => (
+                          <li key={index} className="mb-2">
+                            <strong>Datum:</strong> {detail.date}, <strong>Gehalt:</strong> {detail.salary}€, <strong>Stunden:</strong> {detail.workingHours} h
+                          </li>
+                        ))}
+                      </ul>
                     </div>
                   </td>
                 </tr>
