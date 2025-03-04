@@ -11,6 +11,7 @@ function Futterplatz() {
 
   const companies = ["Lona Markt", "LTD", "Pattys Eis"];
 
+  // Invoice parsing function
   function parseInvoiceData(text) {
     const regex = /(\d{2}\.\d{2}\.\d{4})\s+Rechnung\s+([\w\s-]+)\s+([\d,.]+) €/g;
     let matches;
@@ -29,6 +30,7 @@ function Futterplatz() {
     return result;
   }
 
+  // Salary parsing function
   function parseSalaryData(text) {
     const regex = /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch Cake & Candy\s+([\w\s]+) \(#(\d+)\) - Gehalt "([\w\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
     let matches;
@@ -46,24 +48,33 @@ function Futterplatz() {
   
     return result;
   }
-  
-  
 
+  // Inventory parsing function
   function parseInventoryData(text) {
-    const regex = /Artikel: ([\w\s-]+), Menge: (\d+), Preis: ([\d,.]+) €/g;
+    // Regex anpassen, um komplette Namen korrekt zu erfassen, einschließlich Leerzeichen und Bindestrichen
+    const regex = /([A-Za-zÄÖÜäöüß\s\-]+)\s+(\d+)\s+([^\n]+)/g;
     let matches;
     const result = [];
-
+  
     while ((matches = regex.exec(text)) !== null) {
+      // Entfernen von überflüssigen Leerzeichen
+      const itemName = matches[1].trim();
+      const quantity = parseInt(matches[2]);
+      const location = matches[3].trim() || "Nicht angegeben"; // Standardwert für Location, falls leer
+  
       result.push({
-        itemName: matches[1].trim(),
-        quantity: parseInt(matches[2]),
-        price: parseFloat(matches[3].replace(',', '.'))
+        itemName: itemName,
+        quantity: quantity,
+        location: location,
       });
     }
+  
+    console.log("Extrahierte Inventardaten:", result);  // Debugging-Ausgabe
     return result;
   }
+  
 
+  // Handle form submission and send data to backend
   async function handleSubmit(e, inputData, inputType) {
     e.preventDefault();
   
@@ -107,12 +118,8 @@ function Futterplatz() {
       console.error("Fehler:", error);
     }
   }
-  
-  
-  
-  
-  
-  // Hilfsfunktion zur Prüfung auf vorhandene Daten
+
+  // Check if data exists before submitting
   async function checkIfDataExists(data, inputType) {
     const url =
       inputType === "salary"
@@ -155,8 +162,6 @@ function Futterplatz() {
   
     return [];
   }
-  
-  
 
   return (
     <div className="container mx-auto p-6 text-amber-100">
@@ -239,10 +244,10 @@ function Futterplatz() {
         </button>
       </form>
 
-      {/* 📦 Inputfeld 3 - Inventurliste */}
+      {/* 🏗️ Inputfeld 3 - Inventar */}
       <form onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}>
         <label htmlFor="inventory-input" className="text-center text-sm">
-          Inputfeld für Inventurliste
+          Inputfeld für Lagerbestände
         </label>
         <textarea
           value={inputText3}
