@@ -1,21 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function Futterplatz() {
-  const [inputText1, setInputText1] = useState("");
+  const [inputText1, setInputText1] = useState(""); // Für Rechnungsdaten
+  const [inputText2, setInputText2] = useState(""); // Für Gehaltsdaten
+  const [inputText3, setInputText3] = useState(""); // Für Inventardaten
+
   const [isB2B, setIsB2B] = useState(false);
   const [isB2C, setIsB2C] = useState(false);
   const [selectedCompany, setSelectedCompany] = useState("");
+  const [newCompany, setNewCompany] = useState("");
+  const [companies, setCompanies] = useState([]);
 
-  const [inputText2, setInputText2] = useState("");
-  const [inputText3, setInputText3] = useState("");
+  // Laden der Firmen aus dem Backend
+  useEffect(() => {
+    async function fetchCompanies() {
+      try {
+        const response = await fetch("http://localhost:5000/api/companies");
+        const data = await response.json();
+        setCompanies(data);
+      } catch (error) {
+        console.error("Fehler beim Laden der Firmen:", error);
+      }
+    }
+    fetchCompanies();
+  }, []);
 
-  const companies = ["Lona Markt", "LTD", "Pattys Eis"];
-
-  // Invoice parsing function
+  // Rechnungsdaten parsen
   function parseInvoiceData(text) {
-    // Regex für Produkte und Preise, der auch mit verschiedenen Trennzeichen arbeitet
     const productRegex = /([A-Za-zÄÖÜäöüß0-9\s\(\)-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
-    const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/; // Regex für den Gesamtbetrag
+    const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/;
   
     let matches;
     const products = [];
@@ -23,16 +36,11 @@ function Futterplatz() {
   
     console.log("Verarbeite den folgenden Text:", text);
   
-    // Extrahiere die Produkte und deren Preise
     while ((matches = productRegex.exec(text)) !== null) {
-      console.log("Produkt-Regex-Matches:", matches);
-  
       const productName = matches[1].trim();
       const pricePerUnit = parseFloat(matches[2].replace(',', '.'));
       const quantity = parseInt(matches[3]);
       const totalPrice = parseFloat(matches[4].replace(',', '.'));
-  
-      console.log(`Produkt gefunden: ${productName} - ${pricePerUnit} $ / Stk., ${quantity} Stk., Gesamtpreis: ${totalPrice}`);
   
       products.push({
         productName,
@@ -41,35 +49,23 @@ function Futterplatz() {
         totalPrice,
       });
   
-      totalAmount += totalPrice; // Summe der Produktpreise
+      totalAmount += totalPrice;
     }
   
-    // Extrahiere den Gesamtbetrag
     const amountMatches = text.match(amountRegex);
     if (amountMatches && amountMatches[1]) {
-      totalAmount = parseFloat(amountMatches[1].replace(',', '.')); // Gesamtbetrag setzen
+      totalAmount = parseFloat(amountMatches[1].replace(',', '.'));
     }
-  
-    // Debugging-Log für das Endergebnis
-    console.log("Produkte:", products);
-    console.log("Gesamtbetrag:", totalAmount);
   
     return {
       products,
       totalAmount,
-      company: selectedCompany, // Die Firma aus der Auswahl
-      customerType: isB2B ? "B2B" : "B2C", // Der Kundentyp aus der Auswahl
+      company: selectedCompany,
+      customerType: isB2B ? "B2B" : "B2C",
     };
   }
-  
-  
-  
-  
-  
-  
-  
 
-  // Salary parsing function
+  // Gehaltsdaten parsen
   function parseSalaryData(text) {
     const regex = /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch Cake & Candy\s+([\w\s]+) \(#(\d+)\) - Gehalt "([\w\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
     let matches;
@@ -81,25 +77,23 @@ function Futterplatz() {
         employeeName: matches[2].trim(),
         kontoNumber: matches[3],
         workingHours: parseFloat(matches[5].replace(',', '.')),
-        salary: Math.abs(parseFloat(matches[6].replace(',', '.'))) // Absoluten Wert verwenden
+        salary: Math.abs(parseFloat(matches[6].replace(',', '.')))
       });
     }
   
     return result;
   }
 
-  // Inventory parsing function
+  // Inventardaten parsen
   function parseInventoryData(text) {
-    // Regex anpassen, um komplette Namen korrekt zu erfassen, einschließlich Leerzeichen und Bindestrichen
     const regex = /([A-Za-zÄÖÜäöüß\s\-]+)\s+(\d+)\s+([^\n]+)/g;
     let matches;
     const result = [];
   
     while ((matches = regex.exec(text)) !== null) {
-      // Entfernen von überflüssigen Leerzeichen
       const itemName = matches[1].trim();
       const quantity = parseInt(matches[2]);
-      const location = matches[3].trim() || "Nicht angegeben"; // Standardwert für Location, falls leer
+      const location = matches[3].trim() || "Nicht angegeben";
   
       result.push({
         itemName: itemName,
@@ -108,28 +102,24 @@ function Futterplatz() {
       });
     }
   
-    console.log("Extrahierte Inventardaten:", result);  // Debugging-Ausgabe
+    console.log("Extrahierte Inventardaten:", result);
     return result;
   }
-  
 
-  // Handle form submission and send data to backend
+  // Daten absenden
   async function handleSubmit(e, inputData, inputType) {
     e.preventDefault();
 
     let extractedData;
     if (inputType === "invoice") {
       extractedData = parseInvoiceData(inputData);
-      
-      // Zusätzliche Daten für Rechnungen hinzufügen
       extractedData = {
         ...extractedData,
-        company: selectedCompany, // Firma aus dem Dropdown
-        customerType: isB2B ? "B2B" : isB2C ? "B2C" : "", // Kundentyp
+        company: selectedCompany,
+        customerType: isB2B ? "B2B" : isB2C ? "B2C" : "",
       };
     } else if (inputType === "salary") {
       extractedData = parseSalaryData(inputData);
-      // Datum ins richtige Format konvertieren
       extractedData = extractedData.map(data => ({
         ...data,
         date: data.date
@@ -138,7 +128,7 @@ function Futterplatz() {
       extractedData = parseInventoryData(inputData);
     }
 
-    console.log("Extrahierte Daten:", extractedData);  // Daten prüfen
+    console.log("Extrahierte Daten:", extractedData);
 
     try {
       const url =
@@ -165,49 +155,31 @@ function Futterplatz() {
     }
   }
 
-
-  // Check if data exists before submitting
-  async function checkIfDataExists(data, inputType) {
-    const url =
-      inputType === "salary"
-        ? "http://localhost:5000/api/salaries"
-        : inputType === "invoice"
-        ? "http://localhost:5000/api/invoices"
-        : "http://localhost:5000/api/inventory"; // Beispiel für Inventar
+  // Neue Firma hinzufügen
+  async function handleAddNewCompany() {
+    if (newCompany && !companies.includes(newCompany)) {
+      setCompanies([...companies, newCompany]);
+      setSelectedCompany(newCompany);
+      setNewCompany(""); // Clear the input field after adding
   
-    const response = await fetch(url);
-    const existingData = await response.json();
+      try {
+        const response = await fetch("http://localhost:5000/api/companies/add", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name: newCompany }),
+        });
   
-    // Anpassen der Logik basierend auf den Daten, die du speicherst
-    if (inputType === "salary") {
-      return existingData.filter(
-        (item) =>
-          item.date === data.date &&
-          item.employeeName === data.employeeName &&
-          item.kontoNumber === data.kontoNumber // Beispiel für Gehaltsabrechnung
-      );
+        if (response.ok) {
+          const data = await response.json();
+          console.log("Firma erfolgreich hinzugefügt:", data);
+        } else {
+          const errorData = await response.json();
+          console.error("Fehler beim Hinzufügen der Firma:", errorData.message);
+        }
+      } catch (error) {
+        console.error("Fehler:", error);
+      }
     }
-  
-    if (inputType === "invoice") {
-      return existingData.filter(
-        (item) =>
-          item.date === data.date &&
-          item.clientName === data.clientName &&
-          item.amount === data.amount &&
-          item.company === data.company // Beispiel für Rechnung
-      );
-    }
-  
-    if (inputType === "inventory") {
-      return existingData.filter(
-        (item) =>
-          item.itemName === data.itemName &&
-          item.quantity === data.quantity &&
-          item.price === data.price // Beispiel für Inventardaten
-      );
-    }
-  
-    return [];
   }
 
   return (
@@ -246,38 +218,60 @@ function Futterplatz() {
             name="customerType"
             checked={isB2C}
             onChange={() => { setIsB2C(true); setIsB2B(false); }}
-            className="ml-4"
+            className="mr-2"
           />
           <label htmlFor="b2c-radio">B2C</label>
         </div>
 
-        {/* Dropdown für Firmenauswahl */}
-        <div className="my-2">
-          <label htmlFor="company-select">Firma:</label>
+        {/* Auswahl der Firma */}
+        <div>
+          <label className="text-sm text-gray-200">Firma:</label>
           <select
-            id="company-select"
-            value={selectedCompany}
-            onChange={(e) => setSelectedCompany(e.target.value)}
-            className="border p-2 rounded-md ml-2"
-          >
-            <option value="">Bitte Firma wählen</option>
-            {companies.map((company, index) => (
-              <option key={index} value={company}>
-                {company}
-              </option>
-            ))}
-          </select>
+  className="p-2 rounded-sm border-gray-300"
+  value={selectedCompany}
+  onChange={(e) => setSelectedCompany(e.target.value)}
+>
+  <option value="" disabled>
+    Wählen Sie eine Firma aus
+  </option>
+  {companies.map((company, index) => (
+    <option key={index} value={company.name}>
+      {company.name} {/* Zeige nur den Namen an */}
+    </option>
+  ))}
+</select>
+
+ {/* Neue Firma hinzufügen */}
+ <div>
+        <input
+          type="text"
+          value={newCompany}
+          onChange={(e) => setNewCompany(e.target.value)}
+          placeholder="Neue Firma hinzufügen"
+          className="p-2 border border-gray-300 rounded-md"
+        />
+        <button
+          onClick={handleAddNewCompany}
+          className="bg-green-500 text-white rounded-full px-6 py-2 my-3"
+        >
+          Firma hinzufügen
+        </button>
+      </div>
+
         </div>
 
-        <button type="submit" className="bg-teal-950 cursor-pointer border-1 rounded px-4 py-2 my-4">
-          Rein ins Backend (Rechnung)
+        <button
+          type="submit"
+          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
+        >
+          Daten absenden
         </button>
       </form>
 
-      {/* 💰 Inputfeld 2 - Gehaltsabrechnung */}
-      <form onSubmit={(e) => handleSubmit(e, inputText2, "salary")}>
+        {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
+        <form onSubmit={(e) => handleSubmit(e, inputText2, "salary")}>
         <label htmlFor="salary-input" className="text-center text-sm">
-          Inputfeld für RDP Kontoauszug
+          Gehaltsdaten (z.B. für Lastschrift)
         </label>
         <textarea
           value={inputText2}
@@ -286,15 +280,19 @@ function Futterplatz() {
           cols="150"
           className="border border-gray-300 p-2 m-5 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
-        <button type="submit" className="bg-teal-950 cursor-pointer border-1 rounded px-4 py-2 my-4">
-          Rein ins Backend (Gehalt)
+
+        <button
+          type="submit"
+          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
+        >
+          Daten absenden
         </button>
       </form>
 
-      {/* 🏗️ Inputfeld 3 - Inventar */}
+      {/* 🧾 Inputfeld 3 - Inventardaten */}
       <form onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}>
         <label htmlFor="inventory-input" className="text-center text-sm">
-          Inputfeld für Lagerbestände
+          Inventardaten (z.B. für Bestände)
         </label>
         <textarea
           value={inputText3}
@@ -303,11 +301,20 @@ function Futterplatz() {
           cols="150"
           className="border border-gray-300 p-2 m-5 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
-        <button type="submit" className="bg-teal-950 cursor-pointer border-1 rounded px-4 py-2 my-4">
-          Rein ins Backend (Inventar)
+
+        <button
+          type="submit"
+          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
+        >
+          Daten absenden
         </button>
       </form>
+     
+
+      {/* Weitere Eingabeformulare... */}
     </div>
+
+    
   );
 }
 
