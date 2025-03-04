@@ -6,13 +6,19 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [scaleAmount, setScaleAmount] = useState(0);
 
+  // const calculateScaledIngredients = (recipe, scale) => {
+  //   return recipe.ingredients.map((ingredient) => ({
+  //     ...ingredient,
+  //     amount: (ingredient.amount * scale).toFixed(2),
+  //   }));
+  // };
   const calculateScaledIngredients = (recipe, scale) => {
     return recipe.ingredients.map((ingredient) => ({
       ...ingredient,
-      amount: (ingredient.amount * scale).toFixed(2),
+      // Math.round(), um die Menge auf die nächste ganze Zahl zu runden
+      amount: Math.round(ingredient.amount * scale),
     }));
   };
-
   const calculateIngredientTotalPrice = (ingredient) => {
     const amount = parseFloat(ingredient.amount);
     const ekPreis = parseFloat(ingredient.ekPreis);
@@ -27,8 +33,8 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
   };
 
   const round = (calc) => {
-    return "$" + (calc || 0).toFixed(2)
-  }
+    return "$" + (calc || 0).toFixed(2);
+  };
 
   const handleSelectRecipe = (recipe) => {
     setSelectedRecipe(recipe);
@@ -49,7 +55,7 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
 
   return (
     <div>
-      <h2 className="text-2xl font-semibold mt-6">Rezepte-Liste</h2>
+      <h2 className="text-2xl font-bold text-teal-200 mt-6">Rezepte-Liste</h2>
       <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
         <thead className="bg-teal-950">
           <tr>
@@ -57,12 +63,11 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
             <th className="p-2">Kategorie</th>
             <th className="p-2">Hilfsmittel</th>
             <th className="p-2">Output</th>
-            <th className="p-2">Stückpreis</th>
-            <th className="p-2">Gesamtpreis</th>
             <th className="p-2">Zutaten</th>
             {/* <th className="p-2">Menge</th> */}
             <th className="p-2">Istbestand</th>
             <th className="p-2">Sollbestand</th>
+            <th className="p-2">Zusatz</th>
             <th className="p-2">Aktionen</th>
           </tr>
         </thead>
@@ -77,12 +82,11 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                 <td className="p-2 text-center">{recipe.category}</td>
                 <td className="p-2 text-center">{recipe.tools?.join(", ")}</td>
                 <td className="p-2 text-center">{recipe.totalAmount}</td>
-                <td className="p-2 text-center">{round(recipe.unitPrice)}</td>
-                <td className="p-2 text-center">{round(recipe.totalCost)}</td>
                 <td className="p-2 text-center">Zutaten anzeigen</td>
                 {/* <td className="p-2 text-center">{recipe.totalAmount}</td> */}
                 <td className="p-2 text-center">{recipe.istlagerbestand}</td>
                 <td className="p-2 text-center">{recipe.solllagerbestand}</td>
+                <td className="p-2 text-center">-</td>
                 <td className="p-2 text-center">
                   <EditButton onClick={() => onEdit(recipe)}>
                     Rezept bearbeiten
@@ -91,11 +95,11 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                 </td>
               </tr>
               {selectedRecipe && selectedRecipe._id === recipe._id && (
-                <tr className="rounded-md shadow-lg p-4">
+                <tr>
                   <td colSpan="9" className="rounded-md shadow-lg p-4">
                     <div className="bg-[#7ec6cc33] rounded-md shadow-lg p-4">
-                      <table className=" bg-teal-900 min-w-full rounded-md shadow-lg p-4">
-                        <thead className="bg-teal-950  text-amber-100 rounded-md shadow-lg p-4">
+                      <table className=" bg-teal-950 min-w-full rounded-md shadow-lg overflow-hidden">
+                        <thead className="bg-teal-900  text-amber-100 rounded-t-md">
                           <tr>
                             <th className="p-2">Zutaten</th>
                             <th className="p-2">Stück</th>
@@ -126,12 +130,12 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                           </tr>
                         </tbody>
                       </table>
-                      <button
+                      {/* <button
                         className="bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200"
                         onClick={handleCloseDetails}
                       >
                         Zurück
-                      </button>
+                      </button> */}
                     </div>
                   </td>
                 </tr>

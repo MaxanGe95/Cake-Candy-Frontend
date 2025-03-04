@@ -55,7 +55,7 @@ const Orders = () => {
           name="date"
           value={newOrder.date}
           onChange={handleChange}
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
+          className="border mr-1 border-amber-100 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           required
         />
         <input
@@ -64,7 +64,7 @@ const Orders = () => {
           value={newOrder.customerId}
           onChange={handleChange}
           placeholder="Kundennummer"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
+          className="border mr-1 border-amber-100 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           required
         />
         <input
@@ -73,7 +73,7 @@ const Orders = () => {
           value={newOrder.product}
           onChange={handleChange}
           placeholder="Produkt"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
+          className="border mr-1 border-amber-100 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           required
         />
         <input
@@ -82,7 +82,7 @@ const Orders = () => {
           value={newOrder.quantity}
           onChange={handleChange}
           placeholder="Stück"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
+          className="border mr-1 border-amber-100 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
           min="1"
           required
         />

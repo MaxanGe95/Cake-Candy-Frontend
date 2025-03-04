@@ -83,11 +83,14 @@ const Recipes = () => {
       )}
       {!selectedRecipe && !showNewRecipeForm && (
         <div>
+                <h2 className="text-2xl font-bold text-teal-200 mt-6">
+        Neues Rezept hinzufügen
+      </h2>
           <PrimaryButton
             onClick={() => setShowNewRecipeForm(true)}
-            className="mb-4 mt-10"
+            className="mb-4 mt-6"
           >
-            Neues Rezept hinzufügen
+            Hinzufügen
           </PrimaryButton>
           <RecipeList
             recipes={recipes}
