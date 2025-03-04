@@ -149,7 +149,7 @@ const MultipleDropdownInput = ({
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       <div
-        className={`border rounded p-2 cursor-pointer flex items-center flex-wrap gap-1 ${
+        className={`border rounded p-1 cursor-pointer flex items-center flex-wrap gap-1 ${
           error
             ? "border-red-500 bg-red-100 text-red-700"
             : "border-amber-100 bg-teal-400/10"
@@ -160,7 +160,7 @@ const MultipleDropdownInput = ({
           value.map((val, index) => (
             <span
               key={index}
-              className="bg-teal-500 text-white px-2 py-1 rounded"
+              className="bg-teal-500 text-amber-100 px-2 py-1 rounded"
             >
               {nameKey
                 ? options.find((opt) => opt[valueKey] === val)?.[nameKey]
@@ -193,7 +193,7 @@ const MultipleDropdownInput = ({
                 <div
                   key={index}
                   className={`p-2 flex items-center cursor-pointer hover:bg-teal-400 ${
-                    isSelected ? "bg-teal-600 text-white" : ""
+                    isSelected ? "bg-teal-600 text-amber-100" : ""
                   }`}
                   onClick={() => handleSelect(optionValue)}
                 >
