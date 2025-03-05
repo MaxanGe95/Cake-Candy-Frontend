@@ -206,7 +206,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       {newRecipe.ingredients.map((ingredient, index) => (
         <div key={index} className="flex mb-2 items-center">
           <DropdownInput
-            className="w-3/4 mr-1"
+            className="w-1/4 mr-1"
             options={ingredientsList}
             value={ingredient.name}
             onChangeObject={(v) => handleIngredientChange(index, v)}
