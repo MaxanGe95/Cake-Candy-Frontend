@@ -149,7 +149,7 @@ const MultipleDropdownInput = ({
   return (
     <div className={`relative ${className}`} ref={dropdownRef}>
       <div
-        className={`border rounded p-1 cursor-pointer flex items-center flex-wrap gap-1 ${
+        className={`border border-amber-100 rounded p-1 cursor-pointer flex items-center flex-wrap gap-1 ${
           error
             ? "border-red-500 bg-red-100 text-red-700"
             : "border-amber-100 bg-teal-400/10"
@@ -228,7 +228,7 @@ const InputNumber = ({
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         placeholder={placeholder}
-        className={`w-full border rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+        className={`w-full border border-amber-100 rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
           error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
         }`}
       />
@@ -253,7 +253,7 @@ const InputString = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full border rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+        className={`w-full border border-amber-100 rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
           error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
         }`}
       />
@@ -277,7 +277,7 @@ const InputTextarea = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full border rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+        className={`w-full border border-amber-100 rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
           error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
         }`}
         rows={Math.max(3, value?.split("\n").length)}
@@ -298,7 +298,7 @@ const InputCurrency = ({
   return (
     <div className={`relative ${className}`}>
       <div
-        className={`flex place-items-center align-center w-full border rounded bg-teal-400/10 focus:ring-1 focus:ring-amber-100 ${
+        className={`flex place-items-center align-center w-full border border-amber-100 rounded bg-teal-400/10 focus:ring-1 focus:ring-amber-100 ${
           error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
         }`}
       >
