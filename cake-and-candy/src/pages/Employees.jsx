@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 
 const MitarbeiterTabelle = () => {
@@ -8,7 +7,7 @@ const MitarbeiterTabelle = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/salaries");
+        const response = await fetch("http://localhost:3000/api/salaries");
         const result = await response.json();
         console.log(result);
 
@@ -68,7 +67,7 @@ const MitarbeiterTabelle = () => {
           {data.map((row) => (
             <React.Fragment key={row.employeeName}>
               <tr
-                className="border rounded-md cursor-pointer hover:bg-teal-950"
+                className="border rounded-md cursor-pointer "
                 onClick={() => toggleDropdown(row.employeeName)}
               >
                 <td className="p-2 text-center">{row.employeeName}</td>
@@ -80,13 +79,24 @@ const MitarbeiterTabelle = () => {
                   <td colSpan="3" className="p-4 text-center">
                     <div className="bg-teal-950 rounded-md shadow-lg p-4">
                       <h3 className="text-lg font-bold mb-2">Details</h3>
-                      <ul>
-                        {row.details.map((detail, index) => (
-                          <li key={index} className="mb-2">
-                            <strong>Datum:</strong> {detail.date}, <strong>Gehalt:</strong> {detail.salary}€, <strong>Stunden:</strong> {detail.workingHours} h
-                          </li>
-                        ))}
-                      </ul>
+                      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+                        <thead>
+                          <tr className="bg-teal-950">
+                            <th className="p-2">Datum</th>
+                            <th className="p-2">Gehalt</th>
+                            <th className="p-2">Stunden</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {row.details.map((detail, index) => (
+                            <tr key={index} className="border rounded-md">
+                              <td className="p-2 text-center">{detail.date}</td>
+                              <td className="p-2 text-center">{detail.salary}€</td>
+                              <td className="p-2 text-center">{detail.workingHours} h</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </td>
                 </tr>
