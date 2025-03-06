@@ -48,7 +48,7 @@ const Orders = () => {
       {currentView === "customer" && (
         <>
           <h1 className="text-2xl font-bold text-teal-200 mt-6">
-            Bestell-Übersicht für Kunden
+            Kunden-Bestellungen
           </h1>
           <OrderList orders={orders} />
         </>
@@ -56,6 +56,8 @@ const Orders = () => {
 
       {currentView === "rdp" && (
         <>
+      <h1 className="text-2xl font-bold text-teal-200 mt-6">RDP-Bestellungen</h1>
+
           <OrderRDP />
         </>
       )}
