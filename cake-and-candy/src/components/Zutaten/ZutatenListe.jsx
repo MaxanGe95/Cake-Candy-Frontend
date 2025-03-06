@@ -62,28 +62,28 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
       <table className="min-w-full text-amber-100 border-collapse border border-teal-950 rounded-md overflow-hidden">
         <thead className="">
           <tr className="bg-teal-950">
-            <th className="border p-2">Produkt</th>
-            <th className="border p-2">Typ</th>
-            <th className="border p-2">EK</th>
-            <th className="border p-2">B2B</th>
-            <th className="border p-2">B2C</th>
-            <th className="border p-2">Istlager</th>
-            <th className="border p-2">Solllager</th>
-            <th className="border p-2">Zusatz</th>
-            <th className="border p-2">Löschen</th>
+            <th className="p-2">Produkt</th>
+            <th className="p-2">Typ</th>
+            <th className="p-2">EK</th>
+            <th className="p-2">B2B</th>
+            <th className="p-2">B2C</th>
+            <th className="p-2">Istlager</th>
+            <th className="p-2">Solllager</th>
+            <th className="p-2">Zusatz</th>
+            <th className="p-2">Löschen</th>
           </tr>
         </thead>
         <tbody>
           {zutatenState.map((zutat) => (
             <tr key={zutat._id} className="border hover:bg-[#7ec6cc80] transition duration-200">
-              <td className="border p-2 text-center">{zutat.name}</td>
-              <td className="border p-2 text-center">{zutat.typ}</td>
-              <td className="border p-2 text-center">
+              <td className="p-2 text-center">{zutat.name}</td>
+              <td className="p-2 text-center">{zutat.typ}</td>
+              <td className="p-2 text-center">
                 {typeof zutat.ekPreis === "number"
                   ? `$${zutat.ekPreis.toFixed(2)}`
                   : "$0.00"}
               </td>
-              <td className="border p-2 text-center">
+              <td className=" p-2 text-center">
                 <input
                   type="number"
                   value={zutat.b2bPreis || ""}
@@ -91,7 +91,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="w-16 p-1  border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
-              <td className=" border p-2 text-center">
+              <td className="p-2 text-center">
                 <input
                   type="number"
                   value={zutat.b2cPreis || ""}
@@ -99,8 +99,8 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
-              <td className="border p-2 text-center">{zutat.istlagerbestand || "0"}</td>
-              <td className="border p-2 text-center">
+              <td className="p-2 text-center">{zutat.istlagerbestand || "0"}</td>
+              <td className="p-2 text-center">
                 <input
                   type="number"
                   value={zutat.solllagerbestand || ""}
@@ -108,8 +108,8 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
-              <td className="border p-2 text-center">{zutat.zusatz || "-"}</td>
-              <td className="border p-2 text-center">
+              <td className="p-2 text-center">{zutat.zusatz || "-"}</td>
+              <td className="p-2 text-center">
                 <button
                   onClick={() => handleDelete(zutat._id)}
                   className=" px-3 py-1 rounded hover:bg-teal-800"
