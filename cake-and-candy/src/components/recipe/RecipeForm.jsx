@@ -193,6 +193,9 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
           error={errors.name}
           className="flex-1"
         />
+        <h2 className="text-xl font-semibold mt-6">
+          Output:
+        </h2>
         <InputNumber
           placeholder="Ergebnismenge"
           value={newRecipe.totalAmount}
@@ -200,6 +203,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
           error={errors.name}
           className="flex-1"
         />
+        
       </div>
 
       <h3 className="text-lg font-semibold">Zutaten</h3>
@@ -215,6 +219,9 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             placeholder="Zutat wählen"
             error={errors[`ingredient${index}_name`]}
           />
+          <h2 className="text-xl font-semibold mt-6">
+              Menge:
+          </h2>
           <InputNumber
             placeholder="Menge"
             value={ingredient.amount}
