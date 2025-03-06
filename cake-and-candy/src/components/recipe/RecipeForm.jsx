@@ -32,7 +32,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
     name: "",
     tools: [],
     category: "",
-    totalAmount: "",
+    totalAmount: 0,
     totalCost: 0,
     unitPrice: 0,
     ingredients: [],
@@ -62,7 +62,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         name: recipe.name || "",
         tools: recipe.tools || [],
         category: recipe.category || "",
-        totalAmount: recipe.totalAmount || "",
+        totalAmount: recipe.totalAmount ? Number(recipe.totalAmount) : 0,
         totalCost: recipe.totalCost || 0,
         unitPrice: recipe.unitPrice || 0,
         ingredients: recipe.ingredients || [],
@@ -168,7 +168,6 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       <h2 className="text-xl font-semibold mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
-
       <div className="flex space-x-1 mb-4">
         <InputString
           placeholder="Rezeptname"
@@ -193,19 +192,19 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
           error={errors.name}
           className="flex-1"
         />
-        <h2 className="text-xl font-semibold mt-6">
-          Output:
-        </h2>
-        <InputNumber
-          placeholder="Ergebnismenge"
-          value={newRecipe.totalAmount}
-          onChange={(v) => handleRecipeChange("totalAmount", v)}
-          error={errors.name}
-          className="flex-1"
-        />
+       
+       <InputNumber
+  placeholder="Ergebnismenge"
+  value={newRecipe.totalAmount}
+  onChange={(v) => handleRecipeChange("totalAmount", v)}
+  error={errors.totalAmount}
+  className="flex-1"
+/>
+
+
+
         
       </div>
-
       <h3 className="text-lg font-semibold">Zutaten</h3>
       {newRecipe.ingredients.map((ingredient, index) => (
         <div key={index} className="flex mb-2 items-center">
@@ -219,16 +218,14 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             placeholder="Zutat wählen"
             error={errors[`ingredient${index}_name`]}
           />
-          <h2 className="text-xl font-semibold mt-6">
-              Menge:
-          </h2>
-          <InputNumber
-            placeholder="Menge"
-            value={ingredient.amount}
-            onChange={(v) => handleIngredientChangeField(index, "amount", v)}
-            error={errors[`ingredient${index}_amount`]}
-            className="w-1/4 mr-1"
-          />
+        <InputNumber
+  placeholder="Menge"
+  value={ingredient.amount || undefined}
+  onChange={(v) => handleIngredientChangeField(index, "amount", v)}
+  error={errors[`ingredient${index}_amount`]}
+  className="w-1/4 mr-1"
+/>
+
           <DeleteButton onClick={() => removeIngredient(index)} />
         </div>
       ))}
