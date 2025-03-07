@@ -59,19 +59,26 @@ export const fetchCategories = async () => {
     const response = await fetch("http://localhost:5000/api/rezepte");
     const data = await response.json();
     // TODO kann effizienter im backend gemacht werden
-    return data.filter(recipe => recipe.typ === "Endprodukt").map(recipe => recipe.category);
+    const result = data
+      .filter((recipe) => recipe.typ === "Endprodukt")
+      .map((recipe) => recipe.category);
+    // eindeutige Kategorien
+    let id = 0;
+    return [...new Set(result)].map((category) => {
+      return { name: category, id: id++ };
+    });
   } catch (error) {
     console.error("Fehler beim Laden der Endprodukte:", error);
     throw error;
   }
 };
 
-export const fetchEndProdukte = async (category) => {
+export const fetchEndProdukte = async () => {
   try {
     const response = await fetch("http://localhost:5000/api/rezepte");
     const data = await response.json();
     // TODO kann effizienter im backend gemacht werden
-    return data.filter(recipe => recipe.category === category);
+    return data.filter((recipe) => recipe.typ === "Endprodukt");
   } catch (error) {
     console.error("Fehler beim Laden der Endprodukte:", error);
     throw error;

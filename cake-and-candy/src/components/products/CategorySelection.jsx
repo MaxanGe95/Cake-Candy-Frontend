@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from "react";
+import "./CategorySelection.css"; // Importiere die CSS-Datei
 
 const CategorySelection = ({ categories, onCategorySelect }) => {
   return (
@@ -6,7 +7,8 @@ const CategorySelection = ({ categories, onCategorySelect }) => {
       {categories.map((category, index) => (
         <div
           key={index}
-          className="relative m-4 w-80 h-40 text-white transform skew-x-1 shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
+          className="category-item relative m-4 w-120 h-80 text-white transform skew-x-1 shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
+          style={{ animationDelay: `${index * ((Math.random()/4)+0.1)}s` }}
           onClick={() => onCategorySelect(category)}
         >
           <img
@@ -15,7 +17,9 @@ const CategorySelection = ({ categories, onCategorySelect }) => {
             className="absolute inset-0 w-full h-full object-cover rounded-lg"
           />
           <div className="absolute inset-0 flex items-center justify-center">
-            <h2 className="text-xl font-bold bg-teal-500/50 p-2 rounded-xl ">{category.name}</h2>
+            <h2 className="text-4xl font-bold bg-teal-500/50 p-2 rounded-xl">
+              {category.name}
+            </h2>
           </div>
         </div>
       ))}
