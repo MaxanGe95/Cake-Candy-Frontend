@@ -7,8 +7,8 @@ const CategorySelection = ({ categories, onCategorySelect }) => {
       {categories.map((category, index) => (
         <div
           key={index}
-          className="category-item relative m-4 w-120 h-80 text-white transform skew-x-1 shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
-          style={{ animationDelay: `${index * ((Math.random()/4)+0.1)}s` }}
+          className="category-item relative m-4 w-120 h-80 transform skew-x-1 shadow-2xl hover:scale-110 transition-transform duration-300 cursor-pointer"
+          style={{ animationDelay: `${index * (Math.random() / 4 + 0.1)}s` }}
           onClick={() => onCategorySelect(category)}
         >
           <img
@@ -17,7 +17,7 @@ const CategorySelection = ({ categories, onCategorySelect }) => {
             className="absolute inset-0 w-full h-full object-cover rounded-lg"
           />
           <div className="absolute inset-0 flex items-center justify-center">
-            <h2 className="text-4xl font-bold bg-teal-500/50 p-2 rounded-xl">
+            <h2 className="text-4xl font-bold bg-teal-950/70 p-2 rounded-xl">
               {category.name}
             </h2>
           </div>
