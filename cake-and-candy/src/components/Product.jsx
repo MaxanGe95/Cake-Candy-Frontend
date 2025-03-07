@@ -1,9 +1,10 @@
 import React from 'react';
+import muffin from "../assets/muffin.jpg";
 
 const Product = ({ image, title, description }) => {
   return (
     <div className="bg-teal-100/80 max-w-sm rounded-xl overflow-hidden shadow-lg">
-      <img className="w-full" src={image} alt={title} />
+      <img className="w-full" src={image || muffin} alt={title} />
       <div className="px-6 py-4">
         <div className="font-bold text-xl mb-2">{title}</div>
         <p className="text-gray-700 text-base">{description}</p>
