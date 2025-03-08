@@ -176,14 +176,6 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         error={errors.name}
         className="mb-1"
       />
-      <h3 className="text-lg font-semibold">Produktbeschreibung</h3>
-      <InputString
-        placeholder="Produktbeschreibung"
-        value={newRecipe.productDescription}
-        onChange={(v) => handleRecipeChange("productDescription", v)}
-        error={errors.name}
-        className="mb-1"
-      />
       <h3 className="text-lg font-semibold">Kategorie</h3>
       <DropdownInput
         className="w-full"

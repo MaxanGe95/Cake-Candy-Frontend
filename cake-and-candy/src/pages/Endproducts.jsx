@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { fetchEndProdukte, fetchCategories } from "../api/rezepte";
 import { CategorySelection } from "../components/products/CategorySelection";
 import { FlyInWrapper } from "../components/products/FlyInWrapper";
-
-import ScrollToTop from "../components/ScrollToTop";
+import videoFile from "../assets/video2.mp4";
+import "../components/products/Video.css";
 import muffin from "../assets/muffin.jpg";
 import pralinen from "../assets/category/pralinen.jpg";
 import suesses from "../assets/category/suesses.jpg";
@@ -86,56 +86,65 @@ function Endproducts() {
   };
 
   return (
-    <div className="container mx-auto text-amber-100 ">
-      <div>
-        <ScrollToTop />
-        <div className="flex justify-center items-center min-h-screen">
-          <CategorySelection
-            categories={mainCategories}
-            onCategorySelect={scrollToCategory}
-          />
-        </div>
-        {mainCategories.map((category, index) => (
-          <div
-            key={index}
-            id={category.name}
-            className="min-h-screen p-4 mt-8 rounded-xl"
-            style={{
-              backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${category.image})`,
-              backgroundPosition: "center",
-              backgroundSize: "cover",
-              backgroundRepeat: "no-repeat",
-            }}
-          >
-            <div className="flex items-center justify-center">
-              <FlyInWrapper>
-                <h2 className="xl:text-8xl font-bold bg-teal-950/70 p-2 rounded-xl">
-                  {category.name}
-                </h2>
-              </FlyInWrapper>
-            </div>
-            <div className="flex justify-center items-center min-h-screen">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {endproducts
-                  .filter((product) => product.category == category.name)
-                  .map((product, index) => (
-                    <FlyInWrapper
-                      delay={index * 0.2}
-                      duration={1}
-                      direction="right"
-                      key={index}
-                    >
-                      <Product
-                        image={product.productImage}
-                        title={product.name}
-                        description={product.productDescription}
-                      />
-                    </FlyInWrapper>
-                  ))}
-              </div>
-            </div>
+    <div>
+      <div className="background-video-products">
+        <video autoPlay loop muted>
+          <source src={videoFile} type="video/mp4" />
+          <source src={videoFile} type="video/ogg" />
+        </video>
+      </div>
+      <div className="container mx-auto text-amber-100">
+        <div>
+          <div className="flex justify-center items-center min-h-screen">
+            <CategorySelection
+              categories={mainCategories}
+              onCategorySelect={scrollToCategory}
+            />
           </div>
-        ))}
+          <div className="relative z-1">
+            {mainCategories.map((category, index) => (
+              <div
+                key={index}
+                id={category.name}
+                className="min-h-screen p-4 mt-8 rounded-xl"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${category.image})`,
+                  backgroundPosition: "center",
+                  backgroundSize: "cover",
+                  backgroundRepeat: "no-repeat",
+                }}
+              >
+                <div className="flex items-center justify-center">
+                  <FlyInWrapper>
+                    <h2 className="xl:text-8xl font-bold bg-teal-950/70 p-2 rounded-xl">
+                      {category.name}
+                    </h2>
+                  </FlyInWrapper>
+                </div>
+                <div className="flex justify-center items-center min-h-screen">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {endproducts
+                      .filter((product) => product.category == category.name)
+                      .map((product, index) => (
+                        <FlyInWrapper
+                          delay={index * 0.2}
+                          duration={1}
+                          direction="right"
+                          key={index}
+                        >
+                          <Product
+                            // TODO: woher weiß man das?
+                            admin={true}
+                            product={product}
+                          />
+                        </FlyInWrapper>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );

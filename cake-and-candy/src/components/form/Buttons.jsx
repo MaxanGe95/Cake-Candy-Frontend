@@ -10,11 +10,11 @@ const DeleteButton = ({ onClick }) => {
     </button>
   );
 };
-const EditButton = ({ onClick }) => {
+const EditButton = ({ onClick, className = "" }) => {
   return (
     <button
       onClick={onClick}
-      className="bg-teal-900 border rounded m-1 p-2 h-10 w-10 cursor-pointer transition ease-in-out hover:scale-110"
+      className={`bg-teal-900 border rounded m-1 p-2 h-10 w-10 cursor-pointer transition ease-in-out hover:scale-110 ${className}`}
     >
       <FaEdit className="m-auto" />
     </button>
