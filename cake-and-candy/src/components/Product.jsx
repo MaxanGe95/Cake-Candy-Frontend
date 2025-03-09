@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { FaShoppingCart, FaEdit } from "react-icons/fa";
 import { PrimaryButton, EditButton } from "../components/form/Buttons";
 import { updateRezept } from "../api/rezepte";
+import { InputString, InputTextarea } from "./form/Inputs";
 
 const Product = ({ product, admin = false }) => {
   const [currentImage, setCurrentImage] = useState(product.productImage);
@@ -11,9 +12,28 @@ const Product = ({ product, admin = false }) => {
   );
   const [currentPrice, setCurrentPrice] = useState(product.b2bPreis);
 
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [newTitle, setNewTitle] = useState(product.name);
+  const [newDescription, setNewDescription] = useState(
+    product.productDescription
+  );
+  const dialogRef = useRef(null);
+
   useEffect(() => {
     saveProduct();
   }, [currentImage, currentTitle, currentDescription]);
+
+  const openDialog = () => {
+    setNewTitle(currentTitle);
+    setNewDescription(currentDescription);
+    setDialogOpen(true);
+  };
+
+  const handleSaveDialog = () => {
+    setCurrentTitle(newTitle);
+    setCurrentDescription(newDescription);
+    setDialogOpen(false);
+  };
 
   const handleEditImage = () => {
     const fileInput = document.createElement("input");
@@ -23,29 +43,11 @@ const Product = ({ product, admin = false }) => {
       const file = event.target.files[0];
       const reader = new FileReader();
       reader.onloadend = () => {
-        const newImage = reader.result;
-        setCurrentImage(newImage);
+        setCurrentImage(reader.result);
       };
       reader.readAsDataURL(file);
     };
     fileInput.click();
-  };
-
-  const handleEditTitle = () => {
-    const newTitle = window.prompt("Enter new title:", currentTitle);
-    if (newTitle !== null) {
-      setCurrentTitle(newTitle);
-    }
-  };
-
-  const handleEditDescription = () => {
-    const newDescription = window.prompt(
-      "Neue Description eingeben",
-      currentDescription
-    );
-    if (newDescription !== null) {
-      setCurrentDescription(newDescription);
-    }
   };
 
   const saveProduct = async () => {
@@ -60,7 +62,7 @@ const Product = ({ product, admin = false }) => {
     try {
       await updateRezept(updatedProduct);
     } catch (error) {
-      alert("Fehler beim speichern", error);
+      alert("Fehler beim Speichern", error);
     }
   };
 
@@ -68,7 +70,7 @@ const Product = ({ product, admin = false }) => {
     <div className="bg-teal-900/70 text-amber-100 w-sm rounded-xl overflow-hidden shadow-lg">
       <div className="relative">
         {currentImage ? (
-          <img className="w-full" src={currentImage} alt={currentTitle} />
+          <img className="w-full h-48 object-cover" src={currentImage} alt={currentTitle} />
         ) : (
           <div className="w-full h-48 bg-white"></div>
         )}
@@ -85,18 +87,13 @@ const Product = ({ product, admin = false }) => {
         <div className="font-bold text-xl mb-2 flex justify-between items-center">
           {currentTitle}
           {admin && (
-            <EditButton onClick={handleEditTitle}>
+            <EditButton onClick={openDialog}>
               <FaEdit />
             </EditButton>
           )}
         </div>
-        <p className="text-base flex justify-between items-center">
+        <p className="text-base flex justify-between items-center whitespace-pre">
           {currentDescription}
-          {admin && (
-            <EditButton onClick={handleEditDescription}>
-              <FaEdit />
-            </EditButton>
-          )}
         </p>
       </div>
       <div className="px-6 pt-4 pb-2 flex justify-end items-center">
@@ -106,6 +103,39 @@ const Product = ({ product, admin = false }) => {
           </div>
         </PrimaryButton>
       </div>
+
+      {/* Dialog */}
+      {dialogOpen && (
+        <div className="fixed inset-0 z-100 flex items-center justify-center">
+          <div className="p-6 rounded-md shadow-lg w-96 bg-teal-900">
+            <h2 className="text-lg font-bold mb-2">Produkt bearbeiten</h2>
+            <InputString
+              placeholder="Neuer Titel"
+              value={newTitle}
+              onChange={(e) => setNewTitle(e)}
+            />
+            <InputTextarea
+              value={newDescription}
+              onChange={(e) => setNewDescription(e)}
+              placeholder="Neue Beschreibung"
+            />
+            <div className="mt-4 flex justify-end gap-2">
+              <button
+                className="bg-gray-500 text-white px-3 py-1 rounded"
+                onClick={() => setDialogOpen(false)}
+              >
+                Abbrechen
+              </button>
+              <button
+                className="bg-blue-500 text-white px-3 py-1 rounded"
+                onClick={handleSaveDialog}
+              >
+                Speichern
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
