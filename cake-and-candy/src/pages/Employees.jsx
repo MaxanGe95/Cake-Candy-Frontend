@@ -1,102 +1,145 @@
-/* 
-
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 const MitarbeiterTabelle = () => {
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [data, setData] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState({});
 
-  const data = [
-    {
-      id: 1,
-      name: "Max Mustermann",
-      gehalt: "3.000€",
-      wochenstunden: 40,
-      wochenlohn: "700€",
-      monatsstunden: 160,
-      monatslohn: "3.000€",
-      datum: "01.02.2025",
-      gearbeiteteStunden: 40,
-    },
-    {
-      id: 2,
-      name: "Erika Musterfrau",
-      gehalt: "2.800€",
-      wochenstunden: 35,
-      wochenlohn: "600€",
-      monatsstunden: 140,
-      monatslohn: "2.800€",
-      datum: "01.02.2025",
-      gearbeiteteStunden: 35,
-    },
-    {
-      id: 3,
-      name: "Joe Doe",
-      gehalt: "2.800€",
-      wochenstunden: 35,
-      wochenlohn: "600€",
-      monatsstunden: 140,
-      monatslohn: "2.800€",
-      datum: "01.02.2025",
-      gearbeiteteStunden: 35,
-    },
-    {
-      id: 4,
-      name: "Ernesto Ernst",
-      gehalt: "2.800€",
-      wochenstunden: 35,
-      wochenlohn: "600€",
-      monatsstunden: 140,
-      monatslohn: "2.800€",
-      datum: "01.02.2025",
-      gearbeiteteStunden: 35,
-    },
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/salaries");
+        const result = await response.json();
+        setData(groupData(result));
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Daten:", error);
+      }
+    };
 
-  const toggleDropdown = (id) => {
-    setSelectedRow(selectedRow === id ? null : id);
+    fetchData();
+  }, []);
+
+  const groupData = (data) => {
+    const grouped = {};
+
+    data.forEach((entry) => {
+      if (!grouped[entry.employeeName]) {
+        grouped[entry.employeeName] = {
+          employeeName: entry.employeeName,
+          totalSalary: 0,
+          totalWorkingHours: 0,
+          months: {},
+        };
+      }
+      grouped[entry.employeeName].totalSalary += entry.salary;
+      grouped[entry.employeeName].totalWorkingHours += entry.workingHours;
+
+      const [day, monthNum, year] = entry.date.split(".");
+      const formattedDate = `${year}-${monthNum}-${day}`;
+      const month = new Date(formattedDate).toLocaleString("de-DE", {
+        month: "long",
+      });
+
+      if (!grouped[entry.employeeName].months[month]) {
+        grouped[entry.employeeName].months[month] = [];
+      }
+      grouped[entry.employeeName].months[month].push(entry);
+    });
+    return Object.values(grouped);
+  };
+
+  const toggleEmployee = (name) => {
+    setSelectedEmployee(selectedEmployee === name ? null : name);
+  };
+
+  const toggleMonth = (employee, month) => {
+    setSelectedMonth((prev) => ({
+      ...prev,
+      [employee]: prev[employee] === month ? null : month,
+    }));
   };
 
   return (
     <div className="container mx-auto p-6">
-      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+      <table className="min-w-full border border-gray-500">
         <thead>
-          <tr className="bg-teal-950">
-            <th className=" p-2">Mitarbeitername</th>
-            <th className=" p-2">Gehalt</th>
-            <th className=" p-2">Wochen/h</th>
-            <th className=" p-2">Wochenlohn</th>
-            <th className=" p-2">Monats/h</th>
-            <th className=" p-2">Monatslohn</th>
+          <tr className="bg-gray-700 text-white">
+            <th className="p-2">Mitarbeitername</th>
+            <th className="p-2">Gesamtgehalt</th>
+            <th className="p-2">Gesamte Wochenstunden</th>
           </tr>
         </thead>
         <tbody>
-          {data.map((row) => (
-            <React.Fragment key={row.id}>
+          {data.map((employee) => (
+            <React.Fragment key={employee.employeeName}>
               <tr
-                className="border rounded-md cursor-pointer hover:bg-[#7ec6cc80]"
-                onClick={() => toggleDropdown(row.id)}
+                className="cursor-pointer bg-gray-200"
+                onClick={() => toggleEmployee(employee.employeeName)}
               >
-                <td className=" p-2 text-center">{row.name}</td>
-                <td className=" p-2 text-center">{row.gehalt}</td>
-                <td className=" p-2 text-center">{row.wochenstunden}</td>
-                <td className=" p-2 text-center">{row.wochenlohn}</td>
-                <td className=" p-2 text-center">{row.monatsstunden}</td>
-                <td className=" p-2 text-center">{row.monatslohn}</td>
+                <td className="p-2 text-center">{employee.employeeName}</td>
+                <td className="p-2 text-center">
+                  {employee.totalSalary.toFixed(2)}€
+                </td>
+                <td className="p-2 text-center">
+                  {employee.totalWorkingHours.toFixed(1)} h
+                </td>
               </tr>
-              {selectedRow === row.id && (
+              {selectedEmployee === employee.employeeName && (
                 <tr>
-                  <td colSpan="6" className="p-4 text-center">
-                    <div className="bg-teal-950 rounded-md shadow-lg p-4">
-                      <p>
-                        <strong>Datum:</strong> {row.datum}
-                      </p>
-                      <p>
-                        <strong>Gearbeitete Stunden:</strong> {row.gearbeiteteStunden}
-                      </p>
-                      <p>
-                        <strong>Gesamtes Gehalt:</strong> {row.gehalt}
-                      </p>
-                    </div>
+                  <td colSpan="3" className="p-4">
+                    {Object.keys(employee.months).map((month) => (
+                      <div key={month} className="mb-2">
+                        <button
+                          className="w-full text-left bg-blue-500 text-white p-2"
+                          onClick={() =>
+                            toggleMonth(employee.employeeName, month)
+                          }
+                        >
+                          {month}
+                        </button>
+                        {selectedMonth[employee.employeeName] === month && (
+                          <table className="w-full border mt-2">
+                            <thead>
+                              <tr className="bg-gray-600 text-white">
+                                <th className="p-2">Datum</th>
+                                <th className="p-2">Gehalt</th>
+                                <th className="p-2">Stunden</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {employee.months[month].map((entry, index) => (
+                                <tr key={index} className="border">
+                                  <td className="p-2 text-center">
+                                    {entry.date}
+                                  </td>
+                                  <td className="p-2 text-center">
+                                    {entry.salary.toFixed(2)}€
+                                  </td>
+                                  <td className="p-2 text-center">
+                                    {entry.workingHours.toFixed(1)} h
+                                  </td>
+                                </tr>
+                              ))}
+                              <tr className="bg-gray-300 font-bold">
+                                <td className="p-2 text-center">Gesamt</td>
+                                <td className="p-2 text-center">
+                                  {employee.months[month]
+                                    .reduce((sum, e) => sum + e.salary, 0)
+                                    .toFixed(2)}
+                                  €
+                                </td>
+                                <td className="p-2 text-center">
+                                  {employee.months[month]
+                                    .reduce((sum, e) => sum + e.workingHours, 0)
+                                    .toFixed(1)}{" "}
+                                  h
+                                </td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        )}
+                      </div>
+                    ))}
                   </td>
                 </tr>
               )}
@@ -109,9 +152,8 @@ const MitarbeiterTabelle = () => {
 };
 
 export default MitarbeiterTabelle;
- */
 
-import React, { useState, useEffect } from "react";
+/* import React, { useState, useEffect } from "react";
 
 const MitarbeiterTabelle = () => {
   const [selectedRow, setSelectedRow] = useState(null);
@@ -180,7 +222,7 @@ const MitarbeiterTabelle = () => {
           {data.map((row) => (
             <React.Fragment key={row.employeeName}>
               <tr
-                className="border rounded-md cursor-pointer hover:bg-teal-950"
+                className="border rounded-md cursor-pointer "
                 onClick={() => toggleDropdown(row.employeeName)}
               >
                 <td className="p-2 text-center">{row.employeeName}</td>
@@ -192,13 +234,28 @@ const MitarbeiterTabelle = () => {
                   <td colSpan="3" className="p-4 text-center">
                     <div className="bg-teal-950 rounded-md shadow-lg p-4">
                       <h3 className="text-lg font-bold mb-2">Details</h3>
-                      <ul>
-                        {row.details.map((detail, index) => (
-                          <li key={index} className="mb-2">
-                            <strong>Datum:</strong> {detail.date}, <strong>Gehalt:</strong> {detail.salary}€, <strong>Stunden:</strong> {detail.workingHours} h
-                          </li>
-                        ))}
-                      </ul>
+                      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+                        <thead>
+                          <tr className="bg-teal-950">
+                            <th className="p-2">Datum</th>
+                            <th className="p-2">Gehalt</th>
+                            <th className="p-2">Stunden</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {row.details.map((detail, index) => (
+                            <tr key={index} className="border rounded-md">
+                              <td className="p-2 text-center">{detail.date}</td>
+                              <td className="p-2 text-center">
+                                {detail.salary}€
+                              </td>
+                              <td className="p-2 text-center">
+                                {detail.workingHours} h
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
                     </div>
                   </td>
                 </tr>
@@ -212,3 +269,4 @@ const MitarbeiterTabelle = () => {
 };
 
 export default MitarbeiterTabelle;
+ */

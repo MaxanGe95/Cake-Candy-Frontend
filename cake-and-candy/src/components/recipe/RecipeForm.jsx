@@ -9,6 +9,13 @@ import {
   InputTextarea,
   InputCurrency,
 } from "../form/Inputs";
+import {
+  DropdownInput,
+  InputNumber,
+  InputString,
+  InputTextarea,
+  InputCurrency,
+} from "../form/Inputs";
 
 const toolsList = [
   "Industrietopf",
@@ -63,6 +70,22 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
 
     loadZutaten();
   }, []);
+
+  // useEffect to update newRecipe when recipe prop changes
+  useEffect(() => {
+    if (recipe) {
+      setNewRecipe({
+        _id: recipe._id || "",
+        name: recipe.name || "",
+        tools: recipe.tools || [],
+        category: recipe.category || "",
+        totalAmount: recipe.totalAmount || "",
+        totalCost: recipe.totalCost || 0,
+        unitPrice: recipe.unitPrice || 0,
+        ingredients: recipe.ingredients || [],
+      });
+    }
+  }, [recipe]);
 
   const addIngredient = () => {
     setNewRecipe({
@@ -169,42 +192,38 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
 
-      <InputString
-        placeholder="Rezeptname"
-        value={newRecipe.name}
-        onChange={(v) => handleRecipeChange("name", v)}
-        error={errors.name}
-        className="mb-1"
-      />
-
-      <h3 className="text-lg font-semibold">Kategorie</h3>
-      <DropdownInput
-        className="w-full"
-        options={categoryOptions}
-        value={newRecipe.category}
-        onChange={(v) => handleRecipeChange("category", v)}
-        placeholder="Kategorie wählen"
-        error={errors.name}
-      />
-
-      <h3 className="text-lg font-semibold">Hilfsmittel</h3>
-      <DropdownInput
-        className="w-full"
-        options={toolsList}
-        value={newRecipe.tools[0]}
-        onChange={(e) => handleRecipeChange("tools", [e])}
-        placeholder="Hilfsmittel wählen"
-        error={errors.name}
-      />
-
-      <h3 className="text-lg font-semibold">Ergebnismenge</h3>
-      <InputNumber
-        placeholder="Ergebnismenge"
-        value={newRecipe.totalAmount}
-        onChange={(v) => handleRecipeChange("totalAmount", v)}
-        error={errors.name}
-        className="mb-2"
-      />
+      <div className="flex space-x-1 mb-4">
+        <InputString
+          placeholder="Rezeptname"
+          value={newRecipe.name}
+          onChange={(v) => handleRecipeChange("name", v)}
+          error={errors.name}
+          className="flex-1"
+        />
+        <DropdownInput
+          options={categoryOptions}
+          value={newRecipe.category}
+          onChange={(v) => handleRecipeChange("category", v)}
+          placeholder="Kategorie wählen"
+          error={errors.name}
+          className="flex-1"
+        />
+        <DropdownInput
+          options={toolsList}
+          value={newRecipe.tools[0]}
+          onChange={(e) => handleRecipeChange("tools", [e])}
+          placeholder="Hilfsmittel wählen"
+          error={errors.name}
+          className="flex-1"
+        />
+        <InputNumber
+          placeholder="Ergebnismenge"
+          value={newRecipe.totalAmount}
+          onChange={(v) => handleRecipeChange("totalAmount", v)}
+          error={errors.name}
+          className="flex-1"
+        />
+      </div>
 
       <h3 className="text-lg font-semibold">Zutaten</h3>
       {newRecipe.ingredients.map((ingredient, index) => (

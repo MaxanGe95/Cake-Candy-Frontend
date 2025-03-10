@@ -40,72 +40,48 @@ const Recipes = () => {
   const handleSaveRecipe = (recipe) => {
     console.log("Rezept gespeichert:", recipe);
     loadRezepte();
-
     setEditMode(false);
-    setShowNewRecipeForm(false);
     setSelectedRecipe(null);
   };
 
   const handleEditRecipe = (recipe) => {
+    // Rezept zum Bearbeiten setzen
     setSelectedRecipe(recipe);
-    setShowNewRecipeForm(true);
     setEditMode(true);
   };
 
   const handleDeleteRecipe = async (id) => {
-    deleteRezept(id)
-      .then(loadRezepte)
-      .then(() => setSelectedRecipe(null));
+    await deleteRezept(id);
+    loadRezepte();
+    setSelectedRecipe(null);
   };
 
   const handleCancel = () => {
-    setShowNewRecipeForm(false);
     setSelectedRecipe(null);
     setEditMode(false);
   };
 
   return (
     <div className="p-8 text-amber-100">
-      {showNewRecipeForm && (
-        <RecipeForm
-          recipe={
-            selectedRecipe || {
-              name: "",
-              ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
-              tools: [],
-              totalAmount: 1,
-            }
+      <RecipeForm
+        recipe={
+          selectedRecipe || {
+            name: "",
+            ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
+            tools: [],
+            totalAmount: 1,
           }
-          onSave={handleSaveRecipe}
-          onCancel={handleCancel}
-          ingredientsList={ingredientsList} // Zutatenliste als Prop an RecipeForm übergeben
-        />
-      )}
-      {!selectedRecipe && !showNewRecipeForm && (
-        <div>
-          <PrimaryButton
-            onClick={() => setShowNewRecipeForm(true)}
-            className="mb-4 mt-10"
-          >
-            Neues Rezept hinzufügen
-          </PrimaryButton>
-          <RecipeList
-            recipes={recipes}
-            onSelect={setSelectedRecipe}
-            onDelete={handleDeleteRecipe}
-            onEdit={handleEditRecipe}
-          />
-        </div>
-      )}
-      {selectedRecipe && !showNewRecipeForm && (
-        <div>
-          <RecipeDetails
-            recipe={selectedRecipe}
-            onEdit={handleEditRecipe}
-            onCancel={handleCancel}
-          />
-        </div>
-      )}
+        }
+        onSave={handleSaveRecipe}
+        onCancel={handleCancel}
+        ingredientsList={ingredientsList} // Zutatenliste als Prop an RecipeForm übergeben
+      />
+      <RecipeList
+        recipes={recipes}
+        onSelect={setSelectedRecipe}
+        onDelete={handleDeleteRecipe}
+        onEdit={handleEditRecipe}
+      />
     </div>
   );
 };
