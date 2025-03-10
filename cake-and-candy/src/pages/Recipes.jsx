@@ -88,9 +88,9 @@ const Recipes = () => {
       />
       
       {/* Button zum Hinzufügen eines neuen Rezepts */}
-      <PrimaryButton onClick={handleNewRecipe} className="mb-4 mt-10">
+      {/* <PrimaryButton onClick={handleNewRecipe} className="mb-4 mt-10">
         Neues Rezept hinzufügen
-      </PrimaryButton>
+      </PrimaryButton> */}
     </div>
   );
 };

@@ -69,7 +69,20 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         ingredients: recipe.ingredients || [],
       });
     }
+    loadZutaten();  // Zutaten aus der API laden
   }, [recipe]);
+
+  const loadZutaten = async () => {
+    try {
+      const data = await fetchZutaten();
+      console.log("Zutaten geladen:", data);  // Überprüfe, was zurückgegeben wird
+      setIngredientsList(data);
+    } catch (error) {
+      console.error("Fehler beim Laden der Zutaten:", error);
+    }
+  };
+  
+  
 
   const addIngredient = () => {
     setNewRecipe({
@@ -96,6 +109,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       ),
     }));
   };
+  
 
   const handleIngredientChangeField = (index, field, value) => {
     setNewRecipe((prev) => ({
@@ -216,15 +230,16 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       {newRecipe.ingredients.map((ingredient, index) => (
         <div key={index} className="flex mb-2 items-center">
           <DropdownInput
-            className="w-3/4 mr-1"
-            options={ingredientsList}
-            value={ingredient.name}
-            onChangeObject={(v) => handleIngredientChange(index, v)}
-            valueKey="name"
-            nameKey="name"
-            placeholder="Zutat wählen"
-            error={errors[`ingredient${index}_name`]}
-          />{" "}
+  className="w-3/4 mr-1"
+  options={ingredientsList}
+  value={ingredient.name}  // Hier sollte der Name der Zutat aus 'newRecipe.ingredients' kommen
+  onChangeObject={(v) => handleIngredientChange(index, v)}  // Überprüfe, ob 'v' das richtige Objekt ist
+  valueKey="name"
+  nameKey="name"
+  placeholder="Zutat wählen"
+  error={errors[`ingredient${index}_name`]}
+/>
+{" "}
           <InputNumber
             placeholder="Menge"
             value={ingredient.amount}
