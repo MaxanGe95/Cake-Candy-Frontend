@@ -7,7 +7,7 @@ const MitarbeiterTabelle = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/salaries");
+        const response = await fetch("http://localhost:5000/api/salaries");
         const result = await response.json();
         console.log(result);
 
@@ -91,8 +91,12 @@ const MitarbeiterTabelle = () => {
                           {row.details.map((detail, index) => (
                             <tr key={index} className="border rounded-md">
                               <td className="p-2 text-center">{detail.date}</td>
-                              <td className="p-2 text-center">{detail.salary}€</td>
-                              <td className="p-2 text-center">{detail.workingHours} h</td>
+                              <td className="p-2 text-center">
+                                {detail.salary}€
+                              </td>
+                              <td className="p-2 text-center">
+                                {detail.workingHours} h
+                              </td>
                             </tr>
                           ))}
                         </tbody>
