@@ -10,17 +10,21 @@ const Product = ({ product, admin = false }) => {
   const [currentDescription, setCurrentDescription] = useState(
     product.productDescription
   );
-  const [currentPrice, setCurrentPrice] = useState(product.b2bPreis);
+  const [currentPrice] = useState(product.b2bPreis);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(product.name);
   const [newDescription, setNewDescription] = useState(
     product.productDescription
   );
+  const [hasChanges, setHasChanges] = useState(false);
   const dialogRef = useRef(null);
 
   useEffect(() => {
-    saveProduct();
+    if (hasChanges) {
+      saveProduct();
+      setHasChanges(false);
+    }
   }, [currentImage, currentTitle, currentDescription]);
 
   const openDialog = () => {
@@ -33,6 +37,7 @@ const Product = ({ product, admin = false }) => {
     setCurrentTitle(newTitle);
     setCurrentDescription(newDescription);
     setDialogOpen(false);
+    setHasChanges(true);
   };
 
   const handleEditImage = () => {
@@ -44,6 +49,7 @@ const Product = ({ product, admin = false }) => {
       const reader = new FileReader();
       reader.onloadend = () => {
         setCurrentImage(reader.result);
+        setHasChanges(true);
       };
       reader.readAsDataURL(file);
     };
@@ -55,8 +61,7 @@ const Product = ({ product, admin = false }) => {
       ...product,
       productImage: currentImage,
       name: currentTitle,
-      productDescription: currentDescription,
-      b2bPreis: currentPrice,
+      productDescription: currentDescription
     };
 
     try {
