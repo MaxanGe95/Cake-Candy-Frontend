@@ -62,7 +62,8 @@ const Product = ({ product, admin = false }) => {
     try {
       await updateRezept(updatedProduct);
     } catch (error) {
-      alert("Fehler beim Speichern", error);
+      console.log("Fehler beim Speichern", error);
+      
     }
   };
 
