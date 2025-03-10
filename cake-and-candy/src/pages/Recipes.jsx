@@ -8,7 +8,6 @@ import { PrimaryButton } from "../components/form/Buttons";
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [editMode, setEditMode] = useState(false);
   const [ingredientsList, setIngredientsList] = useState([]);
 
   // Zutaten und Rezepte aus dem Backend laden
@@ -37,57 +36,63 @@ const Recipes = () => {
 
   const handleSaveRecipe = (recipe) => {
     console.log("Rezept gespeichert:", recipe);
-    loadRezepte();
-    setEditMode(false);
-    setSelectedRecipe(null);
+    loadRezepte(); // Rezepte neu laden
+    setSelectedRecipe(null); // Rezept zurücksetzen
   };
 
   const handleEditRecipe = (recipe) => {
+    // Rezept zum Bearbeiten setzen
     setSelectedRecipe(recipe);
-    setEditMode(true);
   };
 
   const handleDeleteRecipe = async (id) => {
     await deleteRezept(id);
-    loadRezepte();
-    setSelectedRecipe(null);
+    loadRezepte(); // Rezepte nach dem Löschen neu laden
+    setSelectedRecipe(null); // Ausgewähltes Rezept zurücksetzen
   };
 
   const handleCancel = () => {
-    setSelectedRecipe(null);
-    setEditMode(false);
+    setSelectedRecipe(null); // Abbrechen setzt das Rezept zurück
+  };
+
+  const handleNewRecipe = () => {
+    setSelectedRecipe({
+      name: "",
+      ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
+      tools: [],
+      totalAmount: 1,
+    }); // Leeres Rezept für neues Rezept
   };
 
   return (
     <div className="p-8 text-amber-100">
-      {selectedRecipe || editMode ? (
-        <RecipeForm
-          recipe={selectedRecipe || {
-            name: "",
-            ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
-            tools: [],
-            totalAmount: 1,
-          }}
-          onSave={handleSaveRecipe}
-          onCancel={handleCancel}
-          ingredientsList={ingredientsList}
-        />
-      ) : (
-        <>
-          <PrimaryButton onClick={() => setEditMode(true)} className="mb-4 mt-10">
-            Neues Rezept hinzufügen
-          </PrimaryButton>
-          <RecipeList
-            recipes={recipes}
-            onSelect={setSelectedRecipe}
-            onDelete={handleDeleteRecipe}
-            onEdit={handleEditRecipe}
-          />
-        </>
-      )}
+      {/* Rezeptformular immer sichtbar */}
+      <RecipeForm
+        recipe={selectedRecipe || {
+          name: "",
+          ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
+          tools: [],
+          totalAmount: 1,
+        }}
+        onSave={handleSaveRecipe}
+        onCancel={handleCancel}
+        ingredientsList={ingredientsList}
+      />
+
+      {/* Rezeptliste immer sichtbar */}
+      <RecipeList
+        recipes={recipes}
+        onSelect={setSelectedRecipe} // Rezept in der Liste auswählen
+        onDelete={handleDeleteRecipe}
+        onEdit={handleEditRecipe} // Rezept in der Liste bearbeiten
+      />
+      
+      {/* Button zum Hinzufügen eines neuen Rezepts */}
+      <PrimaryButton onClick={handleNewRecipe} className="mb-4 mt-10">
+        Neues Rezept hinzufügen
+      </PrimaryButton>
     </div>
   );
-  
 };
 
 export default Recipes;

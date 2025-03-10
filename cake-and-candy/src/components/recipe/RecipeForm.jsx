@@ -52,17 +52,24 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
   const [ingredientsList, setIngredientsList] = useState([]);
 
   useEffect(() => {
-    const loadZutaten = async () => {
-      try {
-        const data = await fetchZutaten();
-        setIngredientsList(data);
-      } catch (error) {
-        console.error("Fehler beim Laden der Zutaten:", error);
-      }
-    };
-
-    loadZutaten();
-  }, []);
+    if (recipe) {
+      setNewRecipe({
+        _id: recipe._id,
+        name: recipe.name || "",
+        tools: recipe.tools || [],
+        category: recipe.category || "",
+        totalAmount: recipe.totalAmount || 0,
+        totalCost: recipe.totalCost || 0,
+        unitPrice: recipe.unitPrice || 0,
+        b2bPreis: recipe.b2bPreis || 0,
+        b2cPreis: recipe.b2cPreis || 0,
+        istlagerbestand: recipe.istlagerbestand || 0,
+        solllagerbestand: recipe.solllagerbestand || 0,
+        zusatz: recipe.zusatz || "",
+        ingredients: recipe.ingredients || [],
+      });
+    }
+  }, [recipe]);
 
   const addIngredient = () => {
     setNewRecipe({
