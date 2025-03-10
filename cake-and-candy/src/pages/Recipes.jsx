@@ -60,27 +60,34 @@ const Recipes = () => {
 
   return (
     <div className="p-8 text-amber-100">
-      <RecipeForm
-        recipe={
-          selectedRecipe || {
+      {selectedRecipe || editMode ? (
+        <RecipeForm
+          recipe={selectedRecipe || {
             name: "",
             ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
             tools: [],
             totalAmount: 1,
-          }
-        }
-        onSave={handleSaveRecipe}
-        onCancel={handleCancel}
-        ingredientsList={ingredientsList} // Zutatenliste als Prop an RecipeForm übergeben
-      />
-      <RecipeList
-        recipes={recipes}
-        onSelect={setSelectedRecipe}
-        onDelete={handleDeleteRecipe}
-        onEdit={handleEditRecipe}
-      />
+          }}
+          onSave={handleSaveRecipe}
+          onCancel={handleCancel}
+          ingredientsList={ingredientsList}
+        />
+      ) : (
+        <>
+          <PrimaryButton onClick={() => setEditMode(true)} className="mb-4 mt-10">
+            Neues Rezept hinzufügen
+          </PrimaryButton>
+          <RecipeList
+            recipes={recipes}
+            onSelect={setSelectedRecipe}
+            onDelete={handleDeleteRecipe}
+            onEdit={handleEditRecipe}
+          />
+        </>
+      )}
     </div>
   );
+  
 };
 
 export default Recipes;
