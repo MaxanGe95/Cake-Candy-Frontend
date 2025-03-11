@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import RecipeForm from "../components/recipe/RecipeForm";
 import RecipeList from "../components/recipe/RecipeList";
+// import RecipeDetails from "../components/recipe/RecipeDetails";
 import { fetchZutaten } from "../api/zutaten";
 import { fetchRezepte, deleteRezept } from "../api/rezepte";
 import { PrimaryButton } from "../components/form/Buttons";
@@ -8,9 +9,11 @@ import { PrimaryButton } from "../components/form/Buttons";
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
-  const [ingredientsList, setIngredientsList] = useState([]);
+  const [showNewRecipeForm, setShowNewRecipeForm] = useState(false);
+  const [editMode, setEditMode] = useState(false);
+  const [ingredientsList, setIngredientsList] = useState([]); // Zutatenliste hinzufügen
 
-  // Zutaten und Rezepte aus dem Backend laden
+  // Zutaten, Rezepte aus dem Backend laden
   useEffect(() => {
     loadZutaten();
     loadRezepte();
@@ -21,14 +24,14 @@ const Recipes = () => {
       const data = await fetchRezepte();
       setRecipes(data);
     } catch (error) {
-      console.error("Fehler beim Laden der Rezepte:", error);
+      console.error("Fehler beim Laden der Zutaten:", error);
     }
   };
 
   const loadZutaten = async () => {
     try {
       const data = await fetchZutaten();
-      setIngredientsList(data);
+      setIngredientsList(data); // Zutatenliste im State speichern
     } catch (error) {
       console.error("Fehler beim Laden der Zutaten:", error);
     }
@@ -36,61 +39,54 @@ const Recipes = () => {
 
   const handleSaveRecipe = (recipe) => {
     console.log("Rezept gespeichert:", recipe);
-    loadRezepte(); // Rezepte neu laden
-    setSelectedRecipe(null); // Rezept zurücksetzen
+    loadRezepte();
+    setEditMode(false);
+    setSelectedRecipe(null);
   };
 
   const handleEditRecipe = (recipe) => {
     // Rezept zum Bearbeiten setzen
     setSelectedRecipe(recipe);
+    setEditMode(true);
   };
 
   const handleDeleteRecipe = async (id) => {
     await deleteRezept(id);
-    loadRezepte(); // Rezepte nach dem Löschen neu laden
-    setSelectedRecipe(null); // Ausgewähltes Rezept zurücksetzen
+    loadRezepte();
+    setSelectedRecipe(null);
   };
 
   const handleCancel = () => {
-    setSelectedRecipe(null); // Abbrechen setzt das Rezept zurück
-  };
-
-  const handleNewRecipe = () => {
-    setSelectedRecipe({
-      name: "",
-      ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
-      tools: [],
-      totalAmount: 1,
-    }); // Leeres Rezept für neues Rezept
+    setSelectedRecipe(null);
+    setEditMode(false);
   };
 
   return (
     <div className="p-8 text-amber-100">
-      {/* Rezeptformular immer sichtbar */}
       <RecipeForm
-        recipe={selectedRecipe || {
-          name: "",
-          ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
-          tools: [],
-          totalAmount: 1,
-        }}
+        recipe={
+          selectedRecipe || {
+            name: "",
+            ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
+            tools: [],
+            totalAmount: 1,
+          }
+        }
         onSave={handleSaveRecipe}
         onCancel={handleCancel}
-        ingredientsList={ingredientsList}
+        ingredientsList={ingredientsList} // Zutatenliste als Prop an RecipeForm übergeben
       />
-
-      {/* Rezeptliste immer sichtbar */}
       <RecipeList
         recipes={recipes}
-        onSelect={setSelectedRecipe} // Rezept in der Liste auswählen
+        onSelect={setSelectedRecipe}
         onDelete={handleDeleteRecipe}
-        onEdit={handleEditRecipe} // Rezept in der Liste bearbeiten
+        onEdit={handleEditRecipe}
       />
       
       {/* Button zum Hinzufügen eines neuen Rezepts */}
-      <PrimaryButton onClick={handleNewRecipe} className="mb-4 mt-10">
+      {/* <PrimaryButton onClick={handleNewRecipe} className="mb-4 mt-10">
         Neues Rezept hinzufügen
-      </PrimaryButton>
+      </PrimaryButton> */}
     </div>
   );
 };
