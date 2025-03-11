@@ -9,13 +9,6 @@ import {
   InputTextarea,
   InputCurrency,
 } from "../form/Inputs";
-import {
-  DropdownInput,
-  InputNumber,
-  InputString,
-  InputTextarea,
-  InputCurrency,
-} from "../form/Inputs";
 
 const toolsList = [
   "Industrietopf",
