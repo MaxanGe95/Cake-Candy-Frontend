@@ -198,6 +198,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       <h2 className="text-xl font-semibold mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
+     
 
       <div className="flex space-x-1 mb-4">
         <InputString
