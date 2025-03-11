@@ -105,7 +105,7 @@ const MitarbeiterTabelle = () => {
     <div className="container mx-auto p-6">
       <table className="min-w-full border border-gray-500">
         <thead>
-          <tr className="bg-gray-700 text-white">
+          <tr className="bg-teal-950 text-white">
             <th className="p-2">Mitarbeitername</th>
             <th className="p-2">Gesamtgehalt</th>
             <th className="p-2">Gesamte Wochenstunden</th>
@@ -114,7 +114,7 @@ const MitarbeiterTabelle = () => {
         <tbody>
           {data.map((employee) => (
             <React.Fragment key={employee.employeeName}>
-              <tr className="cursor-pointer bg-gray-200" onClick={() => toggleEmployee(employee.employeeName)}>
+              <tr className="cursor-pointer " onClick={() => toggleEmployee(employee.employeeName)}>
                 <td className="p-2 text-center">{employee.employeeName}</td>
                 <td className="p-2 text-center">{employee.totalSalary.toFixed(2)}€</td>
                 <td className="p-2 text-center">{employee.totalWorkingHours.toFixed(1)} h</td>
