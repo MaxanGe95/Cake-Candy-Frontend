@@ -61,19 +61,19 @@ const MitarbeiterTabelle = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <table className="min-w-full border border-gray-500">
+      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
         <thead>
-          <tr className="bg-gray-700 text-white">
-            <th className="p-2">Mitarbeitername</th>
-            <th className="p-2">Gesamtgehalt</th>
-            <th className="p-2">Gesamte Wochenstunden</th>
+          <tr className="bg-teal-950">
+            <th className="p-2 text-center">Mitarbeitername</th>
+            <th className="p-2 text-center">Gesamtgehalt</th>
+            <th className="p-2 text-center">Gesamte Wochenstunden</th>
           </tr>
         </thead>
         <tbody>
           {data.map((employee) => (
             <React.Fragment key={employee.employeeName}>
               <tr
-                className="cursor-pointer bg-gray-200"
+                className="cursor-pointer border-b-2"
                 onClick={() => toggleEmployee(employee.employeeName)}
               >
                 <td className="p-2 text-center">{employee.employeeName}</td>
