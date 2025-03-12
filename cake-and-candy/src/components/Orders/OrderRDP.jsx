@@ -153,7 +153,7 @@ const OrderRDP = () => {
                                       </thead>
                                       <tbody>
                                         {order.products.map((product) => (
-                                          <tr key={product.id} className="hover:bg-[#7ec6cc80]">
+                                          <tr key={product.id} className="hover:bg-[#7ec6cc80] shadow-lg">
                                             <td className="p-2 text-center">{product.name}</td>
                                             <td className="p-2 text-center">{product.quantity}</td>
                                             <td className="p-2 text-center">{product.pricePerUnit.toFixed(2)} $</td>
