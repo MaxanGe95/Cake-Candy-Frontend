@@ -108,7 +108,7 @@ function Endproducts() {
                 id={category.name}
                 className="min-h-screen p-4 mt-8 rounded-xl"
                 style={{
-                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${category.image})`,
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4))`,
                   backgroundPosition: "center",
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
