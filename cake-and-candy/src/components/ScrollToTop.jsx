@@ -24,11 +24,11 @@ const ScrollToTop = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-6 z-1000 right-6 p-3 cursor-pointer bg-teal-600 text-white rounded-full shadow-lg transition-opacity duration-300 ${
+      className={`fixed bottom-12 z-1000 right-6 p-3 cursor-pointer bg-teal-600 text-white rounded-full shadow-lg transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
-      <FaArrowUp className="w-6 h-6" />
+      <FaArrowUp className="w-5 h-5" />
     </button>
   );
 };
