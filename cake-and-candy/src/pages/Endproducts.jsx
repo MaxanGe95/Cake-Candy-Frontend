@@ -116,7 +116,7 @@ function Endproducts() {
               >
                 <div className="flex items-center justify-center">
                   <FlyInWrapper>
-                    <h2 className="xl:text-8xl font-bold bg-teal-950/70 p-2 rounded-xl mb-1">
+                    <h2 className="xl:text-3xl font-bold bg-teal-950/70 p-2 rounded-xl mb-1">
                       {category.name}
                     </h2>
                   </FlyInWrapper>

@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { FaArrowUp } from "react-icons/fa";
 
-const ScrollToTop = () => {
+const ScrollToTop = ({ className = "" }) => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -24,7 +24,7 @@ const ScrollToTop = () => {
   return (
     <button
       onClick={scrollToTop}
-      className={`fixed bottom-12 z-1000 right-6 p-3 cursor-pointer bg-teal-600 text-white rounded-full shadow-lg transition-opacity duration-300 ${
+      className={`${className} p-3 cursor-pointer bg-teal-600 text-white rounded-full shadow-lg transition-opacity duration-300 ${
         isVisible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
