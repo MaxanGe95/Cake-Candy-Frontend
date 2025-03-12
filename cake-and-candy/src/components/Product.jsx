@@ -61,14 +61,13 @@ const Product = ({ product, admin = false }) => {
       ...product,
       productImage: currentImage,
       name: currentTitle,
-      productDescription: currentDescription
+      productDescription: currentDescription,
     };
 
     try {
       await updateRezept(updatedProduct);
     } catch (error) {
       console.log("Fehler beim Speichern", error);
-      
     }
   };
 
@@ -76,7 +75,11 @@ const Product = ({ product, admin = false }) => {
     <div className="bg-teal-900/70 text-amber-100 w-sm rounded-xl overflow-hidden shadow-lg">
       <div className="relative">
         {currentImage ? (
-          <img className="w-full h-48 object-cover" src={currentImage} alt={currentTitle} />
+          <img
+            className="w-full h-48 object-cover"
+            src={currentImage}
+            alt={currentTitle}
+          />
         ) : (
           <div className="w-full h-48 bg-white"></div>
         )}
@@ -98,7 +101,7 @@ const Product = ({ product, admin = false }) => {
             </EditButton>
           )}
         </div>
-        <p className="text-base flex justify-between items-center whitespace-pre">
+        <p className="text-base flex justify-between items-center whitespace-pre-wrap">
           {currentDescription}
         </p>
       </div>
