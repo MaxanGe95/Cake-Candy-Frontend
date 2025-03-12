@@ -8,7 +8,7 @@ export default function Navbar({ menuOpen, setMenuOpen }) {
 
   const isActiveLink = (path) => location.pathname === path;
   return (
-    <div className="relative z-1000 top-0 left-0 w-full text-teal-100 bg-teal-800/50 border-b border-teal-200 bg-opacity-50 p-4 flex justify-between items-center">
+    <div className="sticky z-1000 top-0 left-0 w-full text-teal-100 bg-teal-800/50 border-b border-teal-200 bg-opacity-50 p-4 flex justify-between items-center">
       <button
         onClick={() => setMenuOpen(!menuOpen)}
         className="text-xl md:hidden"
