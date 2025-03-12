@@ -86,9 +86,9 @@ const OrderRDP = () => {
   if (error) return <p className="text-red-500">Fehler: {error}</p>;
 
   return (
-    <div className="p-4">
+    <div className="mt-12">
       {/* Haupttabelle: Firmenübersicht */}
-      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md">
+      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
         <thead className="bg-teal-950">
           <tr>
             <th className="p-2">Firma</th>
@@ -106,17 +106,17 @@ const OrderRDP = () => {
               >
                 <td className="p-2 text-center">{company.name}</td>
                 <td className="p-2 text-center">{company.ordersCount}</td>
-                <td className="p-2 text-center">{company.totalRevenue.toFixed(2)} €</td>
-                <td className="p-2 text-center">{company.totalProfit.toFixed(2)} €</td>
+                <td className="p-2 text-center">{company.totalRevenue.toFixed(2)} $</td>
+                <td className="p-2 text-center">{company.totalProfit.toFixed(2)} $</td>
               </tr>
 
               {/* Bestellungen für die gewählte Firma anzeigen */}
               {selectedCompany?.id === company.id && (
                 <tr>
                   <td colSpan="4" className="p-4">
-                    <table className="w-full bg-teal-900 rounded-md">
+                    <table className="w-full bg-teal-950 rounded-md shadow-lg overflow-hidden">
                       <thead>
-                        <tr className="bg-teal-800">
+                        <tr className="bg-teal-900 text-amber-100 rounded-md">
                           <th className="p-2">Datum</th>
                           <th className="p-2">Rechnungsbetrag</th>
                           <th className="p-2">Gewinn</th>
@@ -129,22 +129,22 @@ const OrderRDP = () => {
                           .map((order) => (
                             <React.Fragment key={order.id}>
                               <tr
-                                className="cursor-pointer hover:bg-teal-700"
+                                className="cursor-pointer hover:bg-[#7ec6cc80] shadow-lg rounded-md"
                                 onClick={() => toggleOrder(order)}
                               >
                                 <td className="p-2 text-center">{order.date}</td>
-                                <td className="p-2 text-center">{order.amount.toFixed(2)} €</td>
-                                <td className="p-2 text-center">{order.profit.toFixed(2)} €</td>
+                                <td className="p-2 text-center">{order.amount.toFixed(2)} $</td>
+                                <td className="p-2 text-center">{order.profit.toFixed(2)} $</td>
                                 <td className="p-2 text-center">{order.type}</td>
                               </tr>
 
                               {/* Produkte für die gewählte Bestellung anzeigen */}
                               {selectedOrder?.id === order.id && (
                                 <tr>
-                                  <td colSpan="4" className="p-4 bg-teal-800">
-                                    <table className="w-full text-amber-100">
-                                      <thead>
-                                        <tr className="bg-teal-700">
+                                  <td colSpan="4" className="p-4 bg-[#7ec6cc33] shadow-lg">
+                                    <table className="w-full bg-teal-950 text-amber-100 rounded-md shadow-lg overflow-hidden">
+                                      <thead className="rounded-t-md">
+                                        <tr className="bg-teal-900">
                                           <th className="p-2">Produkt</th>
                                           <th className="p-2">Menge</th>
                                           <th className="p-2">Preis/Stück</th>
@@ -153,11 +153,11 @@ const OrderRDP = () => {
                                       </thead>
                                       <tbody>
                                         {order.products.map((product) => (
-                                          <tr key={product.id} className="hover:bg-teal-600">
+                                          <tr key={product.id} className="hover:bg-[#7ec6cc80]">
                                             <td className="p-2 text-center">{product.name}</td>
                                             <td className="p-2 text-center">{product.quantity}</td>
-                                            <td className="p-2 text-center">{product.pricePerUnit.toFixed(2)} €</td>
-                                            <td className="p-2 text-center">{product.totalPrice.toFixed(2)} €</td>
+                                            <td className="p-2 text-center">{product.pricePerUnit.toFixed(2)} $</td>
+                                            <td className="p-2 text-center">{product.totalPrice.toFixed(2)} $</td>
                                           </tr>
                                         ))}
                                       </tbody>

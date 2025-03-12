@@ -75,7 +75,7 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
           {recipes.map((recipe) => (
             <React.Fragment key={recipe._id}>
               <tr
-                className="border rounded-md cursor-pointer hover:bg-[#7ec6cc80]"
+                className="border cursor-pointer hover:bg-[#7ec6cc80]"
                 onClick={() => toggleDropdown(recipe)}
               >
                 <td className="p-2 text-center">{recipe.name}</td>
@@ -96,9 +96,9 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
               </tr>
               {selectedRecipe && selectedRecipe._id === recipe._id && (
                 <tr>
-                  <td colSpan="9" className="rounded-md shadow-lg p-4">
+                  <td colSpan="9" className="p-4">
                     <div className="bg-[#7ec6cc33] rounded-md shadow-lg p-4">
-                      <table className=" bg-teal-950 min-w-full rounded-md shadow-lg overflow-hidden">
+                      <table className=" bg-teal-950 min-w-full rounded-md overflow-hidden">
                         <thead className="bg-teal-900  text-amber-100 rounded-t-md">
                           <tr>
                             <th className="p-2">Zutaten</th>
