@@ -189,9 +189,9 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       <h2 className="text-xl font-semibold mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
-      <div className="grid gap-6 m-6">
+      <div className="grid gap-6 m-6 md:grid-cols-2">
       <div>
-    <label for="Rezeptname"></label>
+    <label for="Rezeptname" placeholder="Rezeptname" className="block mb-2"></label>
       <InputString
         placeholder="Rezeptname"
         value={newRecipe.name}
