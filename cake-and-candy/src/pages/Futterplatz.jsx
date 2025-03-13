@@ -144,10 +144,19 @@ function Futterplatz() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(extractedData),
-      });
+      });invoice
 
       if (response.ok) {
         console.log("Daten erfolgreich gesendet");
+        //input leeren
+        if (inputType === "invoice") {
+          setInputText1("");
+        } else if (inputType === "salary") {
+          setInputText2("");
+        } else if (inputType === "inventory") {
+          setInputText3("");
+        }
+//----------------------------------------------------------
       } else {
         console.error("Fehler beim Senden der Daten:", response.statusText);
         throw new Error("Fehler beim Senden der Daten");
