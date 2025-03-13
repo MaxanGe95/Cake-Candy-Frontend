@@ -30,8 +30,18 @@ const MitarbeiterTabelle = () => {
   };
 
   const monthOrder = [
-    "Januar", "Februar", "März", "April", "Mai", "Juni",
-    "Juli", "August", "September", "Oktober", "November", "Dezember"
+    "Januar",
+    "Februar",
+    "März",
+    "April",
+    "Mai",
+    "Juni",
+    "Juli",
+    "August",
+    "September",
+    "Oktober",
+    "November",
+    "Dezember",
   ];
 
   const groupData = (data) => {
@@ -64,7 +74,7 @@ const MitarbeiterTabelle = () => {
       grouped[entry.employeeName].months[month][week].push({
         ...entry,
         formattedDate,
-        dateObj
+        dateObj,
       });
     });
 
@@ -82,8 +92,8 @@ const MitarbeiterTabelle = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <table className="min-w-full border border-gray-500">
-        <thead>
+      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+        <thead className="bg-teal-950">
           <tr className="bg-teal-950 text-white">
             <th className="p-2">Mitarbeitername</th>
             <th className="p-2">Gesamtgehalt</th>
@@ -93,43 +103,87 @@ const MitarbeiterTabelle = () => {
         <tbody>
           {data.map((employee) => (
             <React.Fragment key={employee.employeeName}>
-              <tr className="cursor-pointer" onClick={() => setSelectedEmployee(selectedEmployee === employee.employeeName ? null : employee.employeeName)}>
+              <tr
+                className="cursor-pointer border"
+                onClick={() =>
+                  setSelectedEmployee(
+                    selectedEmployee === employee.employeeName
+                      ? null
+                      : employee.employeeName
+                  )
+                }
+              >
                 <td className="p-2 text-center">{employee.employeeName}</td>
-                <td className="p-2 text-center">{employee.totalSalary.toFixed(2)}€</td>
-                <td className="p-2 text-center">{employee.totalWorkingHours.toFixed(1)} h</td>
+                <td className="p-2 text-center">
+                  {employee.totalSalary.toFixed(2)}$
+                </td>
+                <td className="p-2 text-center">
+                  {employee.totalWorkingHours.toFixed(1)} h
+                </td>
               </tr>
               {selectedEmployee === employee.employeeName && (
                 <tr>
                   <td colSpan="3" className="p-4">
                     {Object.keys(employee.months).map((month) => (
                       <div key={month} className="mb-2">
-                        <button className="w-full text-left bg-blue-500 text-white p-2" onClick={() => setSelectedMonth(prev => ({ ...prev, [employee.employeeName]: prev[employee.employeeName] === month ? null : month }))}>
+                        <div
+                          className=" w-full text-left bg-blue-900 text-white p-2 cursor-pointer rounded-md"
+                          onClick={() =>
+                            setSelectedMonth((prev) => ({
+                              ...prev,
+                              [employee.employeeName]:
+                                prev[employee.employeeName] === month
+                                  ? null
+                                  : month,
+                            }))
+                          }
+                        >
                           {month}
-                        </button>
+                        </div>
                         {selectedMonth[employee.employeeName] === month && (
-                          <table className="w-full border mt-2">
-                            <thead>
-                              <tr className="bg-gray-600 text-white">
+                          <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+                            <thead className="bg-teal-950 ">
+                              <tr className="bg-teal-800 text-white">
                                 <th className="p-2">Datum</th>
                                 <th className="p-2">Gehalt</th>
                                 <th className="p-2">Stunden</th>
                               </tr>
                             </thead>
                             <tbody>
-                              {Object.values(employee.months[month]).flat().sort((a, b) => new Date(a.dateObj) - new Date(b.dateObj)).map((entry, index) => (
-                                <tr key={index} className="border">
-                                  <td className="p-2 text-center">{entry.date}</td>
-                                  <td className="p-2 text-center">{entry.salary.toFixed(2)}€</td>
-                                  <td className="p-2 text-center">{entry.workingHours.toFixed(1)} h</td>
-                                </tr>
-                              ))}
-                              <tr className="bg-gray-300 font-bold">
+                              {Object.values(employee.months[month])
+                                .flat()
+                                .sort(
+                                  (a, b) =>
+                                    new Date(a.dateObj) - new Date(b.dateObj)
+                                )
+                                .map((entry, index) => (
+                                  <tr key={index} className="hover:bg-[#5eeaff] border">
+                                    <td className="p-2 text-center">
+                                      {entry.date}
+                                    </td>
+                                    <td className="p-2 text-center">
+                                      {entry.salary.toFixed(2)}$
+                                    </td>
+                                    <td className="p-2 text-center">
+                                      {entry.workingHours.toFixed(1)} h
+                                    </td>
+                                  </tr>
+                                ))}
+                              <tr className="bg-teal-500 font-bold">
                                 <td className="p-2 text-center">Gesamt</td>
                                 <td className="p-2 text-center">
-                                  {Object.values(employee.months[month]).flat().reduce((sum, e) => sum + e.salary, 0).toFixed(2)}€
+                                  {Object.values(employee.months[month])
+                                    .flat()
+                                    .reduce((sum, e) => sum + e.salary, 0)
+                                    .toFixed(2)}
+                                  $
                                 </td>
                                 <td className="p-2 text-center">
-                                  {Object.values(employee.months[month]).flat().reduce((sum, e) => sum + e.workingHours, 0).toFixed(1)} h
+                                  {Object.values(employee.months[month])
+                                    .flat()
+                                    .reduce((sum, e) => sum + e.workingHours, 0)
+                                    .toFixed(1)}{" "}
+                                  h
                                 </td>
                               </tr>
                             </tbody>
@@ -148,11 +202,9 @@ const MitarbeiterTabelle = () => {
   );
 };
 
-export default MitarbeiterTabelle; 
+export default MitarbeiterTabelle;
 
 //<------------------------------------------------------------------------------------------------------------->>
-
-
 
 /* import React, { useState, useEffect } from "react";
 
@@ -403,7 +455,6 @@ const MitarbeiterTabelle = () => {
 export default MitarbeiterTabelle;
  */
 
-
 /* import React, { useState, useEffect } from "react";
 
 const MitarbeiterTabelle = () => {
@@ -554,5 +605,3 @@ const MitarbeiterTabelle = () => {
 };
 
 export default MitarbeiterTabelle;  */
-
- 
