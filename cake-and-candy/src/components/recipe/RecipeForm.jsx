@@ -185,11 +185,13 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
   };
 
   return (
-    <div className="p-6">
+    <form className="p-6">
       <h2 className="text-xl font-semibold mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
-
+      <div className="grid gap-6 m-6">
+      <div>
+    <label for="Rezeptname"></label>
       <InputString
         placeholder="Rezeptname"
         value={newRecipe.name}
@@ -197,6 +199,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         error={errors.name}
         className="mb-1"
       />
+      </div>
       <h3 className="text-lg font-semibold">Kategorie</h3>
       <DropdownInput
         className="w-full"
@@ -259,7 +262,8 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         Speichern
       </PrimaryButton>
       <SecondaryButton onClick={onCancel}>Abbrechen</SecondaryButton>
-    </div>
+      </div>
+    </form>
   );
 };
 
