@@ -200,8 +200,8 @@ function Futterplatz() {
           value={inputText1}
           onChange={(e) => setInputText1(e.target.value)}
           rows="10"
-          cols="150"
-          className="border border-gray-300 p-2  rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          cols={""}
+          className="w-full border border-gray-300 p-2  rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
 
         {/* B2B/B2C Auswahl */}
@@ -246,7 +246,7 @@ function Futterplatz() {
               Wählen Sie eine Firma aus
             </option>
             {companies.map((company, index) => (
-              <option key={index} value={company.name}>
+              <option key={index} value={company.name} className="bg-teal-900">
                 {company.name} {/* Zeige nur den Namen an */}
               </option>
             ))}
@@ -288,7 +288,7 @@ function Futterplatz() {
           onChange={(e) => setInputText2(e.target.value)}
           rows="10"
           cols="150"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
 
         <button
@@ -309,7 +309,7 @@ function Futterplatz() {
           onChange={(e) => setInputText3(e.target.value)}
           rows="10"
           cols="150"
-          className="border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
         ></textarea>
 
         <button
