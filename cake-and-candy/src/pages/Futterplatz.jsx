@@ -144,7 +144,7 @@ function Futterplatz() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(extractedData),
-      });invoice
+      });
 
       if (response.ok) {
         console.log("Daten erfolgreich gesendet");
