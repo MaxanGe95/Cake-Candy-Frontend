@@ -2,13 +2,7 @@ import { useState, useEffect } from "react";
 import { fetchZutaten } from "../../api/zutaten";
 import { DeleteButton, PrimaryButton, SecondaryButton } from "../form/Buttons";
 import { addRezept, updateRezept } from "../../api/rezepte";
-import {
-  DropdownInput,
-  InputNumber,
-  InputString,
-  InputTextarea,
-  InputCurrency,
-} from "../form/Inputs";
+import { DropdownInput, InputNumber, InputString } from "../form/Inputs";
 
 const toolsList = [
   "Industrietopf",
@@ -69,20 +63,18 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
         ingredients: recipe.ingredients || [],
       });
     }
-    loadZutaten();  // Zutaten aus der API laden
+    loadZutaten(); // Zutaten aus der API laden
   }, [recipe]);
 
   const loadZutaten = async () => {
     try {
       const data = await fetchZutaten();
-      console.log("Zutaten geladen:", data);  // Überprüfe, was zurückgegeben wird
+      console.log("Zutaten geladen:", data); // Überprüfe, was zurückgegeben wird
       setIngredientsList(data);
     } catch (error) {
       console.error("Fehler beim Laden der Zutaten:", error);
     }
   };
-  
-  
 
   const addIngredient = () => {
     setNewRecipe({
@@ -109,7 +101,6 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       ),
     }));
   };
-  
 
   const handleIngredientChangeField = (index, field, value) => {
     setNewRecipe((prev) => ({
@@ -185,83 +176,116 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
   };
 
   return (
-    <form className="p-6">
-      <h2 className="text-xl font-semibold mt-6">
+    <form className="max-w-s mx-auto">
+      <h2 className="text-2xl font-bold text-teal-200 mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
-      <div className="grid gap-6 m-6 md:grid-cols-2">
-      <div>
-    <label for="Rezeptname" placeholder="Rezeptname" className="block mb-2"></label>
-      <InputString
-        placeholder="Rezeptname"
-        value={newRecipe.name}
-        onChange={(v) => handleRecipeChange("name", v)}
-        error={errors.name}
-        className="mb-1"
-      />
-      </div>
-      <h3 className="text-lg font-semibold">Kategorie</h3>
-      <DropdownInput
-        className="w-full"
-        options={categoryOptions}
-        value={newRecipe.category}
-        onChange={(v) => handleRecipeChange("category", v)}
-        placeholder="Kategorie wählen"
-        error={errors.name}
-      />
-
-      <h3 className="text-lg font-semibold">Hilfsmittel</h3>
-      <DropdownInput
-        className="w-full"
-        options={toolsList}
-        value={newRecipe.tools[0]}
-        onChange={(e) => handleRecipeChange("tools", [e])}
-        placeholder="Hilfsmittel wählen"
-        error={errors.name}
-      />
-
-      <h3 className="text-lg font-semibold">Ergebnismenge</h3>
-      <InputNumber
-        placeholder="Ergebnismenge"
-        value={newRecipe.totalAmount}
-        onChange={(v) => handleRecipeChange("totalAmount", v)}
-        error={errors.name}
-        className="mb-2"
-      />
-
-      <h3 className="text-lg font-semibold">Zutaten</h3>
-      {newRecipe.ingredients.map((ingredient, index) => (
-        <div key={index} className="flex mb-2 items-center">
-          <DropdownInput
-  className="w-3/4 mr-1"
-  options={ingredientsList}
-  value={ingredient.name}  // Hier sollte der Name der Zutat aus 'newRecipe.ingredients' kommen
-  onChangeObject={(v) => handleIngredientChange(index, v)}  // Überprüfe, ob 'v' das richtige Objekt ist
-  valueKey="name"
-  nameKey="name"
-  placeholder="Zutat wählen"
-  error={errors[`ingredient${index}_name`]}
-/>
-{" "}
-          <InputNumber
-            placeholder="Menge"
-            value={ingredient.amount}
-            onChange={(v) => handleIngredientChangeField(index, "amount", v)}
-            error={errors[`ingredient${index}_amount`]}
-            className="w-1/4 mr-1"
+      <div className="ml-2 grid md:grid-cols-3 gap-4 text-amber-100">
+        <div className="mt-4">
+          <label
+            for="Rezeptname"
+            placeholder="Rezeptname"
+            className="mb-1 text-sm font-medium"
+          >
+            Rezeptname
+          </label>
+          <InputString
+            value={newRecipe.name}
+            onChange={(v) => handleRecipeChange("name", v)}
+            error={errors.name}
+            className=""
           />
-          <DeleteButton onClick={() => removeIngredient(index)} />
+          <label for="Kategorie" className="mb-1 text-sm font-medium">
+            Kategorie
+          </label>
+          <DropdownInput
+            className="w-xs"
+            options={categoryOptions}
+            value={newRecipe.category}
+            onChange={(v) => handleRecipeChange("category", v)}
+            placeholder="Kategorie wählen"
+            error={errors.name}
+          />
         </div>
-      ))}
-      <PrimaryButton onClick={addIngredient} className="mr-1">
-        Zutat hinzufügen
-      </PrimaryButton>
-
-      <br />
-      <PrimaryButton onClick={saveRecipe} className="mr-1 mt-2">
-        Speichern
-      </PrimaryButton>
-      <SecondaryButton onClick={onCancel}>Abbrechen</SecondaryButton>
+        <div className="mt-4">
+          <label for="Hilfsmittel" className="mb-1 text-sm font-medium">
+            Hilfsmittel
+          </label>
+          <DropdownInput
+            className="w-xs"
+            options={toolsList}
+            value={newRecipe.tools[0]}
+            onChange={(e) => handleRecipeChange("tools", [e])}
+            placeholder="Hilfsmittel wählen"
+            error={errors.name}
+          />
+          <div className="">
+            <label for="Ergebnismenge" className="mb-1 text-sm font-medium">
+              Ergebnismenge
+            </label>
+            <InputNumber
+              placeholder="Ergebnismenge"
+              value={newRecipe.totalAmount}
+              onChange={(v) => handleRecipeChange("totalAmount", v)}
+              error={errors.name}
+              className="w-xs"
+            />
+          </div>
+        </div>
+        {newRecipe.ingredients.map((ingredient, index) => (
+          <div key={index} className="">
+            <div className="mt-4">
+              <label for="Zutaten" className="mb-1 text-sm font-medium">
+                Zutaten
+              </label>
+              <DropdownInput
+                className="w-xs"
+                options={ingredientsList}
+                value={ingredient.name} // Hier sollte der Name der Zutat aus 'newRecipe.ingredients' kommen
+                onChangeObject={(v) => handleIngredientChange(index, v)} // Überprüfe, ob 'v' das richtige Objekt ist
+                valueKey="name"
+                nameKey="name"
+                placeholder="Zutat wählen"
+                error={errors[`ingredient${index}_name`]}
+              />
+            </div>
+            <div className="">
+              <label
+                for="Menge"
+                placeholder="Menge"
+                className="mb-1 text-sm font-medium"
+              >
+                Menge
+              </label>
+              <div className="flex">
+                <InputNumber
+                  placeholder="Menge"
+                  value={ingredient.amount}
+                  onChange={(v) =>
+                    handleIngredientChangeField(index, "amount", v)
+                  }
+                  error={errors[`ingredient${index}_amount`]}
+                  className="w-xs"
+                />
+                {/* <DeleteButton className="mb-2" onClick={() => removeIngredient(index)}/> */}
+                {/* würde ich gerne entfernen, da hinter Gesamtergebnis auch kein Delete-Button steht und bei Null sowieso der Error sprint, verstehe die Logik dieses Buttons daher nicht und er hat eine andere default margin */}
+              </div>
+            </div>
+          </div>
+        ))}
+        <div className="mt-1 col-start-3 text-center">
+          <PrimaryButton onClick={addIngredient} className="w-46.5">
+            Hinzufügen
+          </PrimaryButton>
+          <div className="mt-2">
+            <PrimaryButton onClick={saveRecipe} className="">
+              Speichern
+            </PrimaryButton>
+            <SecondaryButton onClick={onCancel} className="ml-1">
+              Abbrechen
+            </SecondaryButton>
+          </div>
+        </div>
       </div>
     </form>
   );
