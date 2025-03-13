@@ -84,3 +84,29 @@ export const fetchEndProdukte = async () => {
     throw error;
   }
 };
+
+// Build im Backend hinzufügen
+// das backend speichert es irgendwo, wo genau ist dem frontend egal
+export const uploadImage = async (rezept, file) => {
+  try {
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch(
+      `http://localhost:5000/api/rezepte/${rezept._id}/image`,
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+    return response
+  } catch (error) {
+    console.error("Fehler beim Speichern:", error);
+    throw error;
+  }
+};
+
+// Url um das Bild abzurufen zusammenbauen
+export const rezeptImage = (rezept) => {
+  return `http://localhost:5000/api/rezepte/${rezept._id}/image`;
+};

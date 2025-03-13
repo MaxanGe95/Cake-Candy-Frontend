@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { FaShoppingCart, FaEdit } from "react-icons/fa";
 import { PrimaryButton, EditButton } from "../components/form/Buttons";
-import { updateRezept } from "../api/rezepte";
+import { updateRezept, uploadImage, rezeptImage } from "../api/rezepte";
 import { InputString, InputTextarea } from "./form/Inputs";
 
 const Product = ({ product, admin = false }) => {
@@ -44,14 +44,11 @@ const Product = ({ product, admin = false }) => {
     const fileInput = document.createElement("input");
     fileInput.type = "file";
     fileInput.accept = "image/*";
-    fileInput.onchange = (event) => {
+    fileInput.onchange = async (event) => {
       const file = event.target.files[0];
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCurrentImage(reader.result);
-        setHasChanges(true);
-      };
-      reader.readAsDataURL(file);
+      await uploadImage(product, file);
+      // seite neu laden, damit man das Bild sieht
+      location.reload();
     };
     fileInput.click();
   };
@@ -59,16 +56,14 @@ const Product = ({ product, admin = false }) => {
   const saveProduct = async () => {
     const updatedProduct = {
       ...product,
-      productImage: currentImage,
       name: currentTitle,
-      productDescription: currentDescription
+      productDescription: currentDescription,
     };
 
     try {
       await updateRezept(updatedProduct);
     } catch (error) {
       console.log("Fehler beim Speichern", error);
-      
     }
   };
 
@@ -76,7 +71,11 @@ const Product = ({ product, admin = false }) => {
     <div className="bg-teal-900/70 text-amber-100 w-sm rounded-xl overflow-hidden shadow-lg">
       <div className="relative">
         {currentImage ? (
-          <img className="w-full h-48 object-cover" src={currentImage} alt={currentTitle} />
+          <img
+            className="w-full h-48 object-cover"
+            src={rezeptImage(product)}
+            alt={currentTitle}
+          />
         ) : (
           <div className="w-full h-48 bg-white"></div>
         )}
@@ -98,7 +97,7 @@ const Product = ({ product, admin = false }) => {
             </EditButton>
           )}
         </div>
-        <p className="text-base flex justify-between items-center whitespace-pre">
+        <p className="text-base flex justify-between items-center whitespace-pre-wrap">
           {currentDescription}
         </p>
       </div>

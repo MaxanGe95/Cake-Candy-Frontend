@@ -108,7 +108,7 @@ function Endproducts() {
                 id={category.name}
                 className="min-h-screen p-4 mt-8 rounded-xl"
                 style={{
-                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 1)), url(${category.image})`,
+                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4))`,
                   backgroundPosition: "center",
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
@@ -116,7 +116,7 @@ function Endproducts() {
               >
                 <div className="flex items-center justify-center">
                   <FlyInWrapper>
-                    <h2 className="xl:text-8xl font-bold bg-teal-950/70 p-2 rounded-xl">
+                    <h2 className="xl:text-3xl font-bold bg-teal-950/70 p-2 rounded-xl mb-1">
                       {category.name}
                     </h2>
                   </FlyInWrapper>
