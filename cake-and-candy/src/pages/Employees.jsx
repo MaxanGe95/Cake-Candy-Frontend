@@ -23,6 +23,193 @@ const MitarbeiterTabelle = () => {
   // Benutzerfreundliche Kalenderwoche berechnen
   const getUserFriendlyWeek = (date) => {
     const tempDate = new Date(date);
+    tempDate.setDate(tempDate.getDate() - tempDate.getDay()); // Setzt den Tag auf den letzten Sonntag
+    const yearStart = new Date(tempDate.getFullYear(), 0, 1); // Der erste Tag des Jahres
+    const daysBetween = Math.floor((date - yearStart) / (1000 * 60 * 60 * 24)); // Tage bis zum Datum
+    const week = Math.floor(daysBetween / 7) + 1; // KW berechnen
+    return `KW ${week}`;
+  };
+
+  const groupData = (data) => {
+    const grouped = {};
+
+    data.forEach((entry) => {
+      if (!grouped[entry.employeeName]) {
+        grouped[entry.employeeName] = {
+          totalSalary: 0,
+          totalWorkingHours: 0,
+          months: {},
+        };
+      }
+
+      grouped[entry.employeeName].totalSalary += entry.salary;
+      grouped[entry.employeeName].totalWorkingHours += entry.workingHours;
+
+      const [day, monthNum, year] = entry.date.split(".");
+      const formattedDate = `${year}-${monthNum}-${day}`;
+      const dateObj = new Date(formattedDate);
+      const month = dateObj.toLocaleString("de-DE", { month: "long" });
+      const week = getUserFriendlyWeek(dateObj);
+
+      if (!grouped[entry.employeeName].months[month]) {
+        grouped[entry.employeeName].months[month] = {
+          totalSalary: 0,
+          totalWorkingHours: 0,
+          weeks: {},
+        };
+      }
+      if (!grouped[entry.employeeName].months[month].weeks[week]) {
+        grouped[entry.employeeName].months[month].weeks[week] = [];
+      }
+
+      grouped[entry.employeeName].months[month].totalSalary += entry.salary;
+      grouped[entry.employeeName].months[month].totalWorkingHours += entry.workingHours;
+
+      grouped[entry.employeeName].months[month].weeks[week].push({ ...entry, dateObj });
+    });
+
+    // Sortiere die Mitarbeiter alphabetisch
+    const sortedEmployees = Object.keys(grouped).sort();
+
+    const sortedGrouped = {};
+
+    sortedEmployees.forEach((employeeName) => {
+      const employee = grouped[employeeName];
+
+      // Sortiere Monate chronologisch
+      const sortedMonths = Object.keys(employee.months).sort((a, b) => {
+        const monthsOrder = [
+          "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"
+        ];
+        return monthsOrder.indexOf(a) - monthsOrder.indexOf(b);
+      });
+
+      sortedGrouped[employeeName] = { ...employee, months: {} };
+
+      sortedMonths.forEach((month) => {
+        const sortedWeeks = Object.keys(employee.months[month].weeks).sort((a, b) => {
+          return parseInt(a.split(" ")[1]) - parseInt(b.split(" ")[1]);
+        });
+
+        sortedGrouped[employeeName].months[month] = {
+          ...employee.months[month],
+          weeks: {},
+        };
+
+        sortedWeeks.forEach((week) => {
+          sortedGrouped[employeeName].months[month].weeks[week] = employee.months[month].weeks[week].sort(
+            (a, b) => a.dateObj - b.dateObj
+          );
+        });
+      });
+    });
+
+    return sortedGrouped;
+  };
+
+  return (
+    <div className="container mx-auto p-6">
+      <table className="min-w-full border border-gray-700 text-center">
+        <thead>
+          <tr className="bg-gray-800 text-white">
+            <th className="p-2">Mitarbeiter</th>
+            <th className="p-2">Gesamtgehalt</th>
+            <th className="p-2">Gesamtstunden</th>
+          </tr>
+        </thead>
+        <tbody>
+          {Object.entries(data).map(([employeeName, employee]) => (
+            <React.Fragment key={employeeName}>
+              <tr
+                className="cursor-pointer bg-gray-700 text-white"
+                onClick={() => setSelectedEmployee(selectedEmployee === employeeName ? null : employeeName)}
+              >
+                <td className="p-2 text-left">{employeeName}</td>
+                <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
+                <td className="p-2">{employee.totalWorkingHours.toFixed(1)} h</td>
+              </tr>
+
+              {selectedEmployee === employeeName &&
+                Object.keys(employee.months).map((month) => (
+                  <React.Fragment key={month}>
+                    <tr
+                      className="cursor-pointer bg-gray-600 text-white"
+                      onClick={() => setSelectedMonth((prev) => ({
+                        ...prev,
+                        [employeeName]: prev[employeeName] === month ? null : month,
+                      }))}
+                    >
+                      <td className="p-2" colSpan={1}>{month}</td>
+                      <td colSpan={1}>{employee.months[month].totalSalary.toFixed(2)}$</td>
+                      <td colSpan={1}>{employee.months[month].totalWorkingHours.toFixed(1)}$</td>
+                    </tr>
+
+                    {selectedMonth[employeeName] === month &&
+                      Object.keys(employee.months[month].weeks).map((week) => (
+                        <React.Fragment key={week}>
+                          <tr
+                            className="cursor-pointer bg-gray-500 text-white"
+                            onClick={() => setSelectedWeek((prev) => ({
+                              ...prev,
+                              [`${employeeName}-${month}`]: prev[`${employeeName}-${month}`] === week ? null : week,
+                            }))}
+                          >
+                            <td className="p-2" colSpan={1}>{week}</td>
+                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.salary, 0).toFixed(2)}$</td>
+                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.workingHours, 0).toFixed(1)} h</td>
+                          </tr>
+
+                          {selectedWeek[`${employeeName}-${month}`] === week &&
+                            employee.months[month].weeks[week].map((entry, index) => (
+                              <tr key={index} className="bg-gray-400 text-black">
+                                <td className="p-2">{entry.date}</td>
+                                <td className="p-2">{entry.salary.toFixed(2)}$</td>
+                                <td className="p-2">{entry.workingHours.toFixed(1)} h</td>
+                              </tr>
+                            ))
+                          }
+                        </React.Fragment>
+                      ))
+                    }
+                  </React.Fragment>
+                ))
+              }
+            </React.Fragment>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default MitarbeiterTabelle;
+
+
+/* import React, { useState, useEffect } from "react";
+
+const MitarbeiterTabelle = () => {
+  const [data, setData] = useState([]);
+  const [selectedEmployee, setSelectedEmployee] = useState(null);
+  const [selectedMonth, setSelectedMonth] = useState({});
+  const [selectedWeek, setSelectedWeek] = useState({});
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/salaries");
+        const result = await response.json();
+        setData(groupData(result));
+      } catch (error) {
+        console.error("Fehler beim Abrufen der Daten:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Benutzerfreundliche Kalenderwoche berechnen
+  const getUserFriendlyWeek = (date) => {
+    const tempDate = new Date(date);
     
     // Berechne den ersten Sonntag des Jahres
     tempDate.setDate(tempDate.getDate() - tempDate.getDay()); // Setzt den Tag auf den letzten Sonntag
@@ -177,7 +364,7 @@ const MitarbeiterTabelle = () => {
   );
 };
 
-export default MitarbeiterTabelle;
+export default MitarbeiterTabelle; */
 
 
 /* import React, { useState, useEffect } from "react";
