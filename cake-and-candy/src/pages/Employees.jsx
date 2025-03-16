@@ -138,8 +138,10 @@ const MitarbeiterTabelle = () => {
                             }))
                           }
                         >
-                          {month}
+                          {month}, {month[month]}
                         </div>
+                        
+                        {/*daten innerhalb der Monate*/}
                         {selectedMonth[employee.employeeName] === month && (
                           <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
                             <thead className="bg-teal-950 ">
@@ -157,12 +159,15 @@ const MitarbeiterTabelle = () => {
                                     new Date(a.dateObj) - new Date(b.dateObj)
                                 )
                                 .map((entry, index) => (
-                                  <tr key={index} className="hover:bg-[#5eeaff] border">
+                                  <tr
+                                    key={index}
+                                    className="hover:bg-[#5eeaff] border"
+                                  >
                                     <td className="p-2 text-center">
                                       {entry.date}
                                     </td>
                                     <td className="p-2 text-center">
-                                      {entry.salary.toFixed(2)}$
+                                      {entry.salary.toFixed(2)} $
                                     </td>
                                     <td className="p-2 text-center">
                                       {entry.workingHours.toFixed(1)} h
