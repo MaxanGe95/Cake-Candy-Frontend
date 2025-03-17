@@ -233,7 +233,7 @@ const InputNumber = ({
         }`}
       />
       {error && error.length > 0 && (
-        <p className="text-red-500 text-sm mt-1">{error}</p>
+        <p className="text-red-500 text-sm">{error}</p>
       )}
     </div>
   );
