@@ -196,6 +196,11 @@ function Futterplatz() {
     }
   }
 
+  function isInvoiceFormValid() {
+    return inputText1.trim() !== "" && (isB2B || isB2C) && selectedCompany !== "";
+  }
+  
+
   return (
     <div className="container mx-auto p-6 text-amber-100">
       <h1 className="py-5 text-center">Willkommen bei Futterplatz</h1>
