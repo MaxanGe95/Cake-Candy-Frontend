@@ -127,7 +127,7 @@ const MitarbeiterTabelle = () => {
                 onClick={() => setSelectedEmployee(selectedEmployee === employeeName ? null : employeeName)}
               >
                 <td className="p-2 text-left">{employeeName}</td>
-                <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
+                <td className="p-2">{employee.totalSalary.toFixed(2)} $</td>
                 <td className="p-2">{employee.totalWorkingHours.toFixed(1)} h</td>
               </tr>
 
@@ -146,7 +146,7 @@ const MitarbeiterTabelle = () => {
                       }))}
                     >
                       <td className="p-2" colSpan={1}>{month}</td>
-                      <td colSpan={1}>{employee.months[month].totalSalary.toFixed(2)}$</td>
+                      <td colSpan={1}>{employee.months[month].totalSalary.toFixed(2)} $</td>
                       <td colSpan={1}>{employee.months[month].totalWorkingHours.toFixed(1)} h</td>
                     </tr>
 
@@ -164,7 +164,7 @@ const MitarbeiterTabelle = () => {
                             }))}
                           >
                             <td className="p-2" colSpan={1}>{week}</td>
-                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.salary, 0).toFixed(2)}$</td>
+                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.salary, 0).toFixed(2)} $</td>
                             <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.workingHours, 0).toFixed(1)} h</td>
                           </tr>
 
@@ -174,7 +174,7 @@ const MitarbeiterTabelle = () => {
                             employee.months[month].weeks[week].map((entry, index) => (
                               <tr key={index} className="bg-teal-600">
                                 <td className="p-2">{entry.date}</td>
-                                <td className="p-2">{entry.salary.toFixed(2)}$</td>
+                                <td className="p-2">{entry.salary.toFixed(2)} $</td>
                                 <td className="p-2">{entry.workingHours.toFixed(1)} h</td>
                               </tr>
                             ))
