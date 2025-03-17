@@ -108,10 +108,10 @@ const MitarbeiterTabelle = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 overflow-y-auto sticky top-0">
 
        <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden text-center">
-        <thead className="bg-teal-950 sticky">
+        <thead className="bg-teal-950 sticky top-0">
           <tr className="text-white">
             <th className="p-2">Mitarbeiter</th>
             <th className="p-2">Gesamtgehalt</th>
@@ -130,7 +130,6 @@ const MitarbeiterTabelle = () => {
                 <td className="p-2">{employee.totalSalary.toFixed(2)} $</td>
                 <td className="p-2">{employee.totalWorkingHours.toFixed(1)} h</td>
               </tr>
-
 
 
 
