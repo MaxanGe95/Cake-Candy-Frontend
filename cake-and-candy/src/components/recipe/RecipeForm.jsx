@@ -267,15 +267,14 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
                   error={errors[`ingredient${index}_amount`]}
                   className="w-35"
                 />
-                <DeleteButton className="mb-2" onClick={() => removeIngredient(index)}/>
-                {/* würde ich gerne entfernen, da hinter Gesamtergebnis auch kein Delete-Button steht und bei Null sowieso der Error sprint, verstehe die Logik dieses Buttons daher nicht und er hat eine andere default margin */}
+                <DeleteButton className="" onClick={() => removeIngredient(index)}/>
               </div>
             </div>
           </div>
         ))}
         <div className="mt-10 col-start-4">
           <PrimaryButton onClick={addIngredient} className="w-41 ml-15">
-            Hinzufügen
+            Zutat Hinzufügen
           </PrimaryButton>
           <div className="mt-7">
             <PrimaryButton onClick={saveRecipe} className="w-27 ml-7.5">
