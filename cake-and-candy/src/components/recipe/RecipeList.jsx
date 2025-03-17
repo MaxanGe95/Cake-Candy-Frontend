@@ -54,7 +54,7 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
   };
 
   return (
-    <div className="mt-1">
+    <div className="mt-6">
       <h4 className="text-2xl font-bold text-teal-200">Rezepte-Liste</h4>
       <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
         <thead className="bg-teal-950">
