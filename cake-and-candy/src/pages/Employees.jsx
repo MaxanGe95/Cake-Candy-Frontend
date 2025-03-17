@@ -26,22 +26,12 @@ const MitarbeiterTabelle = () => {
     tempDate.setDate(tempDate.getDate() + 4 - (tempDate.getDay() || 7));
     const yearStart = new Date(tempDate.getFullYear(), 0, 1);
     const weekNo = Math.ceil(((tempDate - yearStart) / 86400000 + 1) / 7);
-    return `KW ${weekNo}`;
+    return `${tempDate.getFullYear()}-KW${weekNo.toString().padStart(2, "0")}`;
   };
 
   const monthOrder = [
-    "Januar",
-    "Februar",
-    "März",
-    "April",
-    "Mai",
-    "Juni",
-    "Juli",
-    "August",
-    "September",
-    "Oktober",
-    "November",
-    "Dezember",
+    "Januar", "Februar", "März", "April", "Mai", "Juni", 
+    "Juli", "August", "September", "Oktober", "November", "Dezember"
   ];
 
   const groupData = (data) => {
@@ -56,8 +46,8 @@ const MitarbeiterTabelle = () => {
           months: {},
         };
       }
-      grouped[entry.employeeName].totalSalary += entry.salary;
-      grouped[entry.employeeName].totalWorkingHours += entry.workingHours;
+      grouped[entry.employeeName].totalSalary += parseFloat(entry.salary);
+      grouped[entry.employeeName].totalWorkingHours += parseFloat(entry.workingHours);
 
       const [day, monthNum, year] = entry.date.split(".");
       const formattedDate = `${year}-${monthNum}-${day}`;
@@ -82,7 +72,12 @@ const MitarbeiterTabelle = () => {
       employee.months = Object.keys(employee.months)
         .sort((a, b) => monthOrder.indexOf(a) - monthOrder.indexOf(b))
         .reduce((acc, key) => {
-          acc[key] = employee.months[key];
+          acc[key] = Object.keys(employee.months[key])
+            .sort((a, b) => a.localeCompare(b))
+            .reduce((weekAcc, weekKey) => {
+              weekAcc[weekKey] = employee.months[key][weekKey];
+              return weekAcc;
+            }, {});
           return acc;
         }, {});
     });
@@ -114,12 +109,8 @@ const MitarbeiterTabelle = () => {
                 }
               >
                 <td className="p-2 text-center">{employee.employeeName}</td>
-                <td className="p-2 text-center">
-                  {employee.totalSalary.toFixed(2)}$
-                </td>
-                <td className="p-2 text-center">
-                  {employee.totalWorkingHours.toFixed(1)} h
-                </td>
+                <td className="p-2 text-center">{employee.totalSalary.toFixed(2)}$</td>
+                <td className="p-2 text-center">{employee.totalWorkingHours.toFixed(1)} h</td>
               </tr>
               {selectedEmployee === employee.employeeName && (
                 <tr>
@@ -127,7 +118,7 @@ const MitarbeiterTabelle = () => {
                     {Object.keys(employee.months).map((month) => (
                       <div key={month} className="mb-2">
                         <div
-                          className=" w-full text-left bg-blue-900 text-white p-2 cursor-pointer rounded-md"
+                          className="w-full text-left bg-blue-900 text-white p-2 cursor-pointer rounded-md"
                           onClick={() =>
                             setSelectedMonth((prev) => ({
                               ...prev,
@@ -141,53 +132,41 @@ const MitarbeiterTabelle = () => {
                           {month}
                         </div>
                         {selectedMonth[employee.employeeName] === month && (
-                          <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
-                            <thead className="bg-teal-950 ">
-                              <tr className="bg-teal-800 text-white">
-                                <th className="p-2">Datum</th>
-                                <th className="p-2">Gehalt</th>
-                                <th className="p-2">Stunden</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {Object.values(employee.months[month])
-                                .flat()
-                                .sort(
-                                  (a, b) =>
-                                    new Date(a.dateObj) - new Date(b.dateObj)
-                                )
-                                .map((entry, index) => (
-                                  <tr key={index} className="hover:bg-[#5eeaff] border">
-                                    <td className="p-2 text-center">
-                                      {entry.date}
-                                    </td>
-                                    <td className="p-2 text-center">
-                                      {entry.salary.toFixed(2)}$
-                                    </td>
-                                    <td className="p-2 text-center">
-                                      {entry.workingHours.toFixed(1)} h
-                                    </td>
-                                  </tr>
-                                ))}
-                              <tr className="bg-teal-500 font-bold">
-                                <td className="p-2 text-center">Gesamt</td>
-                                <td className="p-2 text-center">
-                                  {Object.values(employee.months[month])
-                                    .flat()
-                                    .reduce((sum, e) => sum + e.salary, 0)
-                                    .toFixed(2)}
-                                  $
-                                </td>
-                                <td className="p-2 text-center">
-                                  {Object.values(employee.months[month])
-                                    .flat()
-                                    .reduce((sum, e) => sum + e.workingHours, 0)
-                                    .toFixed(1)}{" "}
-                                  h
-                                </td>
-                              </tr>
-                            </tbody>
-                          </table>
+                          Object.keys(employee.months[month]).map((week) => (
+                            <div key={week} className="ml-4 mt-2">
+                              <div
+                                className="bg-gray-700 text-white p-2 cursor-pointer rounded-md"
+                                onClick={() =>
+                                  setSelectedWeek((prev) => ({
+                                    ...prev,
+                                    [month]: prev[month] === week ? null : week,
+                                  }))
+                                }
+                              >
+                                {week}
+                              </div>
+                              {selectedWeek[month] === week && (
+                                <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+                                  <thead className="bg-teal-800 text-white">
+                                    <tr>
+                                      <th className="p-2">Datum</th>
+                                      <th className="p-2">Gehalt</th>
+                                      <th className="p-2">Stunden</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody>
+                                    {employee.months[month][week].map((entry, index) => (
+                                      <tr key={index} className="hover:bg-[#5eeaff] border">
+                                        <td className="p-2 text-center">{entry.date}</td>
+                                        <td className="p-2 text-center">{entry.salary.toFixed(2)}$</td>
+                                        <td className="p-2 text-center">{entry.workingHours.toFixed(1)} h</td>
+                                      </tr>
+                                    ))}
+                                  </tbody>
+                                </table>
+                              )}
+                            </div>
+                          ))
                         )}
                       </div>
                     ))}
@@ -203,6 +182,8 @@ const MitarbeiterTabelle = () => {
 };
 
 export default MitarbeiterTabelle;
+
+
 
 //<------------------------------------------------------------------------------------------------------------->>
 
