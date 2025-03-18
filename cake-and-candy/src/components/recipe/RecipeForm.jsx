@@ -190,22 +190,19 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       <h2 className="text-2xl font-bold text-teal-200 mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
-      <div className="ml-2 grid md:grid-cols-3 gap-2 text-amber-100">
+      <div className="ml-2 grid md:grid-cols-5 gap-2 text-amber-100">
         <div className="mt-4">
-          <label
-            htmlFor="Rezeptname"
-            placeholder="Rezeptname"
-            className="mb-1 text-sm font-medium"
-          >
+          <label htmlFor="Rezeptname" className="mb-1 text-sm font-medium">
             Rezeptname
           </label>
           <InputString
-            placeholder="Rezeptname"
             value={newRecipe.name}
             onChange={(v) => handleRecipeChange("name", v)}
             error={errors.name}
             className=""
           />
+        </div>
+        <div className="col-start-2 mt-4 ml-5">
           <label htmlFor="Ergebnismenge" className="mb-1 text-sm font-medium">
             Ergebnismenge
           </label>
@@ -229,19 +226,19 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             placeholder="Hilfsmittel wählen"
             error={errors.name}
           />
-          <div className="">
-            <label htmlFor="Kategorie" className="mb-1 text-sm font-medium">
-              Kategorie
-            </label>
-            <DropdownInput
-              className="w-xs"
-              options={categoryOptions}
-              value={newRecipe.category}
-              onChange={(v) => handleRecipeChange("category", v)}
-              placeholder="Kategorie wählen"
-              error={errors.name}
-            />
-          </div>
+        </div>
+        <div className="mt-4 ml-5">
+          <label htmlFor="Kategorie" className="mb-1 text-sm font-medium">
+            Kategorie
+          </label>
+          <DropdownInput
+            className="w-xs"
+            options={categoryOptions}
+            value={newRecipe.category}
+            onChange={(v) => handleRecipeChange("category", v)}
+            placeholder="Kategorie wählen"
+            error={errors.name}
+          />
         </div>
         <div className="row-start-2">
           {newRecipe.ingredients.map((ingredient, index) => (
@@ -261,8 +258,8 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
                   error={errors[`ingredient${index}_name`]}
                 />
               </div>
-              <div className="flex-1">
-                <label htmlFor="Menge" className="ml-1 text-sm font-medium">
+              <div className="flex-1 ml-0.5">
+                <label htmlFor="Menge" className=" ml-1 text-sm font-medium">
                   Menge
                 </label>
                 <div className="flex items-center ">
@@ -284,30 +281,29 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             </div>
           ))}
         </div>
-        <div className="mt-17 col-start-3 row-start-1">
-          <PrimaryButton
-            type="submit"
-            onClick={saveRecipe}
-            className="w-27 ml-7.5"
-          >
-            Speichern
-          </PrimaryButton>
-          <SecondaryButton
-            type="submit"
-            onClick={handleCancel}
-            className="ml-1 w-27"
-          >
-            Abbrechen
-          </SecondaryButton>
-        </div>
-        <div className="col-start-3 row-start-2 mt-6">
-          <PrimaryButton
-            type="submit"
-            onClick={addIngredient}
-            className="w-41 ml-15"
-          >
-            Zutat Hinzufügen
-          </PrimaryButton>
+        <div className="col-start-5 row-start-2 mt-5">
+          {" "}
+          <div className="">
+            <PrimaryButton
+              type="submit"
+              onClick={addIngredient}
+              className="w-41 ml-17 mb-2"
+            >
+              Zutat Hinzufügen
+            </PrimaryButton>
+          </div>
+          <div className="ml-10">
+            <PrimaryButton type="submit" onClick={saveRecipe} className="w-27 ">
+              Speichern
+            </PrimaryButton>
+            <SecondaryButton
+              type="submit"
+              onClick={handleCancel}
+              className="ml-1 w-27"
+            >
+              Abbrechen
+            </SecondaryButton>
+          </div>
         </div>
       </div>
     </form>
