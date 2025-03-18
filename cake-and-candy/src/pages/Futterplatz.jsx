@@ -223,12 +223,12 @@ function Futterplatz() {
           Inputfeld für RDP Rechnungsvordruck
         </label>
         <textarea
-          value={inputText1}
-          onChange={(e) => setInputText1(e.target.value)}
-          rows="10"
-          cols={""}
-          className="w-full border border-gray-300 p-2  rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        ></textarea>
+  value={inputText1}
+  onChange={(e) => setInputText1(e.target.value)}
+  rows="10"
+  className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 
+  ${inputText1.trim() === "" ? "border-red-500" : "border-gray-300"}`}
+/>
 
         {/* B2B/B2C Auswahl */}
         <div className="my-2">
