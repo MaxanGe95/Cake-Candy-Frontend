@@ -231,7 +231,7 @@ function Futterplatz() {
           value={inputText1}
           onChange={(e) => setInputText1(e.target.value)}
           rows="10"
-          className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2`} 
+          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
  
         />
 
