@@ -99,7 +99,8 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
-              <td className="p-2 text-center">{zutat.istlagerbestand || "0"}</td>
+              <td className="p-2 text-center">{zutat.istlagerbestand ?? "0"}</td>
+
               <td className="p-2 text-center">
                 <input
                   type="number"
