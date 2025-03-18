@@ -197,7 +197,7 @@ function Futterplatz() {
   }
 
   function isInvoiceFormValid() {
-    return inputText1.trim() !== "" && (isB2B || isB2C) && selectedCompany !== "";
+    return inputText3.trim() !== "" && (isB2B || isB2C) && selectedCompany !== "";
   }
   
 
@@ -286,6 +286,7 @@ function Futterplatz() {
 
         <button
           type="submit"
+          disabled={!isInvoiceFormValid()}
           className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
         >
           Daten absenden
@@ -307,6 +308,7 @@ function Futterplatz() {
 
         <button
           type="submit"
+          disabled={!isInvoiceFormValid()}
           className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
         >
           Daten absenden
@@ -328,7 +330,8 @@ function Futterplatz() {
 
         <button
           type="submit"
-          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
+          disabled={!isInvoiceFormValid()}
+          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 disabled:opacity-50"
         >
           Daten absenden
         </button>
