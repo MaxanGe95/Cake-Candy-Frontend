@@ -3,15 +3,18 @@ import { useEffect, useState } from "react";
 import { fetchEndProdukte, fetchCategories } from "../api/rezepte";
 import { CategorySelection } from "../components/products/CategorySelection";
 import { FlyInWrapper } from "../components/products/FlyInWrapper";
+import { ProductCategory } from "../components/products/ProductCategory";
 import videoFile from "../assets/video2.mp4";
 import "../components/products/Video.css";
-import muffin from "../assets/muffin.jpg";
 import pralinen from "../assets/category/pralinen.jpg";
-import suesses from "../assets/category/suesses.jpg";
+import sues from "../assets/category/sues.jpg";
 import tafel from "../assets/category/tafel.jpg";
 import torten from "../assets/category/torte.jpg";
-import getraenk from "../assets/category/getraenk.jpg";
-
+import get from "../assets/category/get.jpg";
+import backwaren from "../assets/category/backwaren.jpg";
+import kooperationsprodukte from "../assets/category/kooperationsprodukte.jpg";
+import saisonprodukte from "../assets/category/saisonprodukte.jpg";
+import sonstiges from "../assets/category/sonstiges.jpg";
 function Endproducts() {
   const [endproducts, setEndproducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -19,7 +22,7 @@ function Endproducts() {
   const mainCategories = [
     {
       name: "Süßes",
-      image: suesses,
+      image: sues,
     },
     {
       name: "Pralinen",
@@ -35,23 +38,23 @@ function Endproducts() {
     },
     {
       name: "Backwaren",
-      image: muffin,
+      image: backwaren,
     },
     {
-      name: "Getränke",
-      image: getraenk,
+      name: "Getränk",
+      image: get,
     },
     {
       name: "Kooperationsprodukte",
-      image: muffin,
+      image: kooperationsprodukte,
     },
     {
       name: "Saisonprodukte",
-      image: muffin,
+      image: saisonprodukte,
     },
     {
       name: "Sonstiges",
-      image: muffin,
+      image: sonstiges,
     },
   ];
 
@@ -103,45 +106,24 @@ function Endproducts() {
           </div>
           <div className="relative z-1">
             {mainCategories.map((category, index) => (
-              <div
-                key={index}
-                id={category.name}
-                className="min-h-screen p-4 mt-8 rounded-xl"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.4))`,
-                  backgroundPosition: "center",
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                }}
-              >
-                <div className="flex items-center justify-center">
-                  <FlyInWrapper>
-                    <h2 className="xl:text-3xl font-bold bg-teal-950/70 p-2 rounded-xl mb-1">
-                      {category.name}
-                    </h2>
-                  </FlyInWrapper>
-                </div>
-                <div className="flex justify-center items-center min-h-screen">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 2xl:grid-cols-3 gap-4">
-                    {endproducts
-                      .filter((product) => product.category == category.name)
-                      .map((product, index) => (
-                        <FlyInWrapper
-                          delay={index * 0.2}
-                          duration={1}
-                          direction="right"
-                          key={index}
-                        >
-                          <Product
-                            // TODO: woher weiß man das?
-                            admin={true}
-                            product={product}
-                          />
-                        </FlyInWrapper>
-                      ))}
-                  </div>
-                </div>
-              </div>
+              <ProductCategory key={index} name={category.name}>
+                {endproducts
+                  .filter((product) => product.category == category.name)
+                  .map((product, index) => (
+                    <FlyInWrapper
+                      delay={index * 0.2}
+                      duration={1}
+                      direction="right"
+                      key={index}
+                    >
+                      <Product
+                        // TODO: woher weiß man das?
+                        admin={true}
+                        product={product}
+                      />
+                    </FlyInWrapper>
+                  ))}
+              </ProductCategory>
             ))}
           </div>
         </div>
