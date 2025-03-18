@@ -50,7 +50,7 @@ const DropdownInput = ({
       <div
         className={`border rounded p-2 cursor-pointer flex items-center ${
           error
-            ? "border-red-500 bg-red-100 text-red-700"
+            ? "border-red-500 bg-red-900 text-white-300"
             : "border-amber-100 bg-teal-400/10"
         }`}
         onClick={() => setIsOpen(!isOpen)}
@@ -68,7 +68,7 @@ const DropdownInput = ({
         <p className="text-red-500 text-sm mt-1">{error}</p>
       )}
       {isOpen && (
-        <div className="absolute w-full border border-teal-500 bg-teal-800 mt-1 rounded-lg shadow-lg z-10">
+        <div className="absolute w-full border  border-teal-500 bg-teal-800 mt-1 rounded-lg shadow-lg z-10">
           <input
             ref={inputRef}
             type="text"
@@ -228,12 +228,12 @@ const InputNumber = ({
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
         placeholder={placeholder}
-        className={`w-full border border-amber-100 rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
-          error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
+        className={`w-full border border-amber-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
+          error ? "border-red-500 bg-red-900 text-white-300" : "border-amber-100"
         }`}
       />
       {error && error.length > 0 && (
-        <p className="text-red-500 text-sm mt-1">{error}</p>
+        <p className="text-red-500 text-sm">{error}</p>
       )}
     </div>
   );
@@ -242,7 +242,7 @@ const InputNumber = ({
 const InputString = ({
   value,
   onChange,
-  placeholder = "Eingeben...",
+  placeholder = "eingeben...",
   className = "",
   error = "",
 }) => {
@@ -253,11 +253,11 @@ const InputString = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-full border border-amber-100 rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
-          error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
+        className={`w-xs border border-amber-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
+          error ? "border-red-500 bg-red-900 text-white-300" : "border-amber-100"
         }`}
       />
-      {error > 0 && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error > 0 && <p className="text-red-500 text-sm">{error}</p>}
     </div>
   );
 };
@@ -278,7 +278,7 @@ const InputTextarea = ({
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
         className={`w-full border border-amber-100 rounded p-2 bg-teal-400/10 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
-          error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
+          error ? "border-red-500 bg-red-900 text-white-300" : "border-amber-100"
         }`}
         rows={Math.max(3, value?.split("\n").length)}
       />
@@ -299,7 +299,7 @@ const InputCurrency = ({
     <div className={`relative ${className}`}>
       <div
         className={`flex place-items-center align-center w-full border border-amber-100 rounded bg-teal-400/10 focus:ring-1 focus:ring-amber-100 ${
-          error ? "border-red-500 bg-red-100 text-red-700" : "border-teal-50"
+          error ? "border-red-500 bg-red-900 text-white-300" : "border-teal-50"
         }`}
       >
         <span className="ml-1">{currency}</span>
