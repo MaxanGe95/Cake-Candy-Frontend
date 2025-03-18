@@ -1,6 +1,6 @@
 import Video from "../assets/video2.mp4";
 import "./Start.css";
-import React, { useRef, useEffect, useState } from "react";
+import { useRef, useEffect, useState } from "react";
 
 export default function Start() {
   const videoRef = useRef(null);

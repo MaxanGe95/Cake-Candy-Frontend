@@ -29,42 +29,43 @@ const ZutatenForm = ({ onAdd }) => {
         setName("");
         setEkPreis("");
       })
-      .catch((error) => console.error("Fehler beim Hinzufügen der Zutat:", error));
+      .catch((error) =>
+        console.error("Fehler beim Hinzufügen der Zutat:", error)
+      );
   };
 
   return (
-    <form onSubmit={handleSubmit} className="p-4 border rounded bg-[#2a6d73]">
-      <div>
-        <label>Zutatname:</label>
-        <input
-          type="text"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-          className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff]  focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
-        />
-      </div>
+    <form onSubmit={handleSubmit} className="mt-6 text-amber-100">
+      <div className="flex">
+        <div className="mr-1">
+          <input
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="Zutatname"
+            required
+            className="border border-amber-100 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
+          />
+        </div>
+        <div className="mr-1">
+          <input
+            type="number"
+            value={ekPreis}
+            onChange={(e) => setEkPreis(e.target.value)}
+            placeholder="EK-Preis"
+            required
+            className="border border-amber-100 p-2 rounded-md focus:outline-none focus:ring-1 focus:ring-amber-100"
+            step="0.01"
+          />
+        </div>
 
-      <div>
-        <label>Typ:</label>
-        <input type="text" value={typ} disabled className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff]" />
+        <button
+          type="submit"
+          className="bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200"
+        >
+          Zutat hinzufügen
+        </button>
       </div>
-
-      <div>
-        <label>EK-Preis ($):</label>
-        <input
-          type="number"
-          value={ekPreis}
-          onChange={(e) => setEkPreis(e.target.value)}
-          required
-          className="border p-2 rounded w-full bg-[#2F4A4C] text-[#5eeaff] focus:outline-none focus:ring-2 focus:ring-[#5eeaff]"
-          step="0.01"
-        />
-      </div>
-
-      <button type="submit" className="bg-[#2F4A4C] text-[#5eeaff] px-4 py-2 rounded mt-2">
-        Zutat hinzufügen
-      </button>
     </form>
   );
 };
