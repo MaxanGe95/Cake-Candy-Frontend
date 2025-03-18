@@ -8,7 +8,7 @@ const Products = () => {
   // Funktion zum Laden der Zutaten
   const fetchZutaten = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/zutaten.js");
+      const response = await fetch("http://localhost:5000/api/zutaten");
       const data = await response.json();
       setZutaten(data); // Zutaten im Zustand setzen
     } catch (error) {
