@@ -62,7 +62,7 @@ const Recipes = () => {
   };
 
   return (
-    <div className="p-8 text-amber-100">
+    <div className="container mx-auto text-amber-100">
       <RecipeForm
         recipe={
           selectedRecipe || {

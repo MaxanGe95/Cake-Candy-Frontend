@@ -15,7 +15,7 @@ function Futterplatz() {
   useEffect(() => {
     async function fetchCompanies() {
       try {
-        const response = await fetch("http://localhost:5000/api/companies");
+        const response = await fetch("http://localhost:5001/api/companies");
         const data = await response.json();
         setCompanies(data);
       } catch (error) {
@@ -135,10 +135,10 @@ function Futterplatz() {
     try {
       const url =
         inputType === "salary"
-          ? "http://localhost:5000/api/salaries"
+          ? "http://localhost:5001/api/salaries"
           : inputType === "invoice"
-          ? "http://localhost:5000/api/invoices"
-          : "http://localhost:5000/api/inventory";
+          ? "http://localhost:5001/api/invoices"
+          : "http://localhost:5001/api/inventory";
 
       const response = await fetch(url, {
         method: "POST",
@@ -156,7 +156,7 @@ function Futterplatz() {
         } else if (inputType === "inventory") {
           setInputText3("");
         }
-//----------------------------------------------------------
+        //----------------------------------------------------------
       } else {
         console.error("Fehler beim Senden der Daten:", response.statusText);
         throw new Error("Fehler beim Senden der Daten");
@@ -175,7 +175,7 @@ function Futterplatz() {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/api/companies/add",
+          "http://localhost:5001/api/companies/add",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -196,6 +196,28 @@ function Futterplatz() {
     }
   }
 
+  // Validierungsfunktion für Rechnungsdaten
+  function isInvoiceFormValid() {
+    return (
+      inputText1.trim() !== "" && (isB2B || isB2C) && selectedCompany !== ""
+    );
+  }
+
+  // Validierungsfunktion für Gehaltsdaten
+  function isSalaryFormValid() {
+    return inputText2.trim() !== "";
+  }
+
+  // Validierungsfunktion für Inventardaten
+  function isInventoryFormValid() {
+    return inputText3.trim() !== "";
+  }
+
+  // Validierungsfunktion für Firmaliste
+  function isNewCompanyFormValid() {
+    return newCompany.trim() !== "";
+  }
+
   return (
     <div className="container mx-auto p-6 text-amber-100">
       <h1 className="py-5 text-center">Willkommen bei Futterplatz</h1>
@@ -209,9 +231,9 @@ function Futterplatz() {
           value={inputText1}
           onChange={(e) => setInputText1(e.target.value)}
           rows="10"
-          cols={""}
-          className="w-full border border-gray-300 p-2  rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        ></textarea>
+          className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 
+  ${inputText1.trim() === "" ? "border-red-500" : "border-gray-300"}`}
+        />
 
         {/* B2B/B2C Auswahl */}
         <div className="my-2">
@@ -247,7 +269,7 @@ function Futterplatz() {
         <div>
           <label className="text-sm text-gray-200">Firma:</label>
           <select
-            className="p-2 rounded-sm border-gray-300"
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
           >
@@ -272,7 +294,10 @@ function Futterplatz() {
             />
             <button
               onClick={handleAddNewCompany}
-              className="bg-green-500 text-white rounded-full px-6 py-2 my-3"
+              disabled={!isNewCompanyFormValid()}
+              className={`bg-green-500 text-white rounded-full px-6 py-2 my-3 ${
+                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               Firma hinzufügen
             </button>
@@ -281,7 +306,9 @@ function Futterplatz() {
 
         <button
           type="submit"
-          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
+          disabled={!isInvoiceFormValid()}
+          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 
+            ${!isInvoiceFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           Daten absenden
         </button>
@@ -302,7 +329,9 @@ function Futterplatz() {
 
         <button
           type="submit"
-          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
+          disabled={!isSalaryFormValid()}
+          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 
+            ${!isSalaryFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           Daten absenden
         </button>
@@ -323,7 +352,9 @@ function Futterplatz() {
 
         <button
           type="submit"
-          className="bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3"
+          disabled={isInventoryFormValid()}
+          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 
+            ${!isInventoryFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
         >
           Daten absenden
         </button>
