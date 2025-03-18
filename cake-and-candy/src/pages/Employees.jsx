@@ -9,7 +9,7 @@ const MitarbeiterTabelle = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5001/api/salaries");
+        const response = await fetch("http://localhost:5000/api/salaries");
         const result = await response.json();
         setData(groupData(result));
       } catch (error) {
@@ -112,7 +112,7 @@ const MitarbeiterTabelle = () => {
 
        <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden text-center">
         <thead className="bg-teal-950 sticky top-0">
-          <tr className="text-white">
+          <tr className="">
             <th className="p-2">Mitarbeiter</th>
             <th className="p-2">Gesamtgehalt</th>
             <th className="p-2">Gesamtstunden</th>

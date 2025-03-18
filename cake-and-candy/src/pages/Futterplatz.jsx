@@ -15,7 +15,7 @@ function Futterplatz() {
   useEffect(() => {
     async function fetchCompanies() {
       try {
-        const response = await fetch("http://localhost:5001/api/companies");
+        const response = await fetch("http://localhost:5000/api/companies");
         const data = await response.json();
         setCompanies(data);
       } catch (error) {
@@ -135,10 +135,10 @@ function Futterplatz() {
     try {
       const url =
         inputType === "salary"
-          ? "http://localhost:5001/api/salaries"
+          ? "http://localhost:5000/api/salaries"
           : inputType === "invoice"
-          ? "http://localhost:5001/api/invoices"
-          : "http://localhost:5001/api/inventory";
+          ? "http://localhost:5000/api/invoices"
+          : "http://localhost:5000/api/inventory";
 
       const response = await fetch(url, {
         method: "POST",
@@ -175,7 +175,7 @@ function Futterplatz() {
 
       try {
         const response = await fetch(
-          "http://localhost:5001/api/companies/add",
+          "http://localhost:5000/api/companies/add",
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
