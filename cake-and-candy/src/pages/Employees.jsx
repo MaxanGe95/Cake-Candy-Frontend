@@ -9,7 +9,7 @@ const MitarbeiterTabelle = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/salaries");
+        const response = await fetch("http://localhost:5001/api/salaries");
         const result = await response.json();
         setData(groupData(result));
       } catch (error) {

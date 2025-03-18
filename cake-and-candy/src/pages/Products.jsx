@@ -8,7 +8,7 @@ const Products = () => {
   // Funktion zum Laden der Zutaten
   const fetchZutaten = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/zutaten");
+      const response = await fetch("http://localhost:5001/api/zutaten");
       const data = await response.json();
       setZutaten(data); // Zutaten im Zustand setzen
     } catch (error) {
@@ -23,7 +23,7 @@ const Products = () => {
   // Funktion zum Hinzufügen einer neuen Zutat
   const handleAddZutat = async (zutat) => {
     try {
-      const response = await fetch("http://localhost:5000/api/zutaten", {
+      const response = await fetch("http://localhost:5001/api/zutaten", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(zutat),
@@ -43,7 +43,7 @@ const Products = () => {
     if (!window.confirm("Willst du die Zutat wirklich löschen?")) return;
 
     try {
-      await fetch(`http://localhost:5000/api/zutaten/${id}`, { method: "DELETE" });
+      await fetch(`http://localhost:5001/api/zutaten/${id}`, { method: "DELETE" });
       fetchZutaten();  // Zutaten nach Löschung erneut abrufen
     } catch (error) {
       console.error("Fehler beim Löschen:", error);
