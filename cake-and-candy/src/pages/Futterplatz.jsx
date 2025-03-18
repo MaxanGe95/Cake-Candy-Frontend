@@ -213,6 +213,11 @@ function Futterplatz() {
     return inputText3.trim() !== "";
   }
 
+  // Validierungsfunktion für Firmaliste
+  function isNewCompanyFormValid() {
+    return newCompany.trim() !== "";
+  }
+
   return (
     <div className="container mx-auto p-6 text-amber-100">
       <h1 className="py-5 text-center">Willkommen bei Futterplatz</h1>
@@ -223,12 +228,12 @@ function Futterplatz() {
           Inputfeld für RDP Rechnungsvordruck
         </label>
         <textarea
-  value={inputText1}
-  onChange={(e) => setInputText1(e.target.value)}
-  rows="10"
-  className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 
+          value={inputText1}
+          onChange={(e) => setInputText1(e.target.value)}
+          rows="10"
+          className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 
   ${inputText1.trim() === "" ? "border-red-500" : "border-gray-300"}`}
-/>
+        />
 
         {/* B2B/B2C Auswahl */}
         <div className="my-2">
@@ -289,8 +294,10 @@ function Futterplatz() {
             />
             <button
               onClick={handleAddNewCompany}
-              /* disabled={!isInvoiceFormValid()} */
-              className="bg-green-500 text-white rounded-full px-6 py-2 my-3"
+              disabled={!isNewCompanyFormValid()}
+              className={`bg-green-500 text-white rounded-full px-6 py-2 my-3 ${
+                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               Firma hinzufügen
             </button>
