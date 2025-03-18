@@ -85,7 +85,33 @@ export const fetchEndProdukte = async () => {
   }
 };
 
-// Build im Backend hinzufügen
+export const fetchHighlightProdukte = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/rezepte");
+    const data = await response.json();
+    // TODO sollte vielleicht im Schema festgelegt werden können, welche Produkte auf der LandingPage angezeigt werden
+    // workaround: erstmal nur die ersten 6 Endprodukte nehmen
+    return data.filter((recipe) => recipe.typ === "Endprodukt").slice(0,6);
+  } catch (error) {
+    console.error("Fehler beim Laden der Endprodukte:", error);
+    throw error;
+  }
+};
+
+export const fetchNeuEingetroffen = async () => {
+  try {
+    const response = await fetch("http://localhost:5000/api/rezepte");
+    const data = await response.json();
+    // TODO sollte vielleicht im Schema festgelegt werden können, welche Produkte auf der LandingPage angezeigt werden
+    // workaround: erstmal nur die letzten 6 Endprodukte nehmen
+    return data.filter((recipe) => recipe.typ === "Endprodukt").reverse().slice(0,6);
+  } catch (error) {
+    console.error("Fehler beim Laden der Endprodukte:", error);
+    throw error;
+  }
+};
+
+// Bild im Backend hinzufügen
 // das backend speichert es irgendwo, wo genau ist dem frontend egal
 export const uploadImage = async (rezept, file) => {
   try {
@@ -99,7 +125,7 @@ export const uploadImage = async (rezept, file) => {
         body: formData,
       }
     );
-    return response
+    return response;
   } catch (error) {
     console.error("Fehler beim Speichern:", error);
     throw error;
