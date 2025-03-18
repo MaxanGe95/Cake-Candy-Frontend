@@ -231,8 +231,8 @@ function Futterplatz() {
           value={inputText1}
           onChange={(e) => setInputText1(e.target.value)}
           rows="10"
-          className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2 
-  ${inputText1.trim() === "" ? "border-red-500" : "border-gray-300"}`}
+          className={`w-full border p-2 rounded-md focus:outline-none focus:ring-2`} 
+ 
         />
 
         {/* B2B/B2C Auswahl */}
@@ -352,7 +352,7 @@ function Futterplatz() {
 
         <button
           type="submit"
-          disabled={isInventoryFormValid()}
+          disabled={!isInventoryFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 
             ${!isInventoryFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
         >
