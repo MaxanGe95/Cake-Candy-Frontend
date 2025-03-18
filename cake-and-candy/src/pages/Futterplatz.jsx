@@ -166,15 +166,21 @@ function Futterplatz() {
     }
   }
 
-  // Neue Firma hinzufügen
-  async function handleAddNewCompany() {
-    if (newCompany && !companies.includes(newCompany)) {
-      setCompanies([...companies, newCompany]);
-      setSelectedCompany(newCompany);
-      setNewCompany(""); // Clear the input field after adding
-      // Seite neu laden
-      window.location.reload();
 
+
+  async function fetchCompanies() {
+    try {
+      const response = await fetch("http://localhost:5000/api/companies");
+      const data = await response.json();
+      setCompanies(data);
+      return data; // Zurückgeben, damit es in handleAddNewCompany genutzt werden kann
+    } catch (error) {
+      console.error("Fehler beim Laden der Firmen:", error);
+    }
+  }
+
+  async function handleAddNewCompany() {
+    if (newCompany && !companies.some((c) => c.name === newCompany)) {
       try {
         const response = await fetch(
           "http://localhost:5000/api/companies/add",
@@ -186,8 +192,13 @@ function Futterplatz() {
         );
 
         if (response.ok) {
-          const data = await response.json();
-          console.log("Firma erfolgreich hinzugefügt:", data);
+          console.log("Firma erfolgreich hinzugefügt");
+          setNewCompany(""); // Eingabefeld leeren
+
+          // Firmenliste neu laden und direkt neue Firma setzen
+          const updatedCompanies = await fetchCompanies();
+          setCompanies(updatedCompanies);
+          setSelectedCompany(newCompany);
         } else {
           const errorData = await response.json();
           console.error("Fehler beim Hinzufügen der Firma:", errorData.message);
