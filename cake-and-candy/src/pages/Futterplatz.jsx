@@ -280,7 +280,7 @@ function Futterplatz() {
 
         {/* Auswahl der Firma */}
         <div className="flex flex-col container mx-auto p-6 ">
-          <label className="text-sm text-amber-100">Firma:</label>
+          <label className="text-sm">Firma:</label>
           <select
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
             value={selectedCompany}
