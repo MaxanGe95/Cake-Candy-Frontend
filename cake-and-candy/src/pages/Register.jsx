@@ -83,7 +83,7 @@ const Register = () => {
   };
 
   return (
-    <div className="absolute top-0 w-screen h-screen flex justify-center items-center text-black">
+    <div className="w-screen my-1 flex justify-center items-center text-black">
       <div className="w-full max-w-md bg-teal-50 rounded-lg shadow-md p-8">
         <h2 className="text-2xl font-bold mb-6 text-center">WELCOME!!</h2>
         <form onSubmit={handleSubmit}>
