@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Button from "../components/Button";
 
 function Futterplatz() {
   const [inputText1, setInputText1] = useState(""); // Für Rechnungsdaten
@@ -310,22 +311,38 @@ function Futterplatz() {
               onClick={handleAddNewCompany}
               disabled={!isNewCompanyFormValid()}
               className={`bg-green-500 text-white rounded-full px-6 py-2 m-3  ${
-                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                !isNewCompanyFormValid()
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
               }`}
             >
               Firma hinzufügen
             </button>
           </div>
         </div>
-
-        <button
+        <Button
+          type="button"
+          onClick={handleAddNewCompany}
+          disabled={!isNewCompanyFormValid()}
+          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-3 self-end ${
+            !isNewCompanyFormValid()
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer"
+          }`}
+          children={`Daten absenden`}
+        />
+       {/*  <button
           type="submit"
           disabled={!isInvoiceFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
-            ${!isInvoiceFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            ${
+              !isInvoiceFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
         >
           Daten absenden
-        </button>
+        </button> */}
       </form>
       {/* ----------------------------------------------------------------------- */}
 
@@ -349,7 +366,11 @@ function Futterplatz() {
           type="submit"
           disabled={!isSalaryFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
-            ${!isSalaryFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            ${
+              !isSalaryFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
         >
           Daten absenden
         </button>
@@ -375,7 +396,11 @@ function Futterplatz() {
           type="submit"
           disabled={!isInventoryFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end 
-            ${!isInventoryFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            ${
+              !isInventoryFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
         >
           Daten absenden
         </button>
