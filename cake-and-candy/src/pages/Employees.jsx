@@ -108,11 +108,11 @@ const MitarbeiterTabelle = () => {
   };
 
   return (
-    <div className="container mx-auto p-6">
+    <div className="container mx-auto p-6 overflow-y-auto sticky top-0">
 
        <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden text-center">
-        <thead className="bg-teal-950">
-          <tr className="text-white">
+        <thead className="bg-teal-950 sticky top-0">
+          <tr className="">
             <th className="p-2">Mitarbeiter</th>
             <th className="p-2">Gesamtgehalt</th>
             <th className="p-2">Gesamtstunden</th>
@@ -127,10 +127,9 @@ const MitarbeiterTabelle = () => {
                 onClick={() => setSelectedEmployee(selectedEmployee === employeeName ? null : employeeName)}
               >
                 <td className="p-2 text-left">{employeeName}</td>
-                <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
+                <td className="p-2">{employee.totalSalary.toFixed(2)} $</td>
                 <td className="p-2">{employee.totalWorkingHours.toFixed(1)} h</td>
               </tr>
-
 
 
 
@@ -146,8 +145,8 @@ const MitarbeiterTabelle = () => {
                       }))}
                     >
                       <td className="p-2" colSpan={1}>{month}</td>
-                      <td colSpan={1}>{employee.months[month].totalSalary.toFixed(2)}$</td>
-                      <td colSpan={1}>{employee.months[month].totalWorkingHours.toFixed(1)}$</td>
+                      <td colSpan={1}>{employee.months[month].totalSalary.toFixed(2)} $</td>
+                      <td colSpan={1}>{employee.months[month].totalWorkingHours.toFixed(1)} h</td>
                     </tr>
 
 
@@ -164,7 +163,7 @@ const MitarbeiterTabelle = () => {
                             }))}
                           >
                             <td className="p-2" colSpan={1}>{week}</td>
-                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.salary, 0).toFixed(2)}$</td>
+                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.salary, 0).toFixed(2)} $</td>
                             <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.workingHours, 0).toFixed(1)} h</td>
                           </tr>
 
@@ -174,7 +173,7 @@ const MitarbeiterTabelle = () => {
                             employee.months[month].weeks[week].map((entry, index) => (
                               <tr key={index} className="bg-teal-600">
                                 <td className="p-2">{entry.date}</td>
-                                <td className="p-2">{entry.salary.toFixed(2)}$</td>
+                                <td className="p-2">{entry.salary.toFixed(2)} $</td>
                                 <td className="p-2">{entry.workingHours.toFixed(1)} h</td>
                               </tr>
                             ))
