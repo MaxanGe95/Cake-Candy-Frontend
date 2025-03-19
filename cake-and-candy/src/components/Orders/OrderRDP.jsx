@@ -139,6 +139,7 @@ const OrderRDP = () => {
                               </tr>
 
                               {/* Produkte für die gewählte Bestellung anzeigen */}
+                              
                               {selectedOrder?.id === order.id && (
                                 <tr>
                                   <td colSpan="4" className="p-4 bg-[#7ec6cc33] shadow-lg">
