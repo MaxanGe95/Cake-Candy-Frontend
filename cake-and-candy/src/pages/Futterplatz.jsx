@@ -297,7 +297,7 @@ function Futterplatz() {
           </select>
 
           {/* Neue Firma hinzufügen */}
-          <div className="">
+          <div className="mt-4">
             <input
               type="text"
               value={newCompany}
