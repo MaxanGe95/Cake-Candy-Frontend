@@ -166,8 +166,6 @@ function Futterplatz() {
     }
   }
 
-
-
   async function fetchCompanies() {
     try {
       const response = await fetch("http://localhost:5000/api/companies");
@@ -236,8 +234,11 @@ function Futterplatz() {
       <h1 className="py-5 text-center">Willkommen bei Futterplatz</h1>
 
       {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
-      <form className="flex flex-col" onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}>
-        <label htmlFor="invoice-input" className="text-center text-sm">
+      <form
+        className="flex flex-col"
+        onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
+      >
+        <label htmlFor="invoice-input" className="text-sm ">
           Inputfeld für RDP Rechnungsvordruck
         </label>
         <textarea
@@ -248,8 +249,8 @@ function Futterplatz() {
         />
 
         {/* B2B/B2C Auswahl */}
-        <div className="my-2 border-blue-500 border-2 text-center">
-          <label className="text-sm mr-4">Kundentyp:</label>
+        <div className="text-center pt-6">
+          <label className="text-sm ">Kundentyp:</label>
           <input
             type="radio"
             id="b2b-radio"
@@ -259,7 +260,7 @@ function Futterplatz() {
               setIsB2B(true);
               setIsB2C(false);
             }}
-            className="mr-2"
+            className="m-2"
           />
           <label htmlFor="b2b-radio">B2B</label>
 
@@ -272,13 +273,13 @@ function Futterplatz() {
               setIsB2C(true);
               setIsB2B(false);
             }}
-            className="mr-2"
+            className="m-2"
           />
           <label htmlFor="b2c-radio">B2C</label>
         </div>
 
         {/* Auswahl der Firma */}
-        <div className="flex flex-col border-amber-500 border-2 container mx-auto p-6">
+        <div className="flex flex-col container mx-auto p-6">
           <label className="text-sm text-gray-200">Firma:</label>
           <select
             className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
@@ -308,7 +309,8 @@ function Futterplatz() {
               onClick={handleAddNewCompany}
               disabled={!isNewCompanyFormValid()}
               className={`bg-green-500 text-white rounded-full px-6 py-2 m-3  ${
-                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
+                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : ""
+              }`}
             >
               Firma hinzufügen
             </button>
@@ -327,8 +329,11 @@ function Futterplatz() {
       {/* ----------------------------------------------------------------------- */}
 
       {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
-      <form onSubmit={(e) => handleSubmit(e, inputText2, "salary")} className="flex flex-col">
-        <label htmlFor="salary-input" className="text-center text-sm">
+      <form
+        onSubmit={(e) => handleSubmit(e, inputText2, "salary")}
+        className="flex flex-col"
+      >
+        <label htmlFor="salary-input" className="text-sm">
           Gehaltsdaten (z.B. für Lastschrift)
         </label>
         <textarea
@@ -350,8 +355,11 @@ function Futterplatz() {
       </form>
 
       {/* 🧾 Inputfeld 3 - Inventardaten */}
-      <form onSubmit={(e) => handleSubmit(e, inputText3, "inventory")} className="flex flex-col">
-        <label htmlFor="inventory-input" className="text-center text-sm">
+      <form
+        onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}
+        className="flex flex-col"
+      >
+        <label htmlFor="inventory-input" className="text-sm">
           Inventardaten (z.B. für Bestände)
         </label>
         <textarea
