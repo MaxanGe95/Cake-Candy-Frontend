@@ -308,8 +308,7 @@ function Futterplatz() {
               onClick={handleAddNewCompany}
               disabled={!isNewCompanyFormValid()}
               className={`bg-green-500 text-white rounded-full px-6 py-2 my-3 ${
-                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : ""
-              }`}
+                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               Firma hinzufügen
             </button>
