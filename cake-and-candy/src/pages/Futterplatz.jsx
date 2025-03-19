@@ -260,7 +260,7 @@ function Futterplatz() {
               setIsB2B(true);
               setIsB2C(false);
             }}
-            className="m-2"
+            className="m-2 cursor-pointer"
           />
           <label htmlFor="b2b-radio">B2B</label>
 
@@ -282,7 +282,7 @@ function Futterplatz() {
         <div className="flex flex-col container mx-auto p-6">
           <label className="text-sm text-gray-200">Firma:</label>
           <select
-            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
           >
