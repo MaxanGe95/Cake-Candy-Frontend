@@ -323,9 +323,9 @@ function Futterplatz() {
         <Button
           type="button"
           onClick={handleAddNewCompany}
-          disabled={!isNewCompanyFormValid()}
+          disabled={!isInvoiceFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-3 self-end ${
-            !isNewCompanyFormValid()
+            !isInvoiceFormValid()
               ? "opacity-50 cursor-not-allowed"
               : "cursor-pointer"
           }`}
