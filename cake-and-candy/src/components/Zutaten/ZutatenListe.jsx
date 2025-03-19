@@ -58,7 +58,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
   };
 
   return (
-    <div>
+    <div className="">
       <table className="min-w-full text-amber-100 border-collapse border border-teal-950 rounded-md overflow-hidden">
         <thead className="">
           <tr className="bg-teal-950">
