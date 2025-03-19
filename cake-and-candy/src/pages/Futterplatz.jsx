@@ -297,13 +297,13 @@ function Futterplatz() {
           </select>
 
           {/* Neue Firma hinzufügen */}
-          <div className="">
+          <div className="mt-4">
             <input
               type="text"
               value={newCompany}
               onChange={(e) => setNewCompany(e.target.value)}
               placeholder="Neue Firma hinzufügen"
-              className="p-2 border border-gray-300 rounded-md"
+              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
             <button
               type="button"
