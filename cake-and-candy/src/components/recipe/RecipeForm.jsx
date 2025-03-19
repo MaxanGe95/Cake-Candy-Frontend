@@ -259,7 +259,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
                 />
               </div>
               <div className="flex-1 ml-0.5">
-                <label htmlFor="Menge" className=" ml-1 text-sm font-medium">
+                <label htmlFor="Menge" className="ml-1 text-sm font-medium">
                   Menge
                 </label>
                 <div className="flex items-center ">
