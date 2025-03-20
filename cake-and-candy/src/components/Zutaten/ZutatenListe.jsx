@@ -2,10 +2,11 @@ import React, { useState, useEffect } from "react";
 
 const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
   const [zutatenState, setZutatenState] = useState(zutaten);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   useEffect(() => {
     setZutatenState(zutaten);
-  }, [zutaten]); // Wenn zutaten geändert wird, setze den Zustand
+  }, [zutaten]);
 
   const handleDelete = (id) => {
     if (!id) {
@@ -20,13 +21,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
         if (!response.ok) {
           throw new Error("Fehler beim Löschen der Zutat");
         }
-        console.log("Zutat erfolgreich gelöscht");
-        // Lösche die Zutat aus dem Zustand
-        setZutatenState(zutatenState.filter(zutat => zutat._id !== id));
+        setZutatenState(zutatenState.filter((zutat) => zutat._id !== id));
       })
-      .catch((error) => {
-        console.error(error);
-      });
+      .catch((error) => console.error(error));
   };
 
   const handleUpdate = (id, field, value) => {
@@ -35,76 +32,130 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
       return;
     }
 
-    const updatedZutat = {
-      [field]: value,
-    };
-
     fetch(`http://localhost:5000/api/zutaten/${id}`, {
       method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedZutat),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ [field]: value }),
     })
       .then((response) => response.json())
-      .then((data) => {
-        console.log("Zutat erfolgreich aktualisiert", data);
-        // Aktualisiere den Zustand der Zutat in der Liste
-        setZutatenState(zutatenState.map(zutat => 
-          zutat._id === id ? { ...zutat, [field]: value } : zutat
-        ));
+      .then(() => {
+        setZutatenState(
+          zutatenState.map((zutat) =>
+            zutat._id === id ? { ...zutat, [field]: value } : zutat
+          )
+        );
       })
       .catch((error) => console.error("Fehler beim Aktualisieren:", error));
   };
 
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+
+    const sortedData = [...zutatenState].sort((a, b) => {
+      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
+      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    setSortConfig({ key, direction });
+    setZutatenState(sortedData);
+  };
+
   return (
-    <div className="">
+    <div>
       <table className="min-w-full text-amber-100 border-collapse border border-teal-950 rounded-md overflow-hidden">
-        <thead className="">
+        <thead>
           <tr className="bg-teal-950">
-            <th className="p-2">Produkt</th>
-            <th className="p-2">Typ</th>
-            <th className="p-2">EK</th>
-            <th className="p-2">B2B</th>
-            <th className="p-2">B2C</th>
-            <th className="p-2">Istlager</th>
-            <th className="p-2">Solllager</th>
-            <th className="p-2">Zusatz</th>
+            {[
+              "name",
+              "typ",
+              "ekPreis",
+              "b2bPreis",
+              "b2cPreis",
+              "istlagerbestand",
+              "solllagerbestand",
+              "zusatz",
+            ].map((key) => (
+              <th
+                key={key}
+                className="p-2 cursor-pointer"
+                onClick={() => handleSort(key)}
+              >
+                {key.toUpperCase()}{" "}
+                {sortConfig.key === key
+                  ? sortConfig.direction === "asc"
+                    ? "▲"
+                    : "▼"
+                  : ""}
+              </th>
+            ))}
             <th className="p-2">Löschen</th>
           </tr>
         </thead>
         <tbody>
           {zutatenState.map((zutat) => (
-            <tr key={zutat._id} className="border hover:bg-[#7ec6cc80] transition duration-200">
+            <tr
+              key={zutat._id}
+              className="border hover:bg-[#7ec6cc80] transition duration-200"
+            >
               <td className="p-2 text-center">{zutat.name}</td>
               <td className="p-2 text-center">{zutat.typ}</td>
               <td className="p-2 text-center">
-                {typeof zutat.ekPreis === "number"
-                  ? `$${zutat.ekPreis.toFixed(2)}`
-                  : "$0.00"}
+                ${zutat.ekPreis?.toFixed(2) || "0.00"}
               </td>
-              <td className=" p-2 text-center">
+              <td className="p-2 text-center">
                 <input
                   type="number"
                   value={zutat.b2bPreis || ""}
-                  onChange={(e) => handleUpdate(zutat._id, "b2bPreis", e.target.value)}
-                  className="w-16 p-1  border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
+                  onChange={(e) =>
+                    handleUpdate(
+                      zutat._id,
+                      "b2bPreis",
+                      parseFloat(e.target.value) || 0
+                    )
+                  }
+                  className={`w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                    zutat.typ?.toLowerCase() !== "endprodukt"
+                      ? " border-0"
+                      : ""
+                  }`}
+                  disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
               </td>
+
               <td className="p-2 text-center">
                 <input
                   type="number"
                   value={zutat.b2cPreis || ""}
-                  onChange={(e) => handleUpdate(zutat._id, "b2cPreis", e.target.value)}
-                  className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
+                  onChange={(e) =>
+                    handleUpdate(
+                      zutat._id,
+                      "b2cPreis",
+                      parseFloat(e.target.value) || 0
+                    )
+                  }
+                  className={`w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                    zutat.typ?.toLowerCase() !== "endprodukt"
+                      ? "  border-0"
+                      : ""
+                  }`}
+                  disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
               </td>
-              <td className="p-2 text-center">{zutat.istlagerbestand || "0"}</td>
+
+              <td className="p-2 text-center">
+                {zutat.istlagerbestand ?? "0"}
+              </td>
               <td className="p-2 text-center">
                 <input
                   type="number"
                   value={zutat.solllagerbestand || ""}
-                  onChange={(e) => handleUpdate(zutat._id, "solllagerbestand", e.target.value)}
+                  onChange={(e) =>
+                    handleUpdate(zutat._id, "solllagerbestand", e.target.value)
+                  }
                   className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
@@ -112,7 +163,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               <td className="p-2 text-center">
                 <button
                   onClick={() => handleDelete(zutat._id)}
-                  className=" px-3 py-1 rounded hover:bg-teal-800"
+                  className="px-3 py-1 rounded hover:bg-teal-800"
                 >
                   ✖
                 </button>
