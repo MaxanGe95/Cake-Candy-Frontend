@@ -27,45 +27,45 @@ function Futterplatz() {
   }, []);
 
   // Rechnungsdaten parsen
-  function parseInvoiceData(text) {
-    const productRegex =
-      /([A-Za-zÄÖÜäöüß0-9\s\(\)-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
-    const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/;
+function parseInvoiceData(text) {
+  const productRegex =
+    /([A-Za-zÄÖÜäöüß0-9\s\(\)'\-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
+  const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/;
 
-    let matches;
-    const products = [];
-    let totalAmount = 0;
+  let matches;
+  const products = [];
+  let totalAmount = 0;
 
-    console.log("Verarbeite den folgenden Text:", text);
+  console.log("Verarbeite den folgenden Text:", text);
 
-    while ((matches = productRegex.exec(text)) !== null) {
-      const productName = matches[1].trim();
-      const pricePerUnit = parseFloat(matches[2].replace(",", "."));
-      const quantity = parseInt(matches[3]);
-      const totalPrice = parseFloat(matches[4].replace(",", "."));
+  while ((matches = productRegex.exec(text)) !== null) {
+    const productName = matches[1].trim();
+    const pricePerUnit = parseFloat(matches[2].replace(",", "."));
+    const quantity = parseInt(matches[3]);
+    const totalPrice = parseFloat(matches[4].replace(",", "."));
 
-      products.push({
-        productName,
-        pricePerUnit,
-        quantity,
-        totalPrice,
-      });
+    products.push({
+      productName,
+      pricePerUnit,
+      quantity,
+      totalPrice,
+    });
 
-      totalAmount += totalPrice;
-    }
-
-    const amountMatches = text.match(amountRegex);
-    if (amountMatches && amountMatches[1]) {
-      totalAmount = parseFloat(amountMatches[1].replace(",", "."));
-    }
-
-    return {
-      products,
-      totalAmount,
-      company: selectedCompany,
-      customerType: isB2B ? "B2B" : "B2C",
-    };
+    totalAmount += totalPrice;
   }
+
+  const amountMatches = text.match(amountRegex);
+  if (amountMatches && amountMatches[1]) {
+    totalAmount = parseFloat(amountMatches[1].replace(",", "."));
+  }
+
+  return {
+    products,
+    totalAmount,
+    company: selectedCompany,
+    customerType: isB2B ? "B2B" : "B2C",
+  };
+}
 
   // Gehaltsdaten parsen
   function parseSalaryData(text) {
@@ -89,22 +89,22 @@ function Futterplatz() {
 
   // Inventardaten parsen
   function parseInventoryData(text) {
-    const regex = /([A-Za-zÄÖÜäöüß\s\-]+)\s+(\d+)\s+([^\n]+)/g;
+    const regex = /([A-Za-zÄÖÜäöüß\s\(\)\-']+)\t(\d+)\t([^\n]+)/g;
     let matches;
     const result = [];
-
+  
     while ((matches = regex.exec(text)) !== null) {
       const itemName = matches[1].trim();
       const quantity = parseInt(matches[2]);
       const location = matches[3].trim() || "Nicht angegeben";
-
+  
       result.push({
         itemName: itemName,
         quantity: quantity,
         location: location,
       });
     }
-
+  
     console.log("Extrahierte Inventardaten:", result);
     return result;
   }
