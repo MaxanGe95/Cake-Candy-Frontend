@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Button from "../components/Button";
 
 function Futterplatz() {
   const [inputText1, setInputText1] = useState(""); // Für Rechnungsdaten
@@ -260,7 +261,7 @@ function Futterplatz() {
               setIsB2B(true);
               setIsB2C(false);
             }}
-            className="m-2"
+            className="m-2 cursor-pointer"
           />
           <label htmlFor="b2b-radio">B2B</label>
 
@@ -279,10 +280,10 @@ function Futterplatz() {
         </div>
 
         {/* Auswahl der Firma */}
-        <div className="flex flex-col container mx-auto p-6">
-          <label className="text-sm text-gray-200">Firma:</label>
+        <div className="flex flex-col container mx-auto p-6 ">
+          <label className="text-sm">Firma:</label>
           <select
-            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
           >
@@ -297,35 +298,51 @@ function Futterplatz() {
           </select>
 
           {/* Neue Firma hinzufügen */}
-          <div className="">
+          <div className="mt-4">
             <input
               type="text"
               value={newCompany}
               onChange={(e) => setNewCompany(e.target.value)}
               placeholder="Neue Firma hinzufügen"
-              className="p-2 border border-gray-300 rounded-md"
+              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
             <button
               type="button"
               onClick={handleAddNewCompany}
               disabled={!isNewCompanyFormValid()}
               className={`bg-green-500 text-white rounded-full px-6 py-2 m-3  ${
-                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+                !isNewCompanyFormValid()
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
               }`}
             >
               Firma hinzufügen
             </button>
           </div>
         </div>
-
-        <button
+        <Button
+          type="button"
+          onClick={handleAddNewCompany}
+          disabled={!isInvoiceFormValid()}
+          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-3 self-end ${
+            !isInvoiceFormValid()
+              ? "opacity-50 cursor-not-allowed"
+              : "cursor-pointer"
+          }`}
+          children={`Daten absenden`}
+        />
+       {/*  <button
           type="submit"
           disabled={!isInvoiceFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
-            ${!isInvoiceFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            ${
+              !isInvoiceFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
         >
           Daten absenden
-        </button>
+        </button> */}
       </form>
       {/* ----------------------------------------------------------------------- */}
 
@@ -349,7 +366,11 @@ function Futterplatz() {
           type="submit"
           disabled={!isSalaryFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
-            ${!isSalaryFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            ${
+              !isSalaryFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
         >
           Daten absenden
         </button>
@@ -375,7 +396,11 @@ function Futterplatz() {
           type="submit"
           disabled={!isInventoryFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end 
-            ${!isInventoryFormValid() ? "opacity-50 cursor-not-allowed" : "cursor-pointer"}`}
+            ${
+              !isInventoryFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
         >
           Daten absenden
         </button>
