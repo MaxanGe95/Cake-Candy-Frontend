@@ -320,7 +320,7 @@ function Futterplatz() {
             </button>
           </div>
         </div>
-        <Button
+        {/*       <Button
           type="button"
           onClick={handleAddNewCompany}
           disabled={!isInvoiceFormValid()}
@@ -330,8 +330,8 @@ function Futterplatz() {
               : "cursor-pointer"
           }`}
           children={`Daten absenden`}
-        />
-       {/*  <button
+        /> */}
+        <button
           type="submit"
           disabled={!isInvoiceFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
@@ -342,7 +342,7 @@ function Futterplatz() {
             }`}
         >
           Daten absenden
-        </button> */}
+        </button>
       </form>
       {/* ----------------------------------------------------------------------- */}
 
