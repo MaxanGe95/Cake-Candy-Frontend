@@ -11,6 +11,7 @@ function Futterplatz() {
   const [selectedCompany, setSelectedCompany] = useState("");
   const [newCompany, setNewCompany] = useState("");
   const [companies, setCompanies] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
 
   // Laden der Firmen aus dem Backend
   useEffect(() => {
@@ -27,45 +28,45 @@ function Futterplatz() {
   }, []);
 
   // Rechnungsdaten parsen
-function parseInvoiceData(text) {
-  const productRegex =
-    /([A-Za-zÄÖÜäöüß0-9\s\(\)'\-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
-  const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/;
+  function parseInvoiceData(text) {
+    const productRegex =
+      /([A-Za-zÄÖÜäöüß0-9\s\(\)'\-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
+    const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/;
 
-  let matches;
-  const products = [];
-  let totalAmount = 0;
+    let matches;
+    const products = [];
+    let totalAmount = 0;
 
-  console.log("Verarbeite den folgenden Text:", text);
+    console.log("Verarbeite den folgenden Text:", text);
 
-  while ((matches = productRegex.exec(text)) !== null) {
-    const productName = matches[1].trim();
-    const pricePerUnit = parseFloat(matches[2].replace(",", "."));
-    const quantity = parseInt(matches[3]);
-    const totalPrice = parseFloat(matches[4].replace(",", "."));
+    while ((matches = productRegex.exec(text)) !== null) {
+      const productName = matches[1].trim();
+      const pricePerUnit = parseFloat(matches[2].replace(",", "."));
+      const quantity = parseInt(matches[3]);
+      const totalPrice = parseFloat(matches[4].replace(",", "."));
 
-    products.push({
-      productName,
-      pricePerUnit,
-      quantity,
-      totalPrice,
-    });
+      products.push({
+        productName,
+        pricePerUnit,
+        quantity,
+        totalPrice,
+      });
 
-    totalAmount += totalPrice;
+      totalAmount += totalPrice;
+    }
+
+    const amountMatches = text.match(amountRegex);
+    if (amountMatches && amountMatches[1]) {
+      totalAmount = parseFloat(amountMatches[1].replace(",", "."));
+    }
+
+    return {
+      products,
+      totalAmount,
+      company: selectedCompany,
+      customerType: isB2B ? "B2B" : "B2C",
+    };
   }
-
-  const amountMatches = text.match(amountRegex);
-  if (amountMatches && amountMatches[1]) {
-    totalAmount = parseFloat(amountMatches[1].replace(",", "."));
-  }
-
-  return {
-    products,
-    totalAmount,
-    company: selectedCompany,
-    customerType: isB2B ? "B2B" : "B2C",
-  };
-}
 
   // Gehaltsdaten parsen
   function parseSalaryData(text) {
@@ -92,19 +93,19 @@ function parseInvoiceData(text) {
     const regex = /([A-Za-zÄÖÜäöüß\s\(\)\-']+)\t(\d+)\t([^\n]+)/g;
     let matches;
     const result = [];
-  
+
     while ((matches = regex.exec(text)) !== null) {
       const itemName = matches[1].trim();
       const quantity = parseInt(matches[2]);
       const location = matches[3].trim() || "Nicht angegeben";
-  
+
       result.push({
         itemName: itemName,
         quantity: quantity,
         location: location,
       });
     }
-  
+
     console.log("Extrahierte Inventardaten:", result);
     return result;
   }
@@ -120,6 +121,7 @@ function parseInvoiceData(text) {
         ...extractedData,
         company: selectedCompany,
         customerType: isB2B ? "B2B" : isB2C ? "B2C" : "",
+        date: selectedDate || extractedData.date, // Falls kein Datum manuell eingegeben wurde, bleibt es unverändert
       };
     } else if (inputType === "salary") {
       extractedData = parseSalaryData(inputData);
@@ -130,6 +132,7 @@ function parseInvoiceData(text) {
     } else if (inputType === "inventory") {
       extractedData = parseInventoryData(inputData);
     }
+    
 
     console.log("Extrahierte Daten:", extractedData);
 
@@ -157,7 +160,7 @@ function parseInvoiceData(text) {
         } else if (inputType === "inventory") {
           setInputText3("");
         }
-        //----------------------------------------------------------
+        
       } else {
         console.error("Fehler beim Senden der Daten:", response.statusText);
         throw new Error("Fehler beim Senden der Daten");
@@ -279,6 +282,17 @@ function parseInvoiceData(text) {
           <label htmlFor="b2c-radio">B2C</label>
         </div>
 
+        <label htmlFor="invoice-date" className="text-sm mt-4">
+          Rechnungsdatum:
+        </label>
+        <input
+          type="date"
+          id="invoice-date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+        />
+
         {/* Auswahl der Firma */}
         <div className="flex flex-col container mx-auto p-6 ">
           <label className="text-sm">Firma:</label>
@@ -344,7 +358,6 @@ function parseInvoiceData(text) {
           Daten absenden
         </button>
       </form>
-      {/* ----------------------------------------------------------------------- */}
 
       {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
       <form
@@ -406,7 +419,6 @@ function parseInvoiceData(text) {
         </button>
       </form>
 
-      {/* Weitere Eingabeformulare... */}
     </div>
   );
 }
