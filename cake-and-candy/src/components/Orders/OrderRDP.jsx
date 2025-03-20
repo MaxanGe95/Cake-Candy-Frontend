@@ -88,7 +88,7 @@ const OrderRDP = () => {
   return (
     <div className="mt-12">
       {/* Haupttabelle: Firmenübersicht */}
-      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+      <table className="min-w-full text-amber-100 border rounded-md overflow-hidden">
         <thead className="bg-teal-950">
           <tr>
             <th className="p-2">Firma</th>
@@ -101,7 +101,7 @@ const OrderRDP = () => {
           {companies.map((company) => (
             <React.Fragment key={company.id}>
               <tr
-                className="border cursor-pointer hover:bg-teal-950"
+                className="border border-amber-100 cursor-pointer hover:bg-teal-950"
                 onClick={() => toggleCompany(company)}
               >
                 <td className="p-2 text-center">{company.name}</td>
@@ -142,10 +142,10 @@ const OrderRDP = () => {
                               
                               {selectedOrder?.id === order.id && (
                                 <tr>
-                                  <td colSpan="4" className="p-4 bg-[#7ec6cc33] shadow-lg">
+                                  <td colSpan="4" className="p-4 bg-[#7ec6cc33] shadow-lg ">
                                     <table className="w-full bg-teal-950 text-amber-100 rounded-md shadow-lg overflow-hidden">
                                       <thead className="rounded-t-md">
-                                        <tr className="bg-teal-900">
+                                        <tr className="bg-teal-900 cursor-pointer">
                                           <th className="p-2">Produkt</th>
                                           <th className="p-2">Menge</th>
                                           <th className="p-2">Preis/Stück</th>

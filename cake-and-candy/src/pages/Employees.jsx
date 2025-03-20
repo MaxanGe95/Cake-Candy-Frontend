@@ -128,8 +128,8 @@ const MitarbeiterTabelle = () => {
   return (
     <div className="container mx-auto p-6"> 
       {/* Hauptübersicht */}
-      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden text-center">
-        <thead className="bg-teal-950 ">
+      <table className="min-w-full  text-amber-100 border rounded-md overflow-hidden text-center">
+        <thead className="bg-teal-950/80">
           <tr className="">
             <th className="p-2">Mitarbeiter</th>
             <th className="p-2">Gesamtgehalt</th>
@@ -139,7 +139,7 @@ const MitarbeiterTabelle = () => {
         <tbody className="">
           {Object.entries(data).map(([employeeName, employee]) => (
             <React.Fragment key={employeeName}>
-              <tr className="cursor-pointer hover:bg-[#7ec6cc80] border border-amber-100"
+              <tr className="border border-amber-100 cursor-pointer hover:bg-[#7ec6cc80] "
                   onClick={() => setSelectedEmployee( selectedEmployee === employeeName ? null : employeeName )}>
                 <td className="p-2 text-left">{employeeName}</td>
                 <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
@@ -149,11 +149,11 @@ const MitarbeiterTabelle = () => {
               {/* Monatstübersicht */}
 
               {selectedEmployee === employeeName && (
-             <tr className="cursor-pointer">
-             <td colSpan="3">
-              <table className="w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden text-center">
-                <thead className="bg-teal-950 ">
-                  <tr className="">
+             <tr className="">
+             <td colSpan="3" className="p-4">
+              <table className="w-full bg-teal-950/80 rounded-md overflow-hidden text-center">
+                <thead className="">
+                  <tr className="text-amber-100">
                     <th className="p-2">Monat</th>
                     <th className="p-2">Gesamtgehalt</th>
                     <th className="p-2">Gesamtstunden</th>
@@ -163,7 +163,7 @@ const MitarbeiterTabelle = () => {
                   {selectedEmployee === employeeName && 
                     Object.keys(employee.months).map((month) => (
                       <React.Fragment key={month}>
-                        <tr className="cursor-pointer hover:bg-[#7ec6cc80] bg-teal-900"
+                        <tr className="cursor-pointer hover:bg-[#7ec6cc80] shadow-lg bg-teal-300/35 rounded-md"
                            onClick={() =>
                             setSelectedMonth((prev) => ({ ...prev,[employeeName]: prev[employeeName] === month ? null : month
                             }))}>
@@ -239,7 +239,7 @@ const MitarbeiterTabelle = () => {
                               <th className="p-2">Gesamtgehalt</th>
                               <th className="p-2">Gesamtstunden</th>
                             </tr>
-                           {selectedWeek[`${employeeName}-${month}`] === week &&
+                           {selectedWeek[`${employeeName}-${month}`] === week && 
                               employee.months[month].weeks[week].map((entry, index) => (
                                     <tr key={index} className="bg-teal-600">
                                         <td className="p-2">{entry.date}</td>
