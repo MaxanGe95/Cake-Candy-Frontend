@@ -63,9 +63,13 @@ const MitarbeiterTabelle = () => {
       }
 
       grouped[entry.employeeName].months[month].totalSalary += entry.salary;
-      grouped[entry.employeeName].months[month].totalWorkingHours += entry.workingHours;
+      grouped[entry.employeeName].months[month].totalWorkingHours +=
+        entry.workingHours;
 
-      grouped[entry.employeeName].months[month].weeks[week].push({ ...entry, dateObj });
+      grouped[entry.employeeName].months[month].weeks[week].push({
+        ...entry,
+        dateObj,
+      });
     });
 
     // Sortiere die Mitarbeiter alphabetisch
@@ -79,7 +83,18 @@ const MitarbeiterTabelle = () => {
       // Sortiere Monate chronologisch
       const sortedMonths = Object.keys(employee.months).sort((a, b) => {
         const monthsOrder = [
-          "Januar", "Februar", "März", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"
+          "Januar",
+          "Februar",
+          "März",
+          "April",
+          "Mai",
+          "Juni",
+          "Juli",
+          "August",
+          "September",
+          "Oktober",
+          "November",
+          "Dezember",
         ];
         return monthsOrder.indexOf(a) - monthsOrder.indexOf(b);
       });
@@ -87,9 +102,11 @@ const MitarbeiterTabelle = () => {
       sortedGrouped[employeeName] = { ...employee, months: {} };
 
       sortedMonths.forEach((month) => {
-        const sortedWeeks = Object.keys(employee.months[month].weeks).sort((a, b) => {
-          return parseInt(a.split(" ")[1]) - parseInt(b.split(" ")[1]);
-        });
+        const sortedWeeks = Object.keys(employee.months[month].weeks).sort(
+          (a, b) => {
+            return parseInt(a.split(" ")[1]) - parseInt(b.split(" ")[1]);
+          }
+        );
 
         sortedGrouped[employeeName].months[month] = {
           ...employee.months[month],
@@ -97,9 +114,10 @@ const MitarbeiterTabelle = () => {
         };
 
         sortedWeeks.forEach((week) => {
-          sortedGrouped[employeeName].months[month].weeks[week] = employee.months[month].weeks[week].sort(
-            (a, b) => a.dateObj - b.dateObj
-          );
+          sortedGrouped[employeeName].months[month].weeks[week] =
+            employee.months[month].weeks[week].sort(
+              (a, b) => a.dateObj - b.dateObj
+            );
         });
       });
     });
@@ -108,83 +126,155 @@ const MitarbeiterTabelle = () => {
   };
 
   return (
-    <div className="container mx-auto p-6 overflow-y-auto sticky top-0">
-
-       <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden text-center">
-        <thead className="bg-teal-950 ">
-          <tr className="text-white">
-
+    <div className="container mx-auto p-6"> 
+      {/* Hauptübersicht */}
+      <table className="min-w-full  text-amber-100 border rounded-md overflow-hidden text-center">
+        <thead className="bg-teal-950/80">
+          <tr className="">
             <th className="p-2">Mitarbeiter</th>
             <th className="p-2">Gesamtgehalt</th>
             <th className="p-2">Gesamtstunden</th>
           </tr>
         </thead>
-
         <tbody className="">
           {Object.entries(data).map(([employeeName, employee]) => (
             <React.Fragment key={employeeName}>
-              <tr
-                className="cursor-pointer hover:bg-[#7ec6cc80] border border-amber-100 text-white"
-                onClick={() => setSelectedEmployee(selectedEmployee === employeeName ? null : employeeName)}
-              >
+              <tr className="border border-amber-100 cursor-pointer hover:bg-[#7ec6cc80] "
+                  onClick={() => setSelectedEmployee( selectedEmployee === employeeName ? null : employeeName )}>
                 <td className="p-2 text-left">{employeeName}</td>
-                <td className="p-2">{employee.totalSalary.toFixed(2)} $</td>
+                <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
                 <td className="p-2">{employee.totalWorkingHours.toFixed(1)} h</td>
               </tr>
 
+              {/* Monatstübersicht */}
 
-
-
-              {selectedEmployee === employeeName &&
-                Object.keys(employee.months).map((month) => (
-                  <React.Fragment key={month}>
-                    <tr
-                      className="cursor-pointer hover:bg-[#7ec6cc80] bg-teal-900 text-white"
+              {selectedEmployee === employeeName && (
+             <tr className="">
+             <td colSpan="3" className="p-4">
+              <table className="w-full bg-teal-950/80 rounded-md overflow-hidden text-center">
+                <thead className="">
+                  <tr className="text-amber-100">
+                    <th className="p-2">Monat</th>
+                    <th className="p-2">Gesamtgehalt</th>
+                    <th className="p-2">Gesamtstunden</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedEmployee === employeeName && 
+                    Object.keys(employee.months).map((month) => (
+                      <React.Fragment key={month}>
+                        <tr className="cursor-pointer hover:bg-[#7ec6cc80] shadow-lg bg-teal-300/35 rounded-md"
+                           onClick={() =>
+                            setSelectedMonth((prev) => ({ ...prev,[employeeName]: prev[employeeName] === month ? null : month
+                            }))}>
+                              <td className="p-2">{month}</td>
+                              <td>{employee.months[month].totalSalary.toFixed(2)}$</td>
+                              <td>{employee.months[month].totalWorkingHours.toFixed(1)} $</td>
+                            </tr>
+                        
+                        {/* {selectedEmployee === employeeName &&
+                        Object.keys(employee.months).map((month) => (
+                        <React.Fragment key={month}>
+                         <tr
+                       className="cursor-pointer hover:bg-[#7ec6cc80] bg-teal-900"
                       onClick={() => setSelectedMonth((prev) => ({
                         ...prev,
                         [employeeName]: prev[employeeName] === month ? null : month,
                       }))}
                     >
                       <td className="p-2" colSpan={1}>{month}</td>
-                      <td colSpan={1}>{employee.months[month].totalSalary.toFixed(2)} $</td>
-                      <td colSpan={1}>{employee.months[month].totalWorkingHours.toFixed(1)} h</td>
-                    </tr>
+                      <td colSpan={1}>{employee.months[month].totalSalary.toFixed(2)}$</td>
+                      <td colSpan={1}>{employee.months[month].totalWorkingHours.toFixed(1)}$</td>
+                    </tr> */}
 
+                    {selectedMonth[employeeName] === month && (
+                      <tr>
+                        <td colSpan="3">
+                        <table className="w-full bg-teal-900 rounded-md shadow-lg overflow-hidden">
+                          <thead className="bg-teal-950 ">
+                            <tr className="">
+                              <th className="p-2">KW</th>
+                              <th className="p-2">Gesamtgehalt</th>
+                              <th className="p-2">Gesamtstunden</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                          {selectedMonth[employeeName] === month &&
+                            Object.keys(employee.months[month].weeks).map((week) => (
+                                <React.Fragment key={week}>
+                                  <tr className="cursor-pointer hover:bg-[#7ec6cc80] bg-teal-800 shadow-lg border-1 border-amber-300"
+                                    onClick={() =>
+                                      setSelectedWeek((prev) => ({...prev,[`${employeeName}-${month}`]: prev[`${employeeName}-${month}`] === week ? null : week}))}>
+                    
+                                      <td className="p-2">{week}</td>
+                                      <td className="p-2">{employee.months[month].weeks[week].reduce(
+                                          (acc, entry) => acc + entry.salary,0).toFixed(2)} $</td>
+                                      <td className="p-2">{employee.months[month].weeks[week].reduce(
+                                          (acc, entry) => acc + entry.workingHours,0).toFixed(1)} h</td>
+                                
+                                  </tr>
 
-
-
-                    {selectedMonth[employeeName] === month &&
+                       {/* {selectedMonth[employeeName] === month &&
                       Object.keys(employee.months[month].weeks).map((week) => (
                         <React.Fragment key={week}>
-                          <tr
-                            className="cursor-pointer hover:bg-[#7ec6cc80] bg-teal-800 shadow-lg text-white border-1 border-amber-300"
+                          <tr className="cursor-pointer hover:bg-[#7ec6cc80] bg-teal-800 shadow-lg border-1 border-amber-300"
                             onClick={() => setSelectedWeek((prev) => ({
                               ...prev,
                               [`${employeeName}-${month}`]: prev[`${employeeName}-${month}`] === week ? null : week,
                             }))}
                           >
                             <td className="p-2" colSpan={1}>{week}</td>
-                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.salary, 0).toFixed(2)} $</td>
+                            <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.salary, 0).toFixed(2)}$</td>
                             <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.workingHours, 0).toFixed(1)} h</td>
-                          </tr>
+                          </tr> */}
 
-
-
-                          {selectedWeek[`${employeeName}-${month}`] === week &&
+            {/* Wochenübersicht */}
+            {selectedWeek[`${employeeName}-${month}`] === week &&(
+            <tr>    
+              <td colSpan="3">    
+                 <table className="w-full bg-teal-900 rounded-md shadow-lg overflow-hidden">
+                          <thead className="bg-teal-950 ">
+                            <tr className="">
+                              <th className="p-2">Datum</th>
+                              <th className="p-2">Gesamtgehalt</th>
+                              <th className="p-2">Gesamtstunden</th>
+                            </tr>
+                           {selectedWeek[`${employeeName}-${month}`] === week && 
+                              employee.months[month].weeks[week].map((entry, index) => (
+                                    <tr key={index} className="bg-teal-600">
+                                        <td className="p-2">{entry.date}</td>
+                                        <td className="p-2">{entry.salary.toFixed(2)} $</td>
+                                        <td className="p-2">{entry.workingHours.toFixed(1)} h</td>
+                                    </tr>
+                                      )
+                                    )}
+                          </thead>
+                  </table>
+              </td>      
+             </tr>
+            )}
+                                  {/* {selectedWeek[`${employeeName}-${month}`] === week &&
                             employee.months[month].weeks[week].map((entry, index) => (
                               <tr key={index} className="bg-teal-600">
                                 <td className="p-2">{entry.date}</td>
-                                <td className="p-2">{entry.salary.toFixed(2)} $</td>
+                                <td className="p-2">{entry.salary.toFixed(2)}$</td>
                                 <td className="p-2">{entry.workingHours.toFixed(1)} h</td>
-                              </tr>
-                            ))
-                          }
-                        </React.Fragment>
-                      ))
-                    }
-                  </React.Fragment>
-                ))
-              }
+                              </tr>  )) } */}
+                                </React.Fragment>
+                              )                    
+                            )}
+                            
+                        </tbody>
+                        </table>
+                        </td>
+                        </tr>
+                        )}
+                      </React.Fragment>
+                    ))}
+                </tbody>
+              </table>
+              </td>
+              </tr>)}
             </React.Fragment>
           ))}
         </tbody>
@@ -194,7 +284,6 @@ const MitarbeiterTabelle = () => {
 };
 
 export default MitarbeiterTabelle;
-
 
 //<------------------------------------------------------------------------------------------------------------->>
 

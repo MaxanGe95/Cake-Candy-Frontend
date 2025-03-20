@@ -77,7 +77,7 @@ const DropdownInput = ({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
-          <div className="max-h-40 overflow-y-auto">
+          <div className="max-h-30 overflow-y-auto">
             {filteredOptions.map((option, index) => (
               <div
                 key={index}
@@ -253,7 +253,7 @@ const InputString = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-xs border border-amber-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
+        className={`w-70 border border-amber-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
           error ? "border-red-500 bg-red-900 text-white-300" : "border-amber-100"
         }`}
       />

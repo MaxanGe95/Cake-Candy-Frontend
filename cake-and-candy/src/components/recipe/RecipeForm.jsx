@@ -190,8 +190,8 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
       <h2 className="text-2xl font-bold text-teal-200 mt-6">
         {recipe?._id ? "Rezept bearbeiten" : "Neues Rezept"}
       </h2>
-      <div className="ml-2 grid md:grid-cols-5 gap-2 text-amber-100">
-        <div className="mt-4">
+      <div className="ml-2 grid md:grid-cols-5 gap-1 text-amber-100 mt-4">
+        <div className="">
           <label htmlFor="Rezeptname" className="mb-1 text-sm font-medium">
             Rezeptname
           </label>
@@ -202,7 +202,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             className=""
           />
         </div>
-        <div className="col-start-2 mt-4 ml-5">
+        <div className="col-start-2">
           <label htmlFor="Ergebnismenge" className="mb-1 text-sm font-medium">
             Ergebnismenge
           </label>
@@ -214,12 +214,12 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             className="w-35"
           />
         </div>
-        <div className="mt-4">
+        <div className="">
           <label htmlFor="Hilfsmittel" className="mb-1 text-sm font-medium">
             Hilfsmittel
           </label>
           <DropdownInput
-            className="w-xs"
+            className="w-70"
             options={toolsList}
             value={newRecipe.tools[0]}
             onChange={(e) => handleRecipeChange("tools", [e])}
@@ -227,12 +227,12 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             error={errors.name}
           />
         </div>
-        <div className="mt-4 ml-5">
+        <div className="">
           <label htmlFor="Kategorie" className="mb-1 text-sm font-medium">
             Kategorie
           </label>
           <DropdownInput
-            className="w-xs"
+            className="w-70"
             options={categoryOptions}
             value={newRecipe.category}
             onChange={(v) => handleRecipeChange("category", v)}
@@ -240,7 +240,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             error={errors.name}
           />
         </div>
-        <div className="row-start-2">
+        <div className="row-start-2 mb-30">
           {newRecipe.ingredients.map((ingredient, index) => (
             <div key={index} className="flex items-center ">
               <div className="flex-1">
@@ -248,7 +248,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
                   Zutaten
                 </label>
                 <DropdownInput
-                  className="w-xs"
+                  className="w-70"
                   options={ingredientsList}
                   value={ingredient.name} // Hier sollte der Name der Zutat aus 'newRecipe.ingredients' kommen
                   onChangeObject={(v) => handleIngredientChange(index, v)} // Überprüfe, ob 'v' das richtige Objekt ist
@@ -258,7 +258,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
                   error={errors[`ingredient${index}_name`]}
                 />
               </div>
-              <div className="flex-1 ml-0.5">
+              <div className="flex-1 ml-6">
                 <label htmlFor="Menge" className="ml-1 text-sm font-medium">
                   Menge
                 </label>
