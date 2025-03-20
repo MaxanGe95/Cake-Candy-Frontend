@@ -43,6 +43,7 @@ const Recipes = () => {
     setEditMode(false);
     setSelectedRecipe(null);
   };
+  
 
   const handleEditRecipe = (recipe) => {
     // Rezept zum Bearbeiten setzen
