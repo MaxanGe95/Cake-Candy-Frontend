@@ -86,7 +86,7 @@ const OrderRDP = () => {
   if (error) return <p className="text-red-500">Fehler: {error}</p>;
 
   return (
-    <div className="mt-12">
+    <div className="container mx-auto">
       {/* Haupttabelle: Firmenübersicht */}
       <table className="min-w-full text-amber-100 border rounded-md overflow-hidden">
         <thead className="bg-teal-950">
