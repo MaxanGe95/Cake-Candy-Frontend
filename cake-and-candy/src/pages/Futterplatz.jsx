@@ -11,6 +11,7 @@ function Futterplatz() {
   const [selectedCompany, setSelectedCompany] = useState("");
   const [newCompany, setNewCompany] = useState("");
   const [companies, setCompanies] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
 
   // Laden der Firmen aus dem Backend
   useEffect(() => {
@@ -29,7 +30,7 @@ function Futterplatz() {
   // Rechnungsdaten parsen
   function parseInvoiceData(text) {
     const productRegex =
-      /([A-Za-zÄÖÜäöüß0-9\s\(\)-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
+      /([A-Za-zÄÖÜäöüß0-9\s\(\)'\-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
     const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/;
 
     let matches;
@@ -70,26 +71,28 @@ function Futterplatz() {
   // Gehaltsdaten parsen
   function parseSalaryData(text) {
     const regex =
-      /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch Cake & Candy\s+([\w\s]+) \(#(\d+)\) - Gehalt "([\w\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
+      /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch (Cake & Candy|Oma\'s Chocolaterie)\s+([a-zA-Z0-9'`\s]+) \(#(\d+)\) - Gehalt "([a-zA-Z0-9'`\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
+  
     let matches;
     const result = [];
-
+  
     while ((matches = regex.exec(text)) !== null) {
       result.push({
         date: matches[1],
-        employeeName: matches[2].trim(),
-        kontoNumber: matches[3],
-        workingHours: parseFloat(matches[5].replace(",", ".")),
-        salary: Math.abs(parseFloat(matches[6].replace(",", "."))),
+        company: matches[2], // "Cake & Candy" oder "Oma's Chocolaterie"
+        employeeName: matches[5].trim(),
+        kontoNumber: matches[4],
+        workingHours: parseFloat(matches[6].replace(",", ".")),
+        salary: Math.abs(parseFloat(matches[7].replace(",", "."))),
       });
     }
-
+  
     return result;
   }
 
   // Inventardaten parsen
   function parseInventoryData(text) {
-    const regex = /([A-Za-zÄÖÜäöüß\s\-]+)\s+(\d+)\s+([^\n]+)/g;
+    const regex = /([A-Za-zÄÖÜäöüß\s\(\)\-']+)\t(\d+)\t([^\n]+)/g;
     let matches;
     const result = [];
 
@@ -120,6 +123,7 @@ function Futterplatz() {
         ...extractedData,
         company: selectedCompany,
         customerType: isB2B ? "B2B" : isB2C ? "B2C" : "",
+        date: selectedDate || extractedData.date, // Falls kein Datum manuell eingegeben wurde, bleibt es unverändert
       };
     } else if (inputType === "salary") {
       extractedData = parseSalaryData(inputData);
@@ -130,6 +134,7 @@ function Futterplatz() {
     } else if (inputType === "inventory") {
       extractedData = parseInventoryData(inputData);
     }
+    
 
     console.log("Extrahierte Daten:", extractedData);
 
@@ -157,7 +162,7 @@ function Futterplatz() {
         } else if (inputType === "inventory") {
           setInputText3("");
         }
-        //----------------------------------------------------------
+        
       } else {
         console.error("Fehler beim Senden der Daten:", response.statusText);
         throw new Error("Fehler beim Senden der Daten");
@@ -279,6 +284,17 @@ function Futterplatz() {
           <label htmlFor="b2c-radio">B2C</label>
         </div>
 
+        <label htmlFor="invoice-date" className="text-sm mt-4">
+          Rechnungsdatum:
+        </label>
+        <input
+          type="date"
+          id="invoice-date"
+          value={selectedDate}
+          onChange={(e) => setSelectedDate(e.target.value)}
+          className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+        />
+
         {/* Auswahl der Firma */}
         <div className="flex flex-col container mx-auto p-6 ">
           <label className="text-sm">Firma:</label>
@@ -344,7 +360,6 @@ function Futterplatz() {
           Daten absenden
         </button>
       </form>
-      {/* ----------------------------------------------------------------------- */}
 
       {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
       <form
@@ -406,7 +421,6 @@ function Futterplatz() {
         </button>
       </form>
 
-      {/* Weitere Eingabeformulare... */}
     </div>
   );
 }
