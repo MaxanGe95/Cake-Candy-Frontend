@@ -106,8 +106,8 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="text-center">
-                            <td className="p-2">
+                          <tr className="text-center ">
+                            <td className="p-2 ">
                               <ul>
                                 {calculateScaledIngredients(
                                   selectedRecipe,

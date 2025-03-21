@@ -128,7 +128,7 @@ const MitarbeiterTabelle = () => {
   return (
     <div className="container mx-auto p-14"> 
       {/* Hauptübersicht */}
-      <table className="container mx-auto border rounded-md overflow-hidden text-center">
+      <table className="container mx-auto border rounded-[18px] overflow-hidden text-center">
         <thead className="bg-teal-950/80 text-amber-100">
           <tr className="">
             <th className="p-2 w-1/3">Mitarbeiter</th>
@@ -139,7 +139,7 @@ const MitarbeiterTabelle = () => {
         <tbody className="">
           {Object.entries(data).map(([employeeName, employee]) => (
             <React.Fragment key={employeeName}>
-              <tr className="border border-amber-100 cursor-pointer shadow-lg hover:bg-[#7ec6cc80] bg-teal-550/80 "
+              <tr className="border border-none cursor-pointer shadow-lg hover:bg-[#7ec6cc80] hover:rounded-[80px] transition duration-200 bg-teal-550/80 p-6 "
                   onClick={() => setSelectedEmployee( selectedEmployee === employeeName ? null : employeeName )}>
                 <td className="p-2 text-left">{employeeName}</td>
                 <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
@@ -163,7 +163,7 @@ const MitarbeiterTabelle = () => {
                   {selectedEmployee === employeeName && 
                     Object.keys(employee.months).map((month) => (
                       <React.Fragment key={month}>
-                        <tr className="cursor-pointer hover:bg-[#7ec6cc80] shadow-lg bg-teal-300/15 rounded-md"
+                        <tr className="cursor-pointer hover:bg-[#7ec6cc80] hover:border-rounded-md transition duration-200 shadow-lg bg-teal-300/15 rounded-md"
                            onClick={() =>
                             setSelectedMonth((prev) => ({ ...prev,[employeeName]: prev[employeeName] === month ? null : month
                             }))}>
@@ -191,7 +191,7 @@ const MitarbeiterTabelle = () => {
                     {selectedMonth[employeeName] === month && (
                       <tr className="container mx-auto">
                         <td colSpan="3" className="p-4">
-                        <table className="container mx-auto rounded-md shadow-lg overflow-hidden ">
+                        <table className="container mx-auto rounded-md shadow-lg overflow-hidden bg-[#4FA095]/65  ">
                           <thead className="bg-teal-950/65 shadow-xl text-amber-100">
                             <tr className="">
                               <th className="p-2 w-1/3">Woche</th>
@@ -203,7 +203,7 @@ const MitarbeiterTabelle = () => {
                           {selectedMonth[employeeName] === month &&
                             Object.keys(employee.months[month].weeks).map((week) => (
                                 <React.Fragment key={week}>
-                                  <tr className="cursor-pointer hover:bg-[#7ec6cc80] bg-teal-700/65 shadow-lg overflow-hidden"
+                                  <tr className="cursor-pointer transition duration-200 hover:bg-[#7ec6cc80] bg-[#4FA095]/35 shadow-lg overflow-hidden"
                                     onClick={() =>
                                       setSelectedWeek((prev) => ({...prev,[`${employeeName}-${month}`]: prev[`${employeeName}-${month}`] === week ? null : week}))}>
                                       <td className="p-2">{week}</td>
@@ -241,7 +241,7 @@ const MitarbeiterTabelle = () => {
                             </tr>
                            {selectedWeek[`${employeeName}-${month}`] === week && 
                               employee.months[month].weeks[week].map((entry, index) => (
-                                    <tr key={index} className="shadow-sm cursor-pointer hover:bg-[#7ec6cc80] rounded-t-md">
+                                    <tr key={index} className="shadow-sm bg-[#4FA095]/50 cursor-pointer transition duration-200 hover:bg-[#7ec6cc80] rounded-t-md">
                                         <td className="p-2 w-1/3">{entry.date}</td>
                                         <td className="p-2">{entry.salary.toFixed(2)} $</td>
                                         <td className="p-2">{entry.workingHours.toFixed(1)} h</td>
