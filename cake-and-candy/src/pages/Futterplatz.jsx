@@ -71,20 +71,22 @@ function Futterplatz() {
   // Gehaltsdaten parsen
   function parseSalaryData(text) {
     const regex =
-      /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch Cake & Candy\s+([\w\s]+) \(#(\d+)\) - Gehalt "([\w\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
+      /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch (Cake & Candy|Oma\'s Chocolaterie)\s+([a-zA-Z0-9'`\s]+) \(#(\d+)\) - Gehalt "([a-zA-Z0-9'`\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
+  
     let matches;
     const result = [];
-
+  
     while ((matches = regex.exec(text)) !== null) {
       result.push({
         date: matches[1],
-        employeeName: matches[2].trim(),
-        kontoNumber: matches[3],
-        workingHours: parseFloat(matches[5].replace(",", ".")),
-        salary: Math.abs(parseFloat(matches[6].replace(",", "."))),
+        company: matches[2], // "Cake & Candy" oder "Oma's Chocolaterie"
+        employeeName: matches[5].trim(),
+        kontoNumber: matches[4],
+        workingHours: parseFloat(matches[6].replace(",", ".")),
+        salary: Math.abs(parseFloat(matches[7].replace(",", "."))),
       });
     }
-
+  
     return result;
   }
 
