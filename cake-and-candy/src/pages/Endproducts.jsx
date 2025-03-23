@@ -4,6 +4,8 @@ import { fetchEndProdukte, fetchCategories } from "../api/rezepte";
 import { CategorySelection } from "../components/products/CategorySelection";
 import { FlyInWrapper } from "../components/products/FlyInWrapper";
 import { ProductCategory } from "../components/products/ProductCategory";
+import { isAdmin } from "../api/auth";
+
 import videoFile from "../assets/video2.mp4";
 import "../components/products/Video.css";
 import pralinen from "../assets/category/pralinen.jpg";
@@ -117,8 +119,7 @@ function Endproducts() {
                       key={index}
                     >
                       <Product
-                        // TODO: woher weiß man das?
-                        admin={true}
+                        admin={isAdmin()}
                         product={product}
                       />
                     </FlyInWrapper>

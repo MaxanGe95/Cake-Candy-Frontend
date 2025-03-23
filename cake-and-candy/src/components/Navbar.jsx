@@ -142,6 +142,16 @@ function NavLinks({ isActiveLink }) {
           Dashboard
         </Link>
       )}
+      {isAdmin() && (
+        <Link
+          className={`transition ease-in-out hover:scale-110 hover:text-amber-100 ${
+            isActiveLink("/user") ? "text-amber-100" : "text-[#5eeaff]"
+          }`}
+          to="/user"
+        >
+          Nutzerverwaltung
+        </Link>
+      )}
     </>
   );
 }
