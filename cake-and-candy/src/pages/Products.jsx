@@ -90,6 +90,7 @@ const Products = () => {
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold text-teal-200 mt-6">Zutaten hinzufügen</h1>
       <ZutatenForm onAdd={handleAddZutat} />
+      
       <h2 className="text-2xl font-bold text-teal-200 mt-6">Zutaten-Liste</h2>
       <ZutatenListe zutaten={zutaten} onDelete={handleDeleteZutat} />
     </div>
