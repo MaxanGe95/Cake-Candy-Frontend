@@ -147,6 +147,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               <td className="p-2 text-center">
                 {zutat.istlagerbestand ?? "0"}
               </td>
+
               <td className="p-2 text-center">
                 <input
                   type="number"
@@ -157,17 +158,56 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
-              {(
-                <meter
-                  className="w-full h-6"
-                  min={0}
-                  max={zutat.solllagerbestand || 100} // Ziel-Lagerbestand
-                  low={(zutat.solllagerbestand || 100) * 0.25} // Niedrig-Schwelle (25% des Soll-Lagerbestands)
-                  high={(zutat.solllagerbestand || 100) * 0.75} // Hoch-Schwelle (75% des Soll-Lagerbestands)
-                  optimum={(zutat.solllagerbestand || 100) * 0.5} // Optimal-Schwelle (50%)
-                  value={zutat.istlagerbestand || 0} // Aktueller Bestand
-                ></meter>
-              )}
+
+              {/* //zusatz */}
+
+              <td className="p-2 text-center">
+                <div className="relative w-full h-6 bg-gray-300 rounded-lg">
+                  <div
+                    className={`
+        absolute top-0 left-0 h-6 rounded-lg
+        flex items-center ${
+          (zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100) < 0.2
+            ? "justify-start pl-2" // Prozentzahl links, wenn Balken sehr klein
+            : "justify-center" // Prozentzahl mittig bei größerem Balken
+        }
+        ${
+          zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.25
+            ? "bg-red-500"
+            : zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.75
+            ? "bg-yellow-500"
+            : "bg-green-500"
+        }
+      `}
+                    style={{
+                      width: `${
+                        ((zutat.istlagerbestand || 0) /
+                          (zutat.solllagerbestand || 100)) *
+                        100
+                      }%`,
+                      maxWidth: "100%",
+                    }}
+                  >
+                    <span
+                      className={`${
+                        (zutat.istlagerbestand || 0) /
+                          (zutat.solllagerbestand || 100) <
+                        0.2
+                          ? "text-black" // Textfarbe ändern, wenn der Balken schmal ist
+                          : "text-white"
+                      } font-bold`}
+                    >
+                      {Math.round(
+                        ((zutat.istlagerbestand || 0) /
+                          (zutat.solllagerbestand || 100)) *
+                          100
+                      )}
+                      %
+                    </span>
+                  </div>
+                </div>
+              </td>
+
               <td className="p-2 text-center">
                 <button
                   onClick={() => handleDelete(zutat._id)}
