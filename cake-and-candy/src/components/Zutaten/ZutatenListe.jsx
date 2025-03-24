@@ -174,8 +174,10 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
         ${
           zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.25
             ? "bg-red-500"
+            : zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.5
+            ? "bg-orange-500"
             : zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.75
-            ? "bg-yellow-500"
+            ?"bg-yellow-500"
             : "bg-green-500"
         }
       `}
