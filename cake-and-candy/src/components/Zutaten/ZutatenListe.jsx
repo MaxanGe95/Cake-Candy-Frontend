@@ -118,9 +118,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                     )
                   }
                   className={`w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
-                    zutat.typ?.toLowerCase() !== "endprodukt"
-                      ? " border-0"
-                      : ""
+                    zutat.typ?.toLowerCase() !== "endprodukt" ? " border-0" : ""
                   }`}
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
@@ -159,7 +157,19 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
-              <td className="p-2 text-center">{zutat.zusatz || "*"}</td>
+              <td className="p-2 text-center">
+                {zutat.zusatz || (
+                  <meter
+                  className="w-[100%] h-[20px] rounded-[5px]"
+                    min={0}
+                    max={zutat.solllagerbestand || 100} // Ziel-Lagerbestand
+                    low={(zutat.solllagerbestand || 100) * 0.25} // Niedrig-Schwelle (25% des Soll-Lagerbestands)
+                    high={(zutat.solllagerbestand || 100) * 0.75} // Hoch-Schwelle (75% des Soll-Lagerbestands)
+                    optimum={(zutat.solllagerbestand || 100) * 0.5} // Optimal-Schwelle (50%)
+                    value={zutat.istlagerbestand || 0} // Aktueller Bestand
+                  ></meter>
+                )}
+              </td>
               <td className="p-2 text-center">
                 <button
                   onClick={() => handleDelete(zutat._id)}
