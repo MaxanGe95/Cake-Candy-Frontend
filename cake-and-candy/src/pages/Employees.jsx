@@ -23,12 +23,15 @@ const MitarbeiterTabelle = () => {
   // Benutzerfreundliche Kalenderwoche berechnen
   const getUserFriendlyWeek = (date) => {
     const tempDate = new Date(date);
-    tempDate.setDate(tempDate.getDate() - tempDate.getDay()); // Setzt den Tag auf den letzten Sonntag
-    const yearStart = new Date(tempDate.getFullYear(), 0, 1); // Der erste Tag des Jahres
-    const daysBetween = Math.floor((date - yearStart) / (1000 * 60 * 60 * 24)); // Tage bis zum Datum
-    const week = Math.floor(daysBetween / 7) + 1; // KW berechnen
-    return `KW ${week}`;
+    tempDate.setDate(tempDate.getDate() - tempDate.getDay()); // Auf den letzten Sonntag setzen
+    const year = tempDate.getFullYear();
+    const yearStart = new Date(year, 0, 1); // Der erste Tag des Jahres
+    const daysBetween = Math.floor((tempDate - yearStart) / (1000 * 60 * 60 * 24));
+    const week = Math.floor(daysBetween / 7) + 1;
+  
+    return `KW ${week} (${year})`; // Jahr hinzufügen
   };
+  
 
   const groupData = (data) => {
     const grouped = {};
@@ -102,11 +105,15 @@ const MitarbeiterTabelle = () => {
       sortedGrouped[employeeName] = { ...employee, months: {} };
 
       sortedMonths.forEach((month) => {
-        const sortedWeeks = Object.keys(employee.months[month].weeks).sort(
-          (a, b) => {
-            return parseInt(a.split(" ")[1]) - parseInt(b.split(" ")[1]);
-          }
-        );
+        const sortedWeeks = Object.keys(employee.months[month].weeks).sort((a, b) => {
+          const yearA = employee.months[month].weeks[a][0].dateObj.getFullYear();
+          const yearB = employee.months[month].weeks[b][0].dateObj.getFullYear();
+          const weekA = parseInt(a.split(" ")[1]);
+          const weekB = parseInt(b.split(" ")[1]);
+        
+          return yearB - yearA || weekA - weekB; // Erst nach Jahr absteigend, dann nach KW aufsteigend
+        });
+        
 
         sortedGrouped[employeeName].months[month] = {
           ...employee.months[month],
