@@ -139,7 +139,7 @@ const MitarbeiterTabelle = () => {
         <tbody className="">
           {Object.entries(data).map(([employeeName, employee]) => (
             <React.Fragment key={employeeName}>
-              <tr className="border border-none cursor-pointer shadow-lg hover:bg-[#7ec6cc80] hover:rounded-[80px] transition duration-200 bg-teal-550/80 p-6 "
+              <tr className="border border-none cursor-pointer shadow-lg hover:bg-[#7ec6cc80] rounded-[18px] transition duration-200 bg-teal-550/80 p-6 "
                   onClick={() => setSelectedEmployee( selectedEmployee === employeeName ? null : employeeName )}>
                 <td className="p-2 text-left">{employeeName}</td>
                 <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
