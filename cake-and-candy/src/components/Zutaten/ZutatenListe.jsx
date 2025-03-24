@@ -72,11 +72,11 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
             {[
               "name",
               "typ",
-              "ekPreis",
-              "b2bPreis",
-              "b2cPreis",
-              "istlagerbestand",
-              "solllagerbestand",
+              "ek-Preis",
+              "b2b-Preis",
+              "b2c-Preis",
+              "ist-lagerbestand",
+              "soll-lagerbestand",
               "zusatz",
             ].map((key) => (
               <th
@@ -157,9 +157,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
-              {zutat.zusatz || (
+              {(
                 <meter
-                  className="w-[100%] h-[20px] rounded-[5px]"
+                  className="w-full h-6"
                   min={0}
                   max={zutat.solllagerbestand || 100} // Ziel-Lagerbestand
                   low={(zutat.solllagerbestand || 100) * 0.25} // Niedrig-Schwelle (25% des Soll-Lagerbestands)
