@@ -54,14 +54,52 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
       direction = "desc";
     }
 
-    const sortedData = [...zutatenState].sort((a, b) => {
-      if (a[key] < b[key]) return direction === "asc" ? -1 : 1;
-      if (a[key] > b[key]) return direction === "asc" ? 1 : -1;
-      return 0;
+    const sortedData = [...zutatenState].map((zutat) => {
+      // Prozentwert für die Zusatz-Spalte berechnen und hinzufügen
+      const zusatzWert = Math.round(
+        ((zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100)) * 100
+      );
+      return { ...zutat, zusatzWert }; // Prozentwert ins Objekt einfügen
+    });
+
+    const finalSortedData = sortedData.sort((a, b) => {
+      const aValue = a[key] ?? "";
+      const bValue = b[key] ?? "";
+
+      const numberKeys = {
+        "ek-Preis": "ekPreis",
+        "b2b-Preis": "b2bPreis",
+        "b2c-Preis": "b2cPreis",
+        "ist-lagerbestand": "istlagerbestand",
+        "soll-lagerbestand": "solllagerbestand",
+        zusatz: "zusatzWert", // Hier der berechnete Prozentwert!
+      };
+
+      const mappedKey = numberKeys[key] || key;
+
+      // Sortierung nach Zahlenwerten
+      if (numberKeys[key] && typeof a[mappedKey] === "number") {
+        return direction === "asc"
+          ? a[mappedKey] - b[mappedKey]
+          : b[mappedKey] - a[mappedKey];
+      }
+
+      // Allgemeine Zahlenerkennung für andere Felder
+      const isNumber = !isNaN(parseFloat(aValue)) && !isNaN(parseFloat(bValue));
+      if (isNumber) {
+        return direction === "asc"
+          ? parseFloat(aValue) - parseFloat(bValue)
+          : parseFloat(bValue) - parseFloat(aValue);
+      }
+
+      // String-Sortierung für andere Felder
+      return direction === "asc"
+        ? aValue.toString().localeCompare(bValue.toString())
+        : bValue.toString().localeCompare(aValue.toString());
     });
 
     setSortConfig({ key, direction });
-    setZutatenState(sortedData);
+    setZutatenState(finalSortedData);
   };
 
   return (
@@ -104,7 +142,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               <td className="p-2 text-center">{zutat.name}</td>
               <td className="p-2 text-center">{zutat.typ}</td>
               <td className="p-2 text-center">
-                ${zutat.ekPreis?.toFixed(2) || "0.00"}
+                $ {zutat.ekPreis?.toFixed(2) || "0.00"}
               </td>
               <td className="p-2 text-center">
                 <input
@@ -174,6 +212,8 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
         ${
           zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.25
             ? "bg-red-500"
+            : zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.5
+            ? "bg-orange-500"
             : zutat.istlagerbestand < (zutat.solllagerbestand || 100) * 0.75
             ? "bg-yellow-500"
             : "bg-green-500"
