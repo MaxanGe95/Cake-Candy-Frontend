@@ -232,7 +232,7 @@ const MitarbeiterTabelle = () => {
             {selectedWeek[`${employeeName}-${month}`] === week &&(
             <tr>    
               <td colSpan="3" className="p-4">    
-                 <table className="w-full shadow-lg rounded-md overflow-hidden">
+                 <table className=" w-full shadow-lg rounded-md overflow-hidden">
                           <thead className="bg-teal-950/60 ">
                             <tr className="container mx-auto shadow-xl">
                               <th className="p-2 text-amber-100">Datum</th>
