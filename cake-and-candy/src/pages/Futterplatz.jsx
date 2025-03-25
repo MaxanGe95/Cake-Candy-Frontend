@@ -350,7 +350,7 @@ function Futterplatz() {
             id="invoice-date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className={`p-2 border rounded-md w-1/6 ${
+            className={`p-2 border rounded-md w-1/4 ${
               !isValidDate(selectedDate)
                 ? "border-red-500 focus:ring-red-500"
                 : "border-gray-300 focus:ring-amber-100"
@@ -358,7 +358,7 @@ function Futterplatz() {
             required
           />
           {!isValidDate(selectedDate) && (
-            <p className="text-red-500 text-sm mt-2">
+            <p className="text-red-400 text-sm mt-2">
               Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
             </p>
           )}
