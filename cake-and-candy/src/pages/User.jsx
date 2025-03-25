@@ -11,6 +11,7 @@ const User = () => {
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newRole, setNewRole] = useState("");
+  const [newEmployeeName, setNewEmployeeName] = useState("");
 
   const loadUsers = async () => {
     try {
@@ -30,6 +31,7 @@ const User = () => {
     setNewUsername(user.username || "");
     setNewEmail(user.email || "");
     setNewRole(user.role || "kunde");
+    setNewEmployeeName(user.employeeName);
     setDialogOpen(true);
   };
 
@@ -44,6 +46,7 @@ const User = () => {
       username: newUsername,
       email: newEmail,
       role: newRole,
+      employeeName: newEmployeeName
     };
 
     try {
@@ -68,6 +71,7 @@ const User = () => {
             <th className="p-2">Mitarbeiter</th>
             <th className="p-2">E-Mail</th>
             <th className="p-2">Rolle</th>
+            <th className="p-2">Mitarbeiter Name</th>
             <th className="p-2">Aktionen</th>
           </tr>
         </thead>
@@ -80,6 +84,7 @@ const User = () => {
               <td className="p-2 text-left">{employee.username}</td>
               <td className="p-2">{employee.email}</td>
               <td className="p-2">{employee.role}</td>
+              <td className="p-2">{employee.employeeName}</td>
               <td className="p-2">
                 <EditButton onClick={() => openDialog(employee)} />
                 <DeleteButton onClick={() => handleDelete(employee)}/>
@@ -110,6 +115,12 @@ const User = () => {
               options={["kunde", "mitarbeiter", "admin"]}
               value={newRole}
               onChange={(e) => setNewRole(e)}
+            />
+            <InputString
+              className="mt-1"
+              placeholder="Mitarbeiter Name"
+              value={newEmployeeName}
+              onChange={(e) => setNewEmployeeName(e)}
             />
             <div className="mt-4 flex justify-end gap-2">
               <button
