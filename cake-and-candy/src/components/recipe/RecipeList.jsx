@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DeleteButton, EditButton } from "../form/Buttons";
 import { InputNumber } from "../form/Inputs";
+import { isAdmin } from "../../api/auth";
 
 const RecipeList = ({ recipes, onDelete, onEdit }) => {
   const [selectedRecipe, setSelectedRecipe] = useState(null);
@@ -68,7 +69,7 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
             <th className="p-2">Istbestand</th>
             <th className="p-2">Sollbestand</th>
             <th className="p-2">Zusatz</th>
-            <th className="p-2">Aktionen</th>
+            {isAdmin() && <th className="p-2">Aktionen</th>}
           </tr>
         </thead>
         <tbody>
@@ -87,12 +88,14 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                 <td className="p-2 text-center">{recipe.istlagerbestand}</td>
                 <td className="p-2 text-center">{recipe.solllagerbestand}</td>
                 <td className="p-2 text-center">-</td>
-                <td className="p-2 text-center">
-                  <EditButton onClick={() => onEdit(recipe)}>
-                    Rezept bearbeiten
-                  </EditButton>
-                  <DeleteButton onClick={() => onDelete(recipe._id)} />
-                </td>
+                {isAdmin() && (
+                  <td className="p-2 text-center">
+                    <EditButton onClick={() => onEdit(recipe)}>
+                      Rezept bearbeiten
+                    </EditButton>
+                    <DeleteButton onClick={() => onDelete(recipe._id)} />
+                  </td>
+                )}
               </tr>
               {selectedRecipe && selectedRecipe._id === recipe._id && (
                 <tr>

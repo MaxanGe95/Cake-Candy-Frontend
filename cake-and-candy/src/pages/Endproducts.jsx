@@ -43,7 +43,7 @@ function Endproducts() {
       image: backwaren,
     },
     {
-      name: "Getränk",
+      name: "Getränke",
       image: get,
     },
     {
