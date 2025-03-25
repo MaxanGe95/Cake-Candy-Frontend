@@ -12,43 +12,24 @@ const RecipeList = ({ onDelete, onEdit }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [recipesRes, inventoryRes] = await Promise.all([
-          fetch("http://localhost:5000/api/rezepte"),
-          fetch("http://localhost:5000/api/inventory"),
-        ]);
-
-        if (!recipesRes.ok || !inventoryRes.ok) {
-          throw new Error("Fehler beim Abrufen der Daten");
+        const response = await fetch("http://localhost:5000/api/rezepte");
+  
+        if (!response.ok) {
+          throw new Error("Fehler beim Abrufen der Rezeptdaten");
         }
-
-        const recipesData = await recipesRes.json();
-        const inventoryData = await inventoryRes.json();
-
+  
+        const recipesData = await response.json();
         console.log("🔍 Rezepte aus API:", recipesData);
-        console.log("🔍 Inventar aus API:", inventoryData);
-
-        // Rezepte mit Lagerbestand kombinieren
-        const updatedRecipes = recipesData.map((recipe) => {
-          const matchingInventory = inventoryData.find(
-            (inv) => inv.itemName && recipe.name && inv.itemName.trim().toLowerCase() === recipe.name.trim().toLowerCase()
-          );
-
-          return {
-            ...recipe,
-            istlagerbestand: matchingInventory ? matchingInventory.quantity : 0,
-            solllagerbestand: matchingInventory ? matchingInventory.targetQuantity : 0,
-          };
-        });
-
-        console.log("✅ Aktualisierte Rezepte:", updatedRecipes);
-        setRecipes(updatedRecipes);
+  
+        setRecipes(recipesData);
       } catch (error) {
-        console.error("❌ Fehler beim Laden der Daten:", error);
+        console.error("❌ Fehler beim Laden der Rezeptdaten:", error);
       }
     };
-
+  
     fetchData();
   }, []);
+  
 
   const calculateScaledIngredients = (recipe, scale) => {
     return recipe.ingredients.map((ingredient) => ({
