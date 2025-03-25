@@ -258,7 +258,7 @@ function Futterplatz() {
 
       {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
       <form
-        className="flex flex-col"
+        className="flex flex-col gap-6"
         onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
       >
         <label htmlFor="invoice-input" className="text-sm ">
@@ -272,7 +272,7 @@ function Futterplatz() {
         />
 
         {/* B2B/B2C Auswahl */}
-        <div className="text-center pt-6">
+        <div className="container mx-auto p-2 w-1/2">
           <label className="text-sm ">Kundentyp:</label>
           <input
             type="radio"
@@ -301,11 +301,11 @@ function Futterplatz() {
           <label htmlFor="b2c-radio">B2C</label>
         </div>
 
-        <div className="flex flex-col  gap-3 container mx-auto p-5">
+        <div className="flex flex-col w-1/2 gap-3 container mx-auto p-2">
           {/* Auswahl der Firma */}
           <label className="text-sm">Firma:</label>
           <select
-            className="w-1/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
+            className=" p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
           >
@@ -320,19 +320,19 @@ function Futterplatz() {
           </select>
 
           {/* Neue Firma hinzufügen */}
-          <div className="">
+          <div className="flex flex-col">
             <input
               type="text"
               value={newCompany}
               onChange={(e) => setNewCompany(e.target.value)}
               placeholder="Neue Firma hinzufügen"
-              className="w-1/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
             <button
               type="button"
               onClick={handleAddNewCompany}
               disabled={!isNewCompanyFormValid()}
-              className={`bg-green-500 text-white rounded-full px-6 py-2 m-3  ${
+              className={`bg-green-500 text-white rounded-full px-6 py-2 m-3 self-end w-1/4 ${
                 !isNewCompanyFormValid()
                   ? "opacity-50 cursor-not-allowed"
                   : "cursor-pointer"
@@ -350,7 +350,7 @@ function Futterplatz() {
             id="invoice-date"
             value={selectedDate}
             onChange={(e) => setSelectedDate(e.target.value)}
-            className={`p-2 border rounded-md w-1/4 ${
+            className={`p-2 border rounded-md  ${
               !isValidDate(selectedDate)
                 ? "border-red-500 focus:ring-red-500"
                 : "border-gray-300 focus:ring-amber-100"
