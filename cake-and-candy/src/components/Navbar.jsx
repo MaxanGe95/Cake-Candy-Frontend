@@ -82,7 +82,7 @@ function NavLinks({ isActiveLink }) {
       >
         -- Kunden Produkte --
       </Link>
-      {(isAdmin() || isMitarbeiter()) && (
+      {isAdmin() && (
         <Link
           className={`transition ease-in-out hover:scale-110 hover:text-amber-100 ${
             isActiveLink("/futterplatz") ? "text-amber-100" : "text-[#5eeaff]"
@@ -92,7 +92,7 @@ function NavLinks({ isActiveLink }) {
           Futterplatz
         </Link>
       )}
-      {(isAdmin() || isMitarbeiter()) && (
+      {isAdmin() && (
         <Link
           className={`transition ease-in-out hover:scale-110 hover:text-amber-100 ${
             isActiveLink("/orders") ? "text-amber-100" : "text-[#5eeaff]"
