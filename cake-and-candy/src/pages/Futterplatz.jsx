@@ -258,50 +258,52 @@ function Futterplatz() {
 
       {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
       <form
-        className="flex flex-col gap-6"
+        className="flex flex-row gap-4 justify-between"
         onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
       >
-        <label htmlFor="invoice-input" className="text-sm ">
-          Inputfeld für RDP Rechnungsvordruck
-        </label>
-        <textarea
-          value={inputText1}
-          onChange={(e) => setInputText1(e.target.value)}
-          rows="10"
-          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        />
-
-        {/* B2B/B2C Auswahl */}
-        <div className="container mx-auto p-2 w-1/2">
-          <label className="text-sm ">Kundentyp:</label>
-          <input
-            type="radio"
-            id="b2b-radio"
-            name="customerType"
-            checked={isB2B}
-            onChange={() => {
-              setIsB2B(true);
-              setIsB2C(false);
-            }}
-            className="m-2 cursor-pointer"
+        <div>
+          <label htmlFor="invoice-input" className="text-sm w-1/2">
+            Inputfeld für RDP Rechnungsvordruck
+          </label>
+          <textarea
+            value={inputText1}
+            onChange={(e) => setInputText1(e.target.value)}
+            rows="10"
+            className="w-full h-[90%] border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
           />
-          <label htmlFor="b2b-radio">B2B</label>
-
-          <input
-            type="radio"
-            id="b2c-radio"
-            name="customerType"
-            checked={isB2C}
-            onChange={() => {
-              setIsB2C(true);
-              setIsB2B(false);
-            }}
-            className="m-2 cursor-pointer"
-          />
-          <label htmlFor="b2c-radio">B2C</label>
         </div>
 
-        <div className="flex flex-col w-1/2 gap-3 container mx-auto p-2">
+        {/* B2B/B2C Auswahl */}
+
+        <div className="flex flex-col w-1/2 gap-3 container p-2">
+          <div className="container w-1/2">
+            <label className="text-sm ">Kundentyp:</label>
+            <input
+              type="radio"
+              id="b2b-radio"
+              name="customerType"
+              checked={isB2B}
+              onChange={() => {
+                setIsB2B(true);
+                setIsB2C(false);
+              }}
+              className="m-2 cursor-pointer"
+            />
+            <label htmlFor="b2b-radio">B2B</label>
+
+            <input
+              type="radio"
+              id="b2c-radio"
+              name="customerType"
+              checked={isB2C}
+              onChange={() => {
+                setIsB2C(true);
+                setIsB2B(false);
+              }}
+              className="m-2 cursor-pointer"
+            />
+            <label htmlFor="b2c-radio">B2C</label>
+          </div>
           {/* Auswahl der Firma */}
           <label className="text-sm">Firma:</label>
           <select
@@ -363,18 +365,10 @@ function Futterplatz() {
             </p>
           )}
         </div>
-        {/*       <Button
-          type="button"
-          onClick={handleAddNewCompany}
-          disabled={!isInvoiceFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-3 self-end ${
-            !isInvoiceFormValid()
-              ? "opacity-50 cursor-not-allowed"
-              : "cursor-pointer"
-          }`}
-          children={`Daten absenden`}
-        /> */}
-        <button
+
+
+      </form>
+      <button
           type="submit"
           disabled={!isInvoiceFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
@@ -386,67 +380,68 @@ function Futterplatz() {
         >
           Daten absenden
         </button>
-      </form>
 
-      {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
-      <form
-        onSubmit={(e) => handleSubmit(e, inputText2, "salary")}
-        className="flex flex-col"
-      >
-        <label htmlFor="salary-input" className="text-sm">
-          Gehaltsdaten (z.B. für Lastschrift)
-        </label>
-        <textarea
-          value={inputText2}
-          onChange={(e) => setInputText2(e.target.value)}
-          rows="10"
-          cols="150"
-          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        ></textarea>
+      <div className="flex gap-2">
+        {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
+        <form
+          onSubmit={(e) => handleSubmit(e, inputText2, "salary")}
+          className=" w-1/2"
+        >
+          <label htmlFor="salary-input" className="text-sm">
+            Gehaltsdaten (z.B. für Lastschrift)
+          </label>
+          <textarea
+            value={inputText2}
+            onChange={(e) => setInputText2(e.target.value)}
+            rows="10"
+            cols="150"
+            className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          ></textarea>
 
-        <button
-          type="submit"
-          disabled={!isSalaryFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
+          <button
+            type="submit"
+            disabled={!isSalaryFormValid()}
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
             ${
               !isSalaryFormValid()
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
             }`}
+          >
+            Daten absenden
+          </button>
+        </form>
+
+        {/* 🧾 Inputfeld 3 - Inventardaten */}
+        <form
+          onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}
+          className="w-1/2"
         >
-          Daten absenden
-        </button>
-      </form>
+          <label htmlFor="inventory-input" className="text-sm">
+            Inventardaten (z.B. für Bestände)
+          </label>
+          <textarea
+            value={inputText3}
+            onChange={(e) => setInputText3(e.target.value)}
+            rows="10"
+            cols="150"
+            className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          ></textarea>
 
-      {/* 🧾 Inputfeld 3 - Inventardaten */}
-      <form
-        onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}
-        className="flex flex-col"
-      >
-        <label htmlFor="inventory-input" className="text-sm">
-          Inventardaten (z.B. für Bestände)
-        </label>
-        <textarea
-          value={inputText3}
-          onChange={(e) => setInputText3(e.target.value)}
-          rows="10"
-          cols="150"
-          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        ></textarea>
-
-        <button
-          type="submit"
-          disabled={!isInventoryFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end 
+          <button
+            type="submit"
+            disabled={!isInventoryFormValid()}
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end 
             ${
               !isInventoryFormValid()
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
             }`}
-        >
-          Daten absenden
-        </button>
-      </form>
+          >
+            Daten absenden
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
