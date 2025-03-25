@@ -258,10 +258,10 @@ function Futterplatz() {
 
       {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
       <form
-        className="flex flex-row gap-4 justify-between"
+        className="flex flex-row  "
         onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
       >
-        <div>
+        <div className="w-1/2">
           <label htmlFor="invoice-input" className="text-sm w-1/2">
             Inputfeld für RDP Rechnungsvordruck
           </label>
@@ -371,7 +371,7 @@ function Futterplatz() {
       <button
           type="submit"
           disabled={!isInvoiceFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
+          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
             ${
               !isInvoiceFormValid()
                 ? "opacity-50 cursor-not-allowed"
@@ -401,7 +401,7 @@ function Futterplatz() {
           <button
             type="submit"
             disabled={!isSalaryFormValid()}
-            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
             ${
               !isSalaryFormValid()
                 ? "opacity-50 cursor-not-allowed"
@@ -431,7 +431,7 @@ function Futterplatz() {
           <button
             type="submit"
             disabled={!isInventoryFormValid()}
-            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-6 mr-4 self-end 
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end 
             ${
               !isInventoryFormValid()
                 ? "opacity-50 cursor-not-allowed"
