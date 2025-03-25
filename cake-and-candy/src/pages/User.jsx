@@ -68,7 +68,7 @@ const User = () => {
       <table className="min-w-full text-amber-100 border rounded-md overflow-hidden text-center">
         <thead className="bg-teal-950/80">
           <tr>
-            <th className="p-2">Mitarbeiter</th>
+            <th className="p-2">Nutzername</th>
             <th className="p-2">E-Mail</th>
             <th className="p-2">Rolle</th>
             <th className="p-2">Mitarbeiter Name</th>
