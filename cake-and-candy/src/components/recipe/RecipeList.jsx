@@ -7,6 +7,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
   const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [scaleAmount, setScaleAmount] = useState(0);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: "asc" });
 
   // Rezepte und Lagerbestand abrufen
   useEffect(() => {
@@ -54,20 +55,99 @@ const RecipeList = ({ onDelete, onEdit }) => {
     }
   };
 
+  const handleSort = (key) => {
+    let direction = "asc";
+    if (sortConfig.key === key && sortConfig.direction === "asc") {
+      direction = "desc";
+    }
+
+    /* const sortedRecipes = [...recipes].sort((a, b) => {
+      const aValue = a[key] ?? "";
+      const bValue = b[key] ?? "";
+
+      // Falls die Werte Zahlen sind, sortiere als Zahlen
+      if (!isNaN(aValue) && !isNaN(bValue)) {
+        return direction === "asc" ? aValue - bValue : bValue - aValue;
+      } */
+
+        const sortedData = [...recipes].map((recipe) => {
+          // Prozentwert für die Zusatz-Spalte berechnen und hinzufügen
+          const zusatzWert = Math.round(
+            ((recipe.istlagerbestand || 0) / (recipe.solllagerbestand || 100)) * 100
+          );
+          return { ...recipe, zusatzWert }; // Prozentwert ins Objekt einfügen
+        });
+    
+        const finalSortedData = sortedData.sort((a, b) => {
+          const aValue = a[key] ?? "";
+          const bValue = b[key] ?? "";
+    
+          const numberKeys = {
+            "ek-Preis": "ekPreis",
+            "b2b-Preis": "b2bPreis",
+            "b2c-Preis": "b2cPreis",
+            "ist-lagerbestand": "istlagerbestand",
+            "soll-lagerbestand": "solllagerbestand",
+            zusatz: "zusatzWert", // Hier der berechnete Prozentwert!
+          };
+    
+          const mappedKey = numberKeys[key] || key;
+    
+          // Sortierung nach Zahlenwerten
+          if (numberKeys[key] && typeof a[mappedKey] === "number") {
+            return direction === "asc"
+              ? a[mappedKey] - b[mappedKey]
+              : b[mappedKey] - a[mappedKey];
+          }
+    
+          // Allgemeine Zahlenerkennung für andere Felder
+          const isNumber = !isNaN(parseFloat(aValue)) && !isNaN(parseFloat(bValue));
+          if (isNumber) {
+            return direction === "asc"
+              ? parseFloat(aValue) - parseFloat(bValue)
+              : parseFloat(bValue) - parseFloat(aValue);
+          }
+    
+
+      // Falls es Strings sind, sortiere lexikografisch
+      return direction === "asc"
+        ? aValue.toString().localeCompare(bValue.toString())
+        : bValue.toString().localeCompare(aValue.toString());
+    });
+
+    setSortConfig({ key, direction });
+    setRecipes(finalSortedData); // sortierte Liste direkt speichern
+  };
+
   return (
     <div className="mt-10">
       <h4 className="text-2xl font-bold text-teal-200 mb-1">Rezepte-Liste</h4>
       <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
         <thead className="bg-teal-950">
           <tr>
-            <th className="p-2">Rezeptname</th>
-            <th className="p-2">Kategorie</th>
-            <th className="p-2">Hilfsmittel</th>
-            <th className="p-2">Output</th>
-            <th className="p-2">Zutaten</th>
-            <th className="p-2">Istbestand</th>
-            <th className="p-2">Sollbestand</th>
-            <th className="p-2">Zusatz</th>
+            {[
+              "name", // statt "rezeptname"
+              "category", // statt "KATEGORIE"
+              "tools", // bleibt gleich
+              "totalAmount", // statt "ausgabe"
+              "zutaten",
+              "istlagerbestand", // ohne Bindestriche
+              "solllagerbestand",
+              "zusatz", // falls dies korrekt berechnet wird
+            ].map((key) => (
+              <th
+                key={key}
+                className="p-2 cursor-pointer"
+                onClick={() => handleSort(key)}
+              >
+                {key.toUpperCase()}{" "}
+                {sortConfig.key === key
+                  ? sortConfig.direction === "asc"
+                    ? "▲"
+                    : "▼"
+                  : ""}
+              </th>
+            ))}
             {isAdmin() && <th className="p-2">Aktionen</th>}
           </tr>
         </thead>
@@ -85,7 +165,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
                 <td className="p-2 text-center">Zutaten anzeigen</td>
                 <td className="p-2 text-center">{recipe.istlagerbestand}</td>
                 <td className="p-2 text-center">{recipe.solllagerbestand}</td>
-                
+
                 {/* //zusatz */}
                 <td className="p-2 text-center text-sm">
                   <div className="relative w-full h-6 bg-gray-300 rounded-lg">
