@@ -199,7 +199,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               {/* //zusatz */}
 
-              <td className="p-2 text-center">
+              <td className="p-2 text-center text-sm">
                 <div className="relative w-full h-6 bg-gray-300 rounded-lg">
                   <div
                     className={`

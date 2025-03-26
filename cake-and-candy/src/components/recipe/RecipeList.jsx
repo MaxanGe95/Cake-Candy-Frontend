@@ -13,23 +13,22 @@ const RecipeList = ({ onDelete, onEdit }) => {
     const fetchData = async () => {
       try {
         const response = await fetch("http://localhost:5000/api/rezepte");
-  
+
         if (!response.ok) {
           throw new Error("Fehler beim Abrufen der Rezeptdaten");
         }
-  
+
         const recipesData = await response.json();
         console.log("🔍 Rezepte aus API:", recipesData);
-  
+
         setRecipes(recipesData);
       } catch (error) {
         console.error("❌ Fehler beim Laden der Rezeptdaten:", error);
       }
     };
-  
+
     fetchData();
   }, []);
-  
 
   const calculateScaledIngredients = (recipe, scale) => {
     return recipe.ingredients.map((ingredient) => ({
@@ -86,7 +85,57 @@ const RecipeList = ({ onDelete, onEdit }) => {
                 <td className="p-2 text-center">Zutaten anzeigen</td>
                 <td className="p-2 text-center">{recipe.istlagerbestand}</td>
                 <td className="p-2 text-center">{recipe.solllagerbestand}</td>
-                <td className="p-2 text-center">-</td>
+                
+                {/* //zusatz */}
+                <td className="p-2 text-center text-sm">
+                  <div className="relative w-full h-6 bg-gray-300 rounded-lg">
+                    <div
+                      className={`
+        absolute top-0 left-0 h-6 rounded-lg
+        flex items-center ${
+          (recipe.istlagerbestand || 0) / (recipe.solllagerbestand || 100) < 0.2
+            ? "justify-start pl-2" // Prozentzahl links, wenn Balken sehr klein
+            : "justify-center" // Prozentzahl mittig bei größerem Balken
+        }
+        ${
+          recipe.istlagerbestand < (recipe.solllagerbestand || 100) * 0.25
+            ? "bg-red-500"
+            : recipe.istlagerbestand < (recipe.solllagerbestand || 100) * 0.5
+            ? "bg-orange-500"
+            : recipe.istlagerbestand < (recipe.solllagerbestand || 100) * 0.75
+            ? "bg-yellow-500"
+            : "bg-green-500"
+        }
+      `}
+                      style={{
+                        width: `${
+                          ((recipe.istlagerbestand || 0) /
+                            (recipe.solllagerbestand || 100)) *
+                          100
+                        }%`,
+                        maxWidth: "100%",
+                      }}
+                    >
+                      <span
+                        className={`${
+                          (recipe.istlagerbestand || 0) /
+                            (recipe.solllagerbestand || 100) <
+                          0.2
+                            ? "text-black" // Textfarbe ändern, wenn der Balken schmal ist
+                            : "text-white"
+                        } font-bold`}
+                      >
+                        {Math.round(
+                          ((recipe.istlagerbestand || 0) /
+                            (recipe.solllagerbestand || 100)) *
+                            100
+                        )}
+                        %
+                      </span>
+                    </div>
+                  </div>
+                </td>
+
                 {isAdmin() && (
                   <td className="p-2 text-center">
                     <EditButton onClick={() => onEdit(recipe)}>
