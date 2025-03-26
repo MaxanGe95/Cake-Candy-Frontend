@@ -64,6 +64,7 @@ const User = () => {
 
   return (
     <div className="container mx-auto p-6">
+      <h1 className="text-center text-2xl font-bold text-teal-200 mb-4">Nutzerverwaltung</h1>
       {/* Tabelle */}
       <table className="min-w-full text-amber-100 border rounded-md overflow-hidden text-center">
         <thead className="bg-teal-950/80">
