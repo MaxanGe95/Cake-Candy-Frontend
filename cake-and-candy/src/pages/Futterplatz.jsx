@@ -258,11 +258,11 @@ function Futterplatz() {
 
       {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
       <form
-        className="flex flex-row  "
+        className="flex flex-row gap-2 "
         onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
       >
         <div className="w-1/2">
-          <label htmlFor="invoice-input" className="text-sm w-1/2">
+          <label htmlFor="invoice-input" className="text-teal-200 font-bold w-1/2">
             Inputfeld für RDP Rechnungsvordruck
           </label>
           <textarea
@@ -287,9 +287,9 @@ function Futterplatz() {
                 setIsB2B(true);
                 setIsB2C(false);
               }}
-              className="m-2 cursor-pointer"
+              className="ml-2 cursor-pointer"
             />
-            <label htmlFor="b2b-radio">B2B</label>
+            <label className="mr-2" htmlFor="b2b-radio">B2B</label>
 
             <input
               type="radio"
@@ -300,7 +300,7 @@ function Futterplatz() {
                 setIsB2C(true);
                 setIsB2B(false);
               }}
-              className="m-2 cursor-pointer"
+              className="ml-2 cursor-pointer"
             />
             <label htmlFor="b2c-radio">B2C</label>
           </div>
@@ -322,7 +322,7 @@ function Futterplatz() {
           </select>
 
           {/* Neue Firma hinzufügen */}
-          <div className="flex flex-col">
+          <div className="flex flex-col ">
             <input
               type="text"
               value={newCompany}
@@ -334,7 +334,7 @@ function Futterplatz() {
               type="button"
               onClick={handleAddNewCompany}
               disabled={!isNewCompanyFormValid()}
-              className={`bg-green-500 text-white rounded-full px-6 py-2 m-3 self-end w-1/4 ${
+              className={`bg-teal-950 text-amber-100 hover:bg-teal-800 rounded-full px-6 py-2 m-3 self-end w-1/4 ${
                 !isNewCompanyFormValid()
                   ? "opacity-50 cursor-not-allowed"
                   : "cursor-pointer"
@@ -371,7 +371,7 @@ function Futterplatz() {
       <button
           type="submit"
           disabled={!isInvoiceFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
+          className={`bg-teal-950 text-amber-100 hover:bg-teal-800 rounded-full px-6 py-2 m-2 self-end
             ${
               !isInvoiceFormValid()
                 ? "opacity-50 cursor-not-allowed"
@@ -381,13 +381,13 @@ function Futterplatz() {
           Daten absenden
         </button>
 
-      <div className="flex gap-2">
+      <div className="flex gap-4 mt-6">
         {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
         <form
           onSubmit={(e) => handleSubmit(e, inputText2, "salary")}
           className=" w-1/2"
         >
-          <label htmlFor="salary-input" className="text-sm">
+          <label htmlFor="salary-input" className="text-teal-200 font-bold">
             Gehaltsdaten (z.B. für Lastschrift)
           </label>
           <textarea
@@ -401,7 +401,7 @@ function Futterplatz() {
           <button
             type="submit"
             disabled={!isSalaryFormValid()}
-            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
+            className={`bg-teal-950 text-amber-100 hover:bg-teal-800 rounded-full px-6 py-2 m-2 self-end
             ${
               !isSalaryFormValid()
                 ? "opacity-50 cursor-not-allowed"
@@ -417,7 +417,7 @@ function Futterplatz() {
           onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}
           className="w-1/2"
         >
-          <label htmlFor="inventory-input" className="text-sm">
+          <label htmlFor="inventory-input" className="text-teal-200 font-bold ">
             Inventardaten (z.B. für Bestände)
           </label>
           <textarea
@@ -431,7 +431,7 @@ function Futterplatz() {
           <button
             type="submit"
             disabled={!isInventoryFormValid()}
-            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end 
+            className={`bg-teal-950 text-amber-100 hover:bg-teal-800 rounded-full px-6 py-2 m-2 self-end 
             ${
               !isInventoryFormValid()
                 ? "opacity-50 cursor-not-allowed"
