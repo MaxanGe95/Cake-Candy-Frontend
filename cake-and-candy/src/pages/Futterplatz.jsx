@@ -72,10 +72,10 @@ function Futterplatz() {
   function parseSalaryData(text) {
     const regex =
       /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch (Cake & Candy|Oma\'s Chocolaterie)\s+([a-zA-Z0-9'`\s]+) \(#(\d+)\) - Gehalt "([a-zA-Z0-9'`\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
-  
+
     let matches;
     const result = [];
-  
+
     while ((matches = regex.exec(text)) !== null) {
       result.push({
         date: matches[1],
@@ -86,7 +86,7 @@ function Futterplatz() {
         salary: Math.abs(parseFloat(matches[7].replace(",", "."))),
       });
     }
-  
+
     return result;
   }
 
@@ -134,7 +134,6 @@ function Futterplatz() {
     } else if (inputType === "inventory") {
       extractedData = parseInventoryData(inputData);
     }
-    
 
     console.log("Extrahierte Daten:", extractedData);
 
@@ -162,7 +161,6 @@ function Futterplatz() {
         } else if (inputType === "inventory") {
           setInputText3("");
         }
-        
       } else {
         console.error("Fehler beim Senden der Daten:", response.statusText);
         throw new Error("Fehler beim Senden der Daten");
@@ -213,10 +211,13 @@ function Futterplatz() {
     }
   }
 
-  // Validierungsfunktion für Rechnungsdaten
+  /// Validierungsfunktion für Rechnungsdaten erweitern
   function isInvoiceFormValid() {
     return (
-      inputText1.trim() !== "" && (isB2B || isB2C) && selectedCompany !== ""
+      inputText1.trim() !== "" &&
+      (isB2B || isB2C) &&
+      selectedCompany !== "" &&
+      isValidDate(selectedDate) // Validierung des Datums
     );
   }
 
@@ -233,6 +234,22 @@ function Futterplatz() {
   // Validierungsfunktion für Firmaliste
   function isNewCompanyFormValid() {
     return newCompany.trim() !== "";
+  }
+
+  // Validierungsfunktion für das Datum
+  function isValidDate(date) {
+    // Prüft, ob das Datum gültig ist
+    if (!date) return false; // Leeres Datum ist ungültig
+
+    const selectedDate = new Date(date);
+    const today = new Date();
+
+    // Datum sollte nicht in der Zukunft liegen
+    if (selectedDate > today) {
+      return false;
+    }
+
+    return !isNaN(selectedDate.getTime()); // Überprüft, ob das Datum ein gültiges Datum ist
   }
 
   return (
@@ -284,22 +301,11 @@ function Futterplatz() {
           <label htmlFor="b2c-radio">B2C</label>
         </div>
 
-        <label htmlFor="invoice-date" className="text-sm mt-4">
-          Rechnungsdatum:
-        </label>
-        <input
-          type="date"
-          id="invoice-date"
-          value={selectedDate}
-          onChange={(e) => setSelectedDate(e.target.value)}
-          className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        />
-
-        {/* Auswahl der Firma */}
-        <div className="flex flex-col container mx-auto p-6 ">
+        <div className="flex flex-col  gap-3 container mx-auto p-5">
+          {/* Auswahl der Firma */}
           <label className="text-sm">Firma:</label>
           <select
-            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
+            className="w-1/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
           >
@@ -314,13 +320,13 @@ function Futterplatz() {
           </select>
 
           {/* Neue Firma hinzufügen */}
-          <div className="mt-4">
+          <div className="">
             <input
               type="text"
               value={newCompany}
               onChange={(e) => setNewCompany(e.target.value)}
               placeholder="Neue Firma hinzufügen"
-              className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+              className="w-1/4 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
             <button
               type="button"
@@ -335,6 +341,27 @@ function Futterplatz() {
               Firma hinzufügen
             </button>
           </div>
+          {/* Rechnungsdatum */}
+          <label htmlFor="invoice-date" className="text-sm">
+            Rechnungsdatum:
+          </label>
+          <input
+            type="date"
+            id="invoice-date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className={`p-2 border rounded-md w-1/4 ${
+              !isValidDate(selectedDate)
+                ? "border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:ring-amber-100"
+            }`}
+            required
+          />
+          {!isValidDate(selectedDate) && (
+            <p className="text-red-400 text-sm mt-2">
+              Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
+            </p>
+          )}
         </div>
         {/*       <Button
           type="button"
@@ -420,7 +447,6 @@ function Futterplatz() {
           Daten absenden
         </button>
       </form>
-
     </div>
   );
 }
