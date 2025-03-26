@@ -239,7 +239,7 @@ const MitarbeiterTabelle = () => {
                                   {employee.months[
                                     month
                                   ].totalWorkingHours.toFixed(1)}{" "}
-                                  $
+                                  h
                                 </td>
                               </tr>
 
