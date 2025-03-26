@@ -213,13 +213,22 @@ function Futterplatz() {
 
   /// Validierungsfunktion für Rechnungsdaten erweitern
   function isInvoiceFormValid() {
+    console.log("isInvoiceFormValid Check:", {
+      inputText1: inputText1.trim() !== "",
+      isB2B,
+      isB2C,
+      selectedCompany: selectedCompany !== "",
+      validDate: isValidDate(selectedDate),
+    });
+  
     return (
       inputText1.trim() !== "" &&
       (isB2B || isB2C) &&
       selectedCompany !== "" &&
-      isValidDate(selectedDate) // Validierung des Datums
+      isValidDate(selectedDate)
     );
   }
+  
 
   // Validierungsfunktion für Gehaltsdaten
   function isSalaryFormValid() {
@@ -370,8 +379,7 @@ function Futterplatz() {
               <label htmlFor="b2c-radio">B2C</label>
             </div>
           </div>
-        </form>
-        <button
+          <button
           type="submit"
           disabled={!isInvoiceFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
@@ -383,6 +391,8 @@ function Futterplatz() {
         >
           Daten absenden
         </button>
+        </form>
+     
       </div>
 
       <div className="flex gap-2">
