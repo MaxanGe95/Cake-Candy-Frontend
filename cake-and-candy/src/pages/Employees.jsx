@@ -169,7 +169,7 @@ const MitarbeiterTabelle = () => {
                             }))}>
                               <td className="p-2">{month}</td>
                               <td>{employee.months[month].totalSalary.toFixed(2)} $</td>
-                              <td>{employee.months[month].totalWorkingHours.toFixed(1)} $</td>
+                              <td>{employee.months[month].totalWorkingHours.toFixed(1)} h</td>
                             </tr>
                         
                         {/* {selectedEmployee === employeeName &&
