@@ -220,7 +220,7 @@ function Futterplatz() {
       selectedCompany: selectedCompany !== "",
       validDate: isValidDate(selectedDate),
     });
-  
+
     return (
       inputText1.trim() !== "" &&
       (isB2B || isB2C) &&
@@ -228,7 +228,6 @@ function Futterplatz() {
       isValidDate(selectedDate)
     );
   }
-  
 
   // Validierungsfunktion für Gehaltsdaten
   function isSalaryFormValid() {
@@ -283,72 +282,7 @@ function Futterplatz() {
             />
           </div>
 
-          <div className="flex flex-col w-1/2 gap-2 container">
-            {/* Auswahl der Firma */}
-            <label className="text-sm">Firma:</label>
-            <select
-              className=" p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
-              value={selectedCompany}
-              onChange={(e) => setSelectedCompany(e.target.value)}
-            >
-              <option value="" disabled>
-                Wählen Sie eine Firma aus
-              </option>
-              {companies.map((company, index) => (
-                <option
-                  key={index}
-                  value={company.name}
-                  className="bg-teal-900"
-                >
-                  {company.name} {/* Zeige nur den Namen an */}
-                </option>
-              ))}
-            </select>
-
-            {/* Neue Firma hinzufügen */}
-            <div className="flex flex-col">
-              <input
-                type="text"
-                value={newCompany}
-                onChange={(e) => setNewCompany(e.target.value)}
-                placeholder="Neue Firma hinzufügen"
-                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-              />
-              <button
-                type="button"
-                onClick={handleAddNewCompany}
-                disabled={!isNewCompanyFormValid()}
-                className={`bg-green-500 text-white rounded-full px-6 py-2 m-3 self-end w-1/4 ${
-                  !isNewCompanyFormValid()
-                    ? "opacity-50 cursor-not-allowed"
-                    : "cursor-pointer"
-                }`}
-              >
-                Firma hinzufügen
-              </button>
-            </div>
-            {/* Rechnungsdatum */}
-            <label htmlFor="invoice-date" className="text-sm">
-              Rechnungsdatum:
-            </label>
-            <input
-              type="date"
-              id="invoice-date"
-              value={selectedDate}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className={`p-2 border rounded-md  ${
-                !isValidDate(selectedDate)
-                  ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-amber-100"
-              }`}
-              required
-            />
-            {!isValidDate(selectedDate) && (
-              <p className="text-red-400 text-sm mt-2">
-                Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
-              </p>
-            )}
-
+          <div className="flex flex-col w-[50%] gap-2 container">
             {/* B2B/B2C Auswahl */}
             <div className="container w-1/2">
               <label className="text-sm ">Kundentyp:</label>
@@ -378,21 +312,85 @@ function Futterplatz() {
               />
               <label htmlFor="b2c-radio">B2C</label>
             </div>
-          </div>
-          <button
-          type="submit"
-          disabled={!isInvoiceFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
+            {/* Rechnungsdatum */}
+            <label htmlFor="invoice-date" className="text-sm">
+              Rechnungsdatum:
+            </label>
+            <input
+              type="date"
+              id="invoice-date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className={`p-2 border rounded-md  ${
+                !isValidDate(selectedDate)
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-amber-100"
+              }`}
+              required
+            />
+            {!isValidDate(selectedDate) && (
+              <p className="text-red-400 text-sm mt-2">
+                Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
+              </p>
+            )}
+
+            {/* Auswahl der Firma */}
+            <label className="text-sm">Firma:</label>
+            <select
+              className=" p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(e.target.value)}
+            >
+              <option value="" disabled>
+                Wählen Sie eine Firma aus
+              </option>
+              {companies.map((company, index) => (
+                <option
+                  key={index}
+                  value={company.name}
+                  className="bg-teal-900"
+                >
+                  {company.name} {/* Zeige nur den Namen an */}
+                </option>
+              ))}
+            </select>
+
+            {/* Neue Firma hinzufügen */}
+            <div className="flex flex-wrap justify-between">
+              <input
+                type="text"
+                value={newCompany}
+                onChange={(e) => setNewCompany(e.target.value)}
+                placeholder="Neue Firma hinzufügen"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+              />
+              <button
+                type="button"
+                onClick={handleAddNewCompany}
+                disabled={!isNewCompanyFormValid()}
+                className={`bg-green-500 text-white rounded-full px-6 py-2 mt-3 self-end ${
+                  !isNewCompanyFormValid()
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              >
+                Firma hinzufügen
+              </button>
+              <button
+                type="submit"
+                disabled={!isInvoiceFormValid()}
+                className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-3 self-end
             ${
               !isInvoiceFormValid()
                 ? "opacity-50 cursor-not-allowed"
                 : "cursor-pointer"
             }`}
-        >
-          Daten absenden
-        </button>
+              >
+                Daten absenden
+              </button>
+            </div>
+          </div>
         </form>
-     
       </div>
 
       <div className="flex gap-2">
