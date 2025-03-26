@@ -30,7 +30,8 @@ const Orders = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <div className="mb-4">
+      <h1 className="text-center text-2xl font-bold text-teal-200 mb-4">Bestellungen</h1>
+      <div className="mb-4 text-center">
         <button
           onClick={handleCustomerOrdersClick}
           className="bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200 mr-2"
