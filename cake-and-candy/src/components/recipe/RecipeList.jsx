@@ -1,40 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { DeleteButton, EditButton } from "../form/Buttons";
 import { InputNumber } from "../form/Inputs";
 import { isAdmin } from "../../api/auth";
 
-const RecipeList = ({ recipes, onDelete, onEdit }) => {
+const RecipeList = ({ onDelete, onEdit }) => {
+  const [recipes, setRecipes] = useState([]);
   const [selectedRecipe, setSelectedRecipe] = useState(null);
   const [scaleAmount, setScaleAmount] = useState(0);
 
-  // const calculateScaledIngredients = (recipe, scale) => {
-  //   return recipe.ingredients.map((ingredient) => ({
-  //     ...ingredient,
-  //     amount: (ingredient.amount * scale).toFixed(2),
-  //   }));
-  // };
+  // Rezepte und Lagerbestand abrufen
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/api/rezepte");
+  
+        if (!response.ok) {
+          throw new Error("Fehler beim Abrufen der Rezeptdaten");
+        }
+  
+        const recipesData = await response.json();
+        console.log("🔍 Rezepte aus API:", recipesData);
+  
+        setRecipes(recipesData);
+      } catch (error) {
+        console.error("❌ Fehler beim Laden der Rezeptdaten:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
+
   const calculateScaledIngredients = (recipe, scale) => {
     return recipe.ingredients.map((ingredient) => ({
       ...ingredient,
-      // Math.round(), um die Menge auf die nächste ganze Zahl zu runden
       amount: Math.round(ingredient.amount * scale),
     }));
-  };
-  const calculateIngredientTotalPrice = (ingredient) => {
-    const amount = parseFloat(ingredient.amount);
-    const ekPreis = parseFloat(ingredient.ekPreis);
-    return amount * ekPreis;
-  };
-
-  const calculateTotalPrice = (ingredients) => {
-    return ingredients.reduce(
-      (total, ingredient) => total + calculateIngredientTotalPrice(ingredient),
-      0
-    );
-  };
-
-  const round = (calc) => {
-    return "$" + (calc || 0).toFixed(2);
   };
 
   const handleSelectRecipe = (recipe) => {
@@ -65,7 +66,6 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
             <th className="p-2">Hilfsmittel</th>
             <th className="p-2">Output</th>
             <th className="p-2">Zutaten</th>
-            {/* <th className="p-2">Menge</th> */}
             <th className="p-2">Istbestand</th>
             <th className="p-2">Sollbestand</th>
             <th className="p-2">Zusatz</th>
@@ -84,7 +84,6 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                 <td className="p-2 text-center">{recipe.tools?.join(", ")}</td>
                 <td className="p-2 text-center">{recipe.totalAmount}</td>
                 <td className="p-2 text-center">Zutaten anzeigen</td>
-                {/* <td className="p-2 text-center">{recipe.totalAmount}</td> */}
                 <td className="p-2 text-center">{recipe.istlagerbestand}</td>
                 <td className="p-2 text-center">{recipe.solllagerbestand}</td>
                 <td className="p-2 text-center">-</td>
@@ -99,13 +98,13 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
               </tr>
               {selectedRecipe && selectedRecipe._id === recipe._id && (
                 <tr>
-                  <td colSpan="9" className="p-4">
+                  <td colSpan="8" className="p-4">
                     <div className="bg-[#7ec6cc33] rounded-md shadow-lg p-4">
                       <table className=" bg-teal-950 min-w-full rounded-md overflow-hidden">
                         <thead className="bg-teal-900  text-amber-100 rounded-t-md">
                           <tr>
                             <th className="p-2">Zutaten</th>
-                            <th className="p-2">Stück</th>
+                            <th className="p-2">Menge</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -133,12 +132,6 @@ const RecipeList = ({ recipes, onDelete, onEdit }) => {
                           </tr>
                         </tbody>
                       </table>
-                      {/* <button
-                        className="bg-teal-950 text-amber-100 p-2 rounded-md hover:bg-teal-800 transition duration-200"
-                        onClick={handleCloseDetails}
-                      >
-                        Zurück
-                      </button> */}
                     </div>
                   </td>
                 </tr>
