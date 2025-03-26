@@ -256,119 +256,122 @@ function Futterplatz() {
     <div className="container mx-auto p-6 text-amber-100">
       <h1 className="py-5 text-center">Willkommen bei Futterplatz</h1>
 
-      {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
-      <form
-        className="flex flex-row  "
-        onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
-      >
-        <div className="w-1/2">
-          <label htmlFor="invoice-input" className="text-sm w-1/2">
-            Inputfeld für RDP Rechnungsvordruck
-          </label>
-          <textarea
-            value={inputText1}
-            onChange={(e) => setInputText1(e.target.value)}
-            rows="10"
-            className="w-full h-[90%] border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-          />
-        </div>
-
-        {/* B2B/B2C Auswahl */}
-
-        <div className="flex flex-col w-1/2 gap-3 container p-2">
-          <div className="container w-1/2">
-            <label className="text-sm ">Kundentyp:</label>
-            <input
-              type="radio"
-              id="b2b-radio"
-              name="customerType"
-              checked={isB2B}
-              onChange={() => {
-                setIsB2B(true);
-                setIsB2C(false);
-              }}
-              className="m-2 cursor-pointer"
+      <div className="flex flex-col gap-3">
+        {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
+        <form
+          className="flex flex-row gap-2"
+          onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
+        >
+          <div className="w-1/2">
+            <label htmlFor="invoice-input" className="text-sm w-1/2">
+              Inputfeld für RDP Rechnungsvordruck
+            </label>
+            <textarea
+              value={inputText1}
+              onChange={(e) => setInputText1(e.target.value)}
+              rows="10"
+              className="w-full h-[90%] border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
-            <label htmlFor="b2b-radio">B2B</label>
-
-            <input
-              type="radio"
-              id="b2c-radio"
-              name="customerType"
-              checked={isB2C}
-              onChange={() => {
-                setIsB2C(true);
-                setIsB2B(false);
-              }}
-              className="m-2 cursor-pointer"
-            />
-            <label htmlFor="b2c-radio">B2C</label>
           </div>
-          {/* Auswahl der Firma */}
-          <label className="text-sm">Firma:</label>
-          <select
-            className=" p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
-            value={selectedCompany}
-            onChange={(e) => setSelectedCompany(e.target.value)}
-          >
-            <option value="" disabled>
-              Wählen Sie eine Firma aus
-            </option>
-            {companies.map((company, index) => (
-              <option key={index} value={company.name} className="bg-teal-900">
-                {company.name} {/* Zeige nur den Namen an */}
-              </option>
-            ))}
-          </select>
 
-          {/* Neue Firma hinzufügen */}
-          <div className="flex flex-col">
-            <input
-              type="text"
-              value={newCompany}
-              onChange={(e) => setNewCompany(e.target.value)}
-              placeholder="Neue Firma hinzufügen"
-              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-            />
-            <button
-              type="button"
-              onClick={handleAddNewCompany}
-              disabled={!isNewCompanyFormValid()}
-              className={`bg-green-500 text-white rounded-full px-6 py-2 m-3 self-end w-1/4 ${
-                !isNewCompanyFormValid()
-                  ? "opacity-50 cursor-not-allowed"
-                  : "cursor-pointer"
-              }`}
+          <div className="flex flex-col w-1/2 gap-2 container">
+            {/* Auswahl der Firma */}
+            <label className="text-sm">Firma:</label>
+            <select
+              className=" p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
+              value={selectedCompany}
+              onChange={(e) => setSelectedCompany(e.target.value)}
             >
-              Firma hinzufügen
-            </button>
+              <option value="" disabled>
+                Wählen Sie eine Firma aus
+              </option>
+              {companies.map((company, index) => (
+                <option
+                  key={index}
+                  value={company.name}
+                  className="bg-teal-900"
+                >
+                  {company.name} {/* Zeige nur den Namen an */}
+                </option>
+              ))}
+            </select>
+
+            {/* Neue Firma hinzufügen */}
+            <div className="flex flex-col">
+              <input
+                type="text"
+                value={newCompany}
+                onChange={(e) => setNewCompany(e.target.value)}
+                placeholder="Neue Firma hinzufügen"
+                className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+              />
+              <button
+                type="button"
+                onClick={handleAddNewCompany}
+                disabled={!isNewCompanyFormValid()}
+                className={`bg-green-500 text-white rounded-full px-6 py-2 m-3 self-end w-1/4 ${
+                  !isNewCompanyFormValid()
+                    ? "opacity-50 cursor-not-allowed"
+                    : "cursor-pointer"
+                }`}
+              >
+                Firma hinzufügen
+              </button>
+            </div>
+            {/* Rechnungsdatum */}
+            <label htmlFor="invoice-date" className="text-sm">
+              Rechnungsdatum:
+            </label>
+            <input
+              type="date"
+              id="invoice-date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              className={`p-2 border rounded-md  ${
+                !isValidDate(selectedDate)
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-amber-100"
+              }`}
+              required
+            />
+            {!isValidDate(selectedDate) && (
+              <p className="text-red-400 text-sm mt-2">
+                Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
+              </p>
+            )}
+
+            {/* B2B/B2C Auswahl */}
+            <div className="container w-1/2">
+              <label className="text-sm ">Kundentyp:</label>
+              <input
+                type="radio"
+                id="b2b-radio"
+                name="customerType"
+                checked={isB2B}
+                onChange={() => {
+                  setIsB2B(true);
+                  setIsB2C(false);
+                }}
+                className="m-2 cursor-pointer"
+              />
+              <label htmlFor="b2b-radio">B2B</label>
+
+              <input
+                type="radio"
+                id="b2c-radio"
+                name="customerType"
+                checked={isB2C}
+                onChange={() => {
+                  setIsB2C(true);
+                  setIsB2B(false);
+                }}
+                className="m-2 cursor-pointer"
+              />
+              <label htmlFor="b2c-radio">B2C</label>
+            </div>
           </div>
-          {/* Rechnungsdatum */}
-          <label htmlFor="invoice-date" className="text-sm">
-            Rechnungsdatum:
-          </label>
-          <input
-            type="date"
-            id="invoice-date"
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className={`p-2 border rounded-md  ${
-              !isValidDate(selectedDate)
-                ? "border-red-500 focus:ring-red-500"
-                : "border-gray-300 focus:ring-amber-100"
-            }`}
-            required
-          />
-          {!isValidDate(selectedDate) && (
-            <p className="text-red-400 text-sm mt-2">
-              Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
-            </p>
-          )}
-        </div>
-
-
-      </form>
-      <button
+        </form>
+        <button
           type="submit"
           disabled={!isInvoiceFormValid()}
           className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
@@ -380,6 +383,7 @@ function Futterplatz() {
         >
           Daten absenden
         </button>
+      </div>
 
       <div className="flex gap-2">
         {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
