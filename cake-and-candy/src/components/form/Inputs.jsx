@@ -220,12 +220,14 @@ const InputNumber = ({
   placeholder = "0",
   className = "",
   error = "",
+  min
 }) => {
   return (
     <div className={`relative ${className}`}>
       <input
         type="number"
         value={value}
+        min={min}
         onChange={(e) => onChange(Number(e.target.value))}
         placeholder={placeholder}
         className={`w-full border border-amber-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
