@@ -278,8 +278,20 @@ function Futterplatz() {
               value={inputText1}
               onChange={(e) => setInputText1(e.target.value)}
               rows="10"
-              className="w-full h-[90%] border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+              className="w-full  border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
+             <button
+                type="submit"
+                disabled={!isInvoiceFormValid()}
+                className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 self-end
+            ${
+              !isInvoiceFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+              >
+                Daten absenden
+              </button>
           </div>
 
           <div className="flex flex-col w-[50%] gap-2 container">
@@ -368,7 +380,7 @@ function Futterplatz() {
                 type="button"
                 onClick={handleAddNewCompany}
                 disabled={!isNewCompanyFormValid()}
-                className={`bg-green-500 text-white rounded-full px-6 py-2 mt-3 self-end ${
+                className={`bg-green-500 text-white rounded-full px-6 py-2 mt-3 justify-items-end ${
                   !isNewCompanyFormValid()
                     ? "opacity-50 cursor-not-allowed"
                     : "cursor-pointer"
@@ -376,18 +388,7 @@ function Futterplatz() {
               >
                 Firma hinzufügen
               </button>
-              <button
-                type="submit"
-                disabled={!isInvoiceFormValid()}
-                className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 mt-3 self-end
-            ${
-              !isInvoiceFormValid()
-                ? "opacity-50 cursor-not-allowed"
-                : "cursor-pointer"
-            }`}
-              >
-                Daten absenden
-              </button>
+             
             </div>
           </div>
         </form>
@@ -413,7 +414,7 @@ function Futterplatz() {
           <button
             type="submit"
             disabled={!isSalaryFormValid()}
-            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-4 
             ${
               !isSalaryFormValid()
                 ? "opacity-50 cursor-not-allowed"
@@ -443,7 +444,7 @@ function Futterplatz() {
           <button
             type="submit"
             disabled={!isInventoryFormValid()}
-            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end 
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-4  
             ${
               !isInventoryFormValid()
                 ? "opacity-50 cursor-not-allowed"
