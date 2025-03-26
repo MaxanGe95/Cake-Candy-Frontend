@@ -146,6 +146,7 @@ const MitarbeiterTabelle = () => {
 
   return (
     <div className="container mx-auto p-14">
+      <h1 className="text-center text-2xl text-teal-200 font-bold mb-4">Mitarbeiter-Übersicht</h1>
       {/* Hauptübersicht */}
       <table className="container mx-auto border rounded-[10px] overflow-hidden text-center">
         <thead className="bg-teal-950/80 text-amber-100">
