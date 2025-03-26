@@ -254,7 +254,7 @@ function Futterplatz() {
 
   return (
     <div className="container mx-auto p-6 text-amber-100">
-      <h1 className="py-5 text-center">Willkommen bei Futterplatz</h1>
+      <h1 className="py-5 text-2xl font-bold text-teal-200 text-center">Willkommen bei Futterplatz</h1>
 
       <div className="flex flex-col gap-3">
         {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
