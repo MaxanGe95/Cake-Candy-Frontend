@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { updateUser, fetchUsers, deleteUser } from "../api/user";
+import { fetchEmployeeNames } from "../api/salary";
 import { InputString, DropdownInput } from "../components/form/Inputs";
 import { EditButton, DeleteButton } from "../components/form/Buttons";
 
@@ -7,6 +8,7 @@ const User = () => {
   const [users, setUsers] = useState([]); // Zustand für Benutzerdaten
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [employeeNames, setEmployeeNames] = useState([]);
 
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -22,8 +24,19 @@ const User = () => {
     }
   };
 
+  // Mitarbeiternamen laden
+  const loadEmployeeNames = async () => {
+    try {
+      const employeeNames = await fetchEmployeeNames();
+      setEmployeeNames(employeeNames); 
+    } catch (error) {
+      console.error("Fehler beim Laden der Benutzer:", error);
+    }
+  };
+
   useEffect(() => {
     loadUsers();
+    loadEmployeeNames();
   }, []); // Nur einmal beim Laden der Komponente aufrufen
 
   const openDialog = (user) => {
@@ -117,8 +130,9 @@ const User = () => {
               value={newRole}
               onChange={(e) => setNewRole(e)}
             />
-            <InputString
+            <DropdownInput
               className="mt-1"
+              options={employeeNames}
               placeholder="Mitarbeiter Name"
               value={newEmployeeName}
               onChange={(e) => setNewEmployeeName(e)}
