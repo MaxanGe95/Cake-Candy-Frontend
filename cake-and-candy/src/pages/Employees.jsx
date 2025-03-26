@@ -176,6 +176,32 @@ const MitarbeiterTabelle = () => {
               {/* Monatstübersicht */}
 
               {selectedEmployee === employeeName && (
+
+             <tr className="">
+             <td colSpan="3" className="p-4">
+              <table className="container mx-auto bg-[#57888c]/50 rounded-[10px] shadow-xl overflow-hidden text-center">
+                <thead className="bg-teal-950/70 text-amber-100">
+                  <tr className="shadow-xl">
+                    <th className="p-2 w-1/3">Monat</th>
+                    <th className="p-2 w-1/3">Gesamtgehalt</th>
+                    <th className="p-2">Gesamtstunden</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {selectedEmployee === employeeName && 
+                    Object.keys(employee.months).map((month) => (
+                      <React.Fragment key={month}>
+                        <tr className="cursor-pointer hover:bg-[#7ec6cc80] transition duration-200 shadow-lg rounded-md"
+                           onClick={() =>
+                            setSelectedMonth((prev) => ({ ...prev,[employeeName]: prev[employeeName] === month ? null : month
+                            }))}>
+                              <td className="p-2">{month}</td>
+                              <td>{employee.months[month].totalSalary.toFixed(2)} $</td>
+                              <td>{employee.months[month].totalWorkingHours.toFixed(1)} h</td>
+                            </tr>
+                        
+                        {/* {selectedEmployee === employeeName &&
+
                 <tr className="">
                   <td colSpan="3" className="p-4">
                     <table className="container mx-auto bg-[#57888c]/50 rounded-[10px] shadow-xl overflow-hidden text-center">
@@ -218,6 +244,7 @@ const MitarbeiterTabelle = () => {
                               </tr>
 
                               {/* {selectedEmployee === employeeName &&
+
                         Object.keys(employee.months).map((month) => (
                         <React.Fragment key={month}>
                          <tr
@@ -311,6 +338,33 @@ const MitarbeiterTabelle = () => {
                             <td className="p-2" colSpan={1}>{employee.months[month].weeks[week].reduce((acc, entry) => acc + entry.workingHours, 0).toFixed(1)} h</td>
                           </tr> */}
 
+            {/*Datum-Übersicht */}
+            {selectedWeek[`${employeeName}-${month}`] === week &&(
+            <tr>    
+              <td colSpan="3" className="p-4">    
+                 <table className=" w-full shadow-lg rounded-md overflow-hidden">
+                          <thead className="bg-teal-950/60 ">
+                            <tr className="container mx-auto shadow-xl">
+                              <th className="p-2 text-amber-100">Datum</th>
+                              <th className="p-2 text-amber-100">Gesamtgehalt</th>
+                              <th className="p-2 text-amber-100">Gesamtstunden</th>
+                            </tr>
+                           {selectedWeek[`${employeeName}-${month}`] === week && 
+                              employee.months[month].weeks[week].map((entry, index) => (
+                                    <tr key={index} className="shadow-sm bg-[#7ec6cc]/25 cursor-pointer transition duration-200 hover:bg-[#7ec6cc80] rounded-t-md">
+                                        <td className="p-2 w-1/3">{entry.date}</td>
+                                        <td className="p-2">{entry.salary.toFixed(2)} $</td>
+                                        <td className="p-2">{entry.workingHours.toFixed(1)} h</td>
+                                    </tr>
+                                      )
+                                    )}
+                          </thead>
+                  </table>
+              </td>      
+             </tr>
+            )}
+                                  {/* {selectedWeek[`${employeeName}-${month}`] === week &&
+
                                               {/*Datum-Übersicht */}
                                               {selectedWeek[
                                                 `${employeeName}-${month}`
@@ -368,6 +422,7 @@ const MitarbeiterTabelle = () => {
                                                 </tr>
                                               )}
                                               {/* {selectedWeek[`${employeeName}-${month}`] === week &&
+
                             employee.months[month].weeks[week].map((entry, index) => (
                               <tr key={index} className="bg-teal-600">
                                 <td className="p-2">{entry.date}</td>
