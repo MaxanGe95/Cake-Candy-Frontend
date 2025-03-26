@@ -146,7 +146,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               </td>
               <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.b2bPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -155,7 +155,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className={`w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                  className={`w-14 p-1 text-center border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
                     zutat.typ?.toLowerCase() !== "endprodukt" ? " border-0" : ""
                   }`}
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
@@ -164,7 +164,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.b2cPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -173,7 +173,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className={`w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                  className={`w-14 p-1 text-center border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
                     zutat.typ?.toLowerCase() !== "endprodukt"
                       ? "  border-0"
                       : ""
@@ -188,12 +188,12 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.solllagerbestand || ""}
                   onChange={(e) =>
                     handleUpdate(zutat._id, "solllagerbestand", e.target.value)
                   }
-                  className="w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
+                  className="w-14 text-center p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
               </td>
 
