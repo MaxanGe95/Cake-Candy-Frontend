@@ -17,6 +17,7 @@ import Products from "./pages/Products";
 import Recipes from "./pages/Recipes";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import User from "./pages/User";
 import Layout from "./components/Layout";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/user" element={<User />} />
         </Routes>
       </Layout>
     </Router>

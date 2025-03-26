@@ -5,6 +5,7 @@ import RecipeList from "../components/recipe/RecipeList";
 import { fetchZutaten } from "../api/zutaten";
 import { fetchRezepte, deleteRezept } from "../api/rezepte";
 import { PrimaryButton } from "../components/form/Buttons";
+import { isAdmin } from "../api/auth";
 
 const Recipes = () => {
   const [recipes, setRecipes] = useState([]);
@@ -63,26 +64,28 @@ const Recipes = () => {
 
   return (
     <div className="container mx-auto text-amber-100">
-      <RecipeForm
-        recipe={
-          selectedRecipe || {
-            name: "",
-            ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
-            tools: [],
-            totalAmount: 1,
+      {isAdmin() && (
+        <RecipeForm
+          recipe={
+            selectedRecipe || {
+              name: "",
+              ingredients: [{ name: "", amount: 0, ekPreis: 0 }],
+              tools: [],
+              totalAmount: 1,
+            }
           }
-        }
-        onSave={handleSaveRecipe}
-        onCancel={handleCancel}
-        ingredientsList={ingredientsList} // Zutatenliste als Prop an RecipeForm übergeben
-      />
+          onSave={handleSaveRecipe}
+          onCancel={handleCancel}
+          ingredientsList={ingredientsList} // Zutatenliste als Prop an RecipeForm übergeben
+        />
+      )}
       <RecipeList
         recipes={recipes}
         onSelect={setSelectedRecipe}
         onDelete={handleDeleteRecipe}
         onEdit={handleEditRecipe}
       />
-      
+
       {/* Button zum Hinzufügen eines neuen Rezepts */}
       {/* <PrimaryButton onClick={handleNewRecipe} className="mb-4 mt-10">
         Neues Rezept hinzufügen

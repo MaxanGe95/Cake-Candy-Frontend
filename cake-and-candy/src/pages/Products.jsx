@@ -8,13 +8,49 @@ const Products = () => {
   // Funktion zum Laden der Zutaten
   const fetchZutaten = async () => {
     try {
-      const response = await fetch("http://localhost:5000/api/zutaten");
-      const data = await response.json();
-      setZutaten(data); // Zutaten im Zustand setzen
+      const [zutatenRes, inventoryRes] = await Promise.all([
+        fetch("http://localhost:5000/api/zutaten"),
+        fetch("http://localhost:5000/api/inventory") // Korrigierte Route
+      ]);
+  
+      if (!zutatenRes.ok || !inventoryRes.ok) {
+        throw new Error("Fehler beim Abrufen der Daten");
+      }
+  
+      const zutatenData = await zutatenRes.json();
+      const inventoryData = await inventoryRes.json();
+  
+      console.log("🔍 Zutaten aus API:", zutatenData);
+      console.log("🔍 Inventar aus API:", inventoryData);
+  
+      // Zutaten mit Istbestand aus Inventory aktualisieren
+      const updatedZutaten = zutatenData.map((zutat) => {
+        if (!zutat.name) {
+          console.error("❌ Fehler: Zutat ohne Name gefunden:", zutat);
+          return { ...zutat, istlagerbestand: 0 }; 
+        }
+      
+        const matchingInventory = inventoryData.find(inv => 
+          inv.itemName && zutat.name && inv.itemName.trim().toLowerCase() === zutat.name.trim().toLowerCase()
+        );
+      
+        return {
+          ...zutat,
+          istlagerbestand: matchingInventory ? matchingInventory.quantity : 0, // `quantity` ist der Istbestand
+        };
+      });
+      
+      
+  
+      console.log("✅ Aktualisierte Zutatenliste:", updatedZutaten);
+      setZutaten(updatedZutaten);
     } catch (error) {
-      console.error("Fehler beim Laden der Zutaten:", error);
+      console.error("❌ Fehler beim Laden der Zutaten oder Inventardaten:", error);
     }
   };
+  
+  
+  
 
   useEffect(() => {
     fetchZutaten(); // Initiale Zutaten bei Seitenladen abrufen
@@ -54,6 +90,7 @@ const Products = () => {
     <div className="container mx-auto p-6">
       <h1 className="text-2xl font-bold text-teal-200 mt-6">Zutaten hinzufügen</h1>
       <ZutatenForm onAdd={handleAddZutat} />
+      
       <h2 className="text-2xl font-bold text-teal-200 mt-6">Zutaten-Liste</h2>
       <ZutatenListe zutaten={zutaten} onDelete={handleDeleteZutat} />
     </div>

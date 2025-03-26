@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Button from "../components/Button";
 
 function Futterplatz() {
   const [inputText1, setInputText1] = useState(""); // Für Rechnungsdaten
@@ -10,6 +11,7 @@ function Futterplatz() {
   const [selectedCompany, setSelectedCompany] = useState("");
   const [newCompany, setNewCompany] = useState("");
   const [companies, setCompanies] = useState([]);
+  const [selectedDate, setSelectedDate] = useState("");
 
   // Laden der Firmen aus dem Backend
   useEffect(() => {
@@ -28,7 +30,7 @@ function Futterplatz() {
   // Rechnungsdaten parsen
   function parseInvoiceData(text) {
     const productRegex =
-      /([A-Za-zÄÖÜäöüß0-9\s\(\)-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
+      /([A-Za-zÄÖÜäöüß0-9\s\(\)'\-]+)[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*\/ Stk\.[\s\t]*\|[\s\t]*(\d+)[\s\t]*Stk\.[\s\t]*\|[\s\t]*([\d,\.]+)[\s\$€£]*/g;
     const amountRegex = /Rechnungsbetrag:[\s\t]*([\d,\.]+)[\s\$€£]*/;
 
     let matches;
@@ -69,17 +71,19 @@ function Futterplatz() {
   // Gehaltsdaten parsen
   function parseSalaryData(text) {
     const regex =
-      /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch Cake & Candy\s+([\w\s]+) \(#(\d+)\) - Gehalt "([\w\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
+      /(\d{2}\.\d{2}\.\d{4})\s00:00\s+Lastschrift durch (Cake & Candy|Oma\'s Chocolaterie)\s+([a-zA-Z0-9'`\s]+) \(#(\d+)\) - Gehalt "([a-zA-Z0-9'`\s]+)" \(([\d,\.]+) h\)\n(-?[\d,\.]+) \$/g;
+
     let matches;
     const result = [];
 
     while ((matches = regex.exec(text)) !== null) {
       result.push({
         date: matches[1],
-        employeeName: matches[2].trim(),
-        kontoNumber: matches[3],
-        workingHours: parseFloat(matches[5].replace(",", ".")),
-        salary: Math.abs(parseFloat(matches[6].replace(",", "."))),
+        company: matches[2], // "Cake & Candy" oder "Oma's Chocolaterie"
+        employeeName: matches[5].trim(),
+        kontoNumber: matches[4],
+        workingHours: parseFloat(matches[6].replace(",", ".")),
+        salary: Math.abs(parseFloat(matches[7].replace(",", "."))),
       });
     }
 
@@ -88,7 +92,7 @@ function Futterplatz() {
 
   // Inventardaten parsen
   function parseInventoryData(text) {
-    const regex = /([A-Za-zÄÖÜäöüß\s\-]+)\s+(\d+)\s+([^\n]+)/g;
+    const regex = /([A-Za-zÄÖÜäöüß\s\(\)\-']+)\t(\d+)\t([^\n]+)/g;
     let matches;
     const result = [];
 
@@ -119,6 +123,7 @@ function Futterplatz() {
         ...extractedData,
         company: selectedCompany,
         customerType: isB2B ? "B2B" : isB2C ? "B2C" : "",
+        date: selectedDate || extractedData.date, // Falls kein Datum manuell eingegeben wurde, bleibt es unverändert
       };
     } else if (inputType === "salary") {
       extractedData = parseSalaryData(inputData);
@@ -156,7 +161,6 @@ function Futterplatz() {
         } else if (inputType === "inventory") {
           setInputText3("");
         }
-        //----------------------------------------------------------
       } else {
         console.error("Fehler beim Senden der Daten:", response.statusText);
         throw new Error("Fehler beim Senden der Daten");
@@ -165,8 +169,6 @@ function Futterplatz() {
       console.error("Fehler:", error);
     }
   }
-
-
 
   async function fetchCompanies() {
     try {
@@ -209,10 +211,13 @@ function Futterplatz() {
     }
   }
 
-  // Validierungsfunktion für Rechnungsdaten
+  /// Validierungsfunktion für Rechnungsdaten erweitern
   function isInvoiceFormValid() {
     return (
-      inputText1.trim() !== "" && (isB2B || isB2C) && selectedCompany !== ""
+      inputText1.trim() !== "" &&
+      (isB2B || isB2C) &&
+      selectedCompany !== "" &&
+      isValidDate(selectedDate) // Validierung des Datums
     );
   }
 
@@ -231,57 +236,78 @@ function Futterplatz() {
     return newCompany.trim() !== "";
   }
 
+  // Validierungsfunktion für das Datum
+  function isValidDate(date) {
+    // Prüft, ob das Datum gültig ist
+    if (!date) return false; // Leeres Datum ist ungültig
+
+    const selectedDate = new Date(date);
+    const today = new Date();
+
+    // Datum sollte nicht in der Zukunft liegen
+    if (selectedDate > today) {
+      return false;
+    }
+
+    return !isNaN(selectedDate.getTime()); // Überprüft, ob das Datum ein gültiges Datum ist
+  }
+
   return (
     <div className="container mx-auto p-6 text-amber-100">
       <h1 className="py-5 text-center">Willkommen bei Futterplatz</h1>
 
       {/* 🧾 Inputfeld 1 - Rechnungsvordruck */}
-      <form onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}>
-        <label htmlFor="invoice-input" className="text-center text-sm">
-          Inputfeld für RDP Rechnungsvordruck
-        </label>
-        <textarea
-          value={inputText1}
-          onChange={(e) => setInputText1(e.target.value)}
-          rows="10"
-          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        />
-
-        {/* B2B/B2C Auswahl */}
-        <div className="my-2">
-          <label className="text-sm mr-4">Kundentyp:</label>
-          <input
-            type="radio"
-            id="b2b-radio"
-            name="customerType"
-            checked={isB2B}
-            onChange={() => {
-              setIsB2B(true);
-              setIsB2C(false);
-            }}
-            className="mr-2"
+      <form
+        className="flex flex-row  "
+        onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
+      >
+        <div className="w-1/2">
+          <label htmlFor="invoice-input" className="text-sm w-1/2">
+            Inputfeld für RDP Rechnungsvordruck
+          </label>
+          <textarea
+            value={inputText1}
+            onChange={(e) => setInputText1(e.target.value)}
+            rows="10"
+            className="w-full h-[90%] border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
           />
-          <label htmlFor="b2b-radio">B2B</label>
-
-          <input
-            type="radio"
-            id="b2c-radio"
-            name="customerType"
-            checked={isB2C}
-            onChange={() => {
-              setIsB2C(true);
-              setIsB2B(false);
-            }}
-            className="mr-2"
-          />
-          <label htmlFor="b2c-radio">B2C</label>
         </div>
 
-        {/* Auswahl der Firma */}
-        <div>
-          <label className="text-sm text-gray-200">Firma:</label>
+        {/* B2B/B2C Auswahl */}
+
+        <div className="flex flex-col w-1/2 gap-3 container p-2">
+          <div className="container w-1/2">
+            <label className="text-sm ">Kundentyp:</label>
+            <input
+              type="radio"
+              id="b2b-radio"
+              name="customerType"
+              checked={isB2B}
+              onChange={() => {
+                setIsB2B(true);
+                setIsB2C(false);
+              }}
+              className="m-2 cursor-pointer"
+            />
+            <label htmlFor="b2b-radio">B2B</label>
+
+            <input
+              type="radio"
+              id="b2c-radio"
+              name="customerType"
+              checked={isB2C}
+              onChange={() => {
+                setIsB2C(true);
+                setIsB2B(false);
+              }}
+              className="m-2 cursor-pointer"
+            />
+            <label htmlFor="b2c-radio">B2C</label>
+          </div>
+          {/* Auswahl der Firma */}
+          <label className="text-sm">Firma:</label>
           <select
-            className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+            className=" p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100 cursor-pointer"
             value={selectedCompany}
             onChange={(e) => setSelectedCompany(e.target.value)}
           >
@@ -296,83 +322,126 @@ function Futterplatz() {
           </select>
 
           {/* Neue Firma hinzufügen */}
-          <div>
+          <div className="flex flex-col">
             <input
               type="text"
               value={newCompany}
               onChange={(e) => setNewCompany(e.target.value)}
               placeholder="Neue Firma hinzufügen"
-              className="p-2 border border-gray-300 rounded-md"
+              className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
             />
             <button
+              type="button"
               onClick={handleAddNewCompany}
               disabled={!isNewCompanyFormValid()}
-              className={`bg-green-500 text-white rounded-full px-6 py-2 my-3 ${
-                !isNewCompanyFormValid() ? "opacity-50 cursor-not-allowed" : ""
+              className={`bg-green-500 text-white rounded-full px-6 py-2 m-3 self-end w-1/4 ${
+                !isNewCompanyFormValid()
+                  ? "opacity-50 cursor-not-allowed"
+                  : "cursor-pointer"
               }`}
             >
               Firma hinzufügen
             </button>
           </div>
+          {/* Rechnungsdatum */}
+          <label htmlFor="invoice-date" className="text-sm">
+            Rechnungsdatum:
+          </label>
+          <input
+            type="date"
+            id="invoice-date"
+            value={selectedDate}
+            onChange={(e) => setSelectedDate(e.target.value)}
+            className={`p-2 border rounded-md  ${
+              !isValidDate(selectedDate)
+                ? "border-red-500 focus:ring-red-500"
+                : "border-gray-300 focus:ring-amber-100"
+            }`}
+            required
+          />
+          {!isValidDate(selectedDate) && (
+            <p className="text-red-400 text-sm mt-2">
+              Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
+            </p>
+          )}
         </div>
 
-        <button
+
+      </form>
+      <button
           type="submit"
           disabled={!isInvoiceFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 
-            ${!isInvoiceFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
+          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
+            ${
+              !isInvoiceFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
         >
           Daten absenden
         </button>
-      </form>
 
-      {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
-      <form onSubmit={(e) => handleSubmit(e, inputText2, "salary")}>
-        <label htmlFor="salary-input" className="text-center text-sm">
-          Gehaltsdaten (z.B. für Lastschrift)
-        </label>
-        <textarea
-          value={inputText2}
-          onChange={(e) => setInputText2(e.target.value)}
-          rows="10"
-          cols="150"
-          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        ></textarea>
-
-        <button
-          type="submit"
-          disabled={!isSalaryFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 
-            ${!isSalaryFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
+      <div className="flex gap-2">
+        {/* 🧾 Inputfeld 2 - Gehaltsdaten */}
+        <form
+          onSubmit={(e) => handleSubmit(e, inputText2, "salary")}
+          className=" w-1/2"
         >
-          Daten absenden
-        </button>
-      </form>
+          <label htmlFor="salary-input" className="text-sm">
+            Gehaltsdaten (z.B. für Lastschrift)
+          </label>
+          <textarea
+            value={inputText2}
+            onChange={(e) => setInputText2(e.target.value)}
+            rows="10"
+            cols="150"
+            className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          ></textarea>
 
-      {/* 🧾 Inputfeld 3 - Inventardaten */}
-      <form onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}>
-        <label htmlFor="inventory-input" className="text-center text-sm">
-          Inventardaten (z.B. für Bestände)
-        </label>
-        <textarea
-          value={inputText3}
-          onChange={(e) => setInputText3(e.target.value)}
-          rows="10"
-          cols="150"
-          className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
-        ></textarea>
+          <button
+            type="submit"
+            disabled={!isSalaryFormValid()}
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end
+            ${
+              !isSalaryFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            Daten absenden
+          </button>
+        </form>
 
-        <button
-          type="submit"
-          disabled={!isInventoryFormValid()}
-          className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 my-3 
-            ${!isInventoryFormValid() ? "opacity-50 cursor-not-allowed" : ""}`}
+        {/* 🧾 Inputfeld 3 - Inventardaten */}
+        <form
+          onSubmit={(e) => handleSubmit(e, inputText3, "inventory")}
+          className="w-1/2"
         >
-          Daten absenden
-        </button>
-      </form>
+          <label htmlFor="inventory-input" className="text-sm">
+            Inventardaten (z.B. für Bestände)
+          </label>
+          <textarea
+            value={inputText3}
+            onChange={(e) => setInputText3(e.target.value)}
+            rows="10"
+            cols="150"
+            className="w-full border border-gray-300 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-amber-100"
+          ></textarea>
 
-      {/* Weitere Eingabeformulare... */}
+          <button
+            type="submit"
+            disabled={!isInventoryFormValid()}
+            className={`bg-amber-100 text-gray-700 rounded-full px-6 py-2 m-4 self-end 
+            ${
+              !isInventoryFormValid()
+                ? "opacity-50 cursor-not-allowed"
+                : "cursor-pointer"
+            }`}
+          >
+            Daten absenden
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
