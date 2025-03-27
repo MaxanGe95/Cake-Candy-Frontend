@@ -64,6 +64,11 @@ export const updateQuantity = async (productId, quantity) => {
   return cart;
 };
 
+//* Gesamtpreis eines einzelnen Artikels berechnen
+export const calculateItemTotal = (item) => {
+  return (item.b2cPreis * item.quantity).toFixed(2);
+};
+
 // Gesamtpreis berechnen
 export const calculateTotal = (cart) =>
   cart
