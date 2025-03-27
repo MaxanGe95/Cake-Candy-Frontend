@@ -150,13 +150,13 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                  className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center ${
                     zutat.typ?.toLowerCase() !== "endprodukt" ? " border-0" : ""
                   }`}
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
                 {zutat.typ?.toLowerCase() === "endprodukt" && (
-                    <span className="text-xs text-white">
+                    <span className="text-xs text-gray-400 pl-1">
                       {zutat.ekPreis > 0
                         ? `(${((zutat.b2bPreis / zutat.ekPreis) * 100).toFixed(
                             0
@@ -177,13 +177,22 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                  className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center ${
                     zutat.typ?.toLowerCase() !== "endprodukt"
                       ? "  border-0"
                       : ""
                   }`}
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
+                {zutat.typ?.toLowerCase() === "endprodukt" && (
+                    <span className="text-xs text-gray-400 pl-1">
+                      {zutat.ekPreis > 0
+                        ? `(${((zutat.b2cPreis / zutat.ekPreis) * 100).toFixed(
+                            0
+                          )}%)`
+                        : "-"}
+                    </span>
+                  )}
               </td>
 
               <td className="p-2 text-center">
