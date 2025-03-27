@@ -49,57 +49,53 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
   };
 
   const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
+    // Umschalten zwischen "asc" und "desc"
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
 
-    const sortedData = [...zutatenState].map((zutat) => {
-      // Prozentwert für die Zusatz-Spalte berechnen und hinzufügen
-      const zusatzWert = Math.round(
-        ((zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100)) * 100
-      );
-      return { ...zutat, zusatzWert }; // Prozentwert ins Objekt einfügen
-    });
+    // Sortierte Kopie des Arrays erstellen und zusatzWert mitberechnen
+    const sortedData = [...zutatenState]
+      .map((zutat) => ({
+        ...zutat,
+        zusatzWert: Math.round(
+          ((zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100)) * 100
+        ),
+      }))
+      .sort((a, b) => {
+        const numberKeys = {
+          "ek-Preis": "ekPreis",
+          "b2b-Preis": "b2bPreis",
+          "b2c-Preis": "b2cPreis",
+          "ist-lagerbestand": "istlagerbestand",
+          "soll-lagerbestand": "solllagerbestand",
+          zusatz: "zusatzWert",
+        };
 
-    const finalSortedData = sortedData.sort((a, b) => {
-      const aValue = a[key] ?? "";
-      const bValue = b[key] ?? "";
+        const mappedKey = numberKeys[key] || key;
 
-      const numberKeys = {
-        "ek-Preis": "ekPreis",
-        "b2b-Preis": "b2bPreis",
-        "b2c-Preis": "b2cPreis",
-        "ist-lagerbestand": "istlagerbestand",
-        "soll-lagerbestand": "solllagerbestand",
-        zusatz: "zusatzWert", // Hier der berechnete Prozentwert!
-      };
+        // Sortierung für numerische Felder
+        if (
+          typeof a[mappedKey] === "number" &&
+          typeof b[mappedKey] === "number"
+        ) {
+          return direction === "asc"
+            ? a[mappedKey] - b[mappedKey]
+            : b[mappedKey] - a[mappedKey];
+        }
 
-      const mappedKey = numberKeys[key] || key;
+        // Fehlende Werte auf "" setzen, um stabil zu sortieren
+        const aValue = (a[mappedKey] ?? "").toString().toLowerCase();
+        const bValue = (b[mappedKey] ?? "").toString().toLowerCase();
 
-      // Sortierung nach Zahlenwerten
-      if (numberKeys[key] && typeof a[mappedKey] === "number") {
+        // Alphabetische Sortierung für String-Werte
         return direction === "asc"
-          ? a[mappedKey] - b[mappedKey]
-          : b[mappedKey] - a[mappedKey];
-      }
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      });
 
-      // Allgemeine Zahlenerkennung für andere Felder
-      const isNumber = !isNaN(parseFloat(aValue)) && !isNaN(parseFloat(bValue));
-      if (isNumber) {
-        return direction === "asc"
-          ? parseFloat(aValue) - parseFloat(bValue)
-          : parseFloat(bValue) - parseFloat(aValue);
-      }
-
-      // String-Sortierung für andere Felder
-      return direction === "asc"
-        ? aValue.toString().localeCompare(bValue.toString())
-        : bValue.toString().localeCompare(aValue.toString());
-    });
-
+    // Sortierzustand aktualisieren
     setSortConfig({ key, direction });
-    setZutatenState(finalSortedData);
+    setZutatenState(sortedData);
   };
 
   return (
@@ -123,16 +119,15 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                 onClick={() => handleSort(key)}
               >
                 {key.toUpperCase()}{" "}
-                {sortConfig.key === key
-                  ? sortConfig.direction === "asc"
-                    ? "▲"
-                    : "▼"
-                  : ""}
+                {sortConfig.key === key && (
+                  <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span> // Bestehende Icons verwenden
+                )}
               </th>
             ))}
             <th className="p-2">Löschen</th>
           </tr>
         </thead>
+
         <tbody>
           {zutatenState.map((zutat) => (
             <tr
