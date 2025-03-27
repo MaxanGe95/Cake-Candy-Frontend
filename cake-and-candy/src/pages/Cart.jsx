@@ -5,6 +5,7 @@ import {
   updateQuantity,
   calculateTotal,
   buyCart,
+  calculateItemTotal,
 } from "../api/cart";
 import { rezeptImage } from "../api/rezepte";
 import { DeleteButton, PrimaryButton } from "../components/form/Buttons";
@@ -45,7 +46,8 @@ const Cart = () => {
               />
               <div className="flex-1 ml-4">
                 <p className="font-bold">{item.name}</p>
-                <p>${item.b2cPreis?.toFixed(2)}</p>
+                <p className="text-right mr-5">Stück: ${item.b2cPreis?.toFixed(2)}</p>
+                <p className="text-right mr-5">Gesamt: ${calculateItemTotal(item)}</p>
               </div>
               <InputNumber
                 value={item.quantity}
@@ -56,9 +58,9 @@ const Cart = () => {
               <DeleteButton onClick={() => handleRemove(item._id)} />
             </div>
           ))}
-          <div className="flex justify-between">
+          <div className="flex justify-end">
             <p className="mt-4 font-bold">Gesamt: ${calculateTotal(cart)}</p>
-            <PrimaryButton onClick={buyCart}>kaufen</PrimaryButton>
+            <PrimaryButton className="ml-6 mr-10 mt-2" onClick={buyCart}>bestellen</PrimaryButton>
           </div>
         </div>
       )}
