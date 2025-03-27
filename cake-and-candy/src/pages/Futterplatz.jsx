@@ -272,7 +272,7 @@ function Futterplatz() {
           onSubmit={(e) => handleSubmit(e, inputText1, "invoice")}
         >
           <div className="w-1/2">
-            <label htmlFor="invoice-input" className="text-teal-200 font-bold w-1/2">
+            <label htmlFor="invoice-input" className="text-teal-200 font-bold">
               Inputfeld für RDP Rechnungsvordruck
             </label>
             <textarea
@@ -334,7 +334,7 @@ function Futterplatz() {
               id="invoice-date"
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className={`p-2 border rounded-md  ${
+              className={`p-2 border rounded-md ${
                 !isValidDate(selectedDate)
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-amber-100"
@@ -342,7 +342,7 @@ function Futterplatz() {
               required
             />
             {!isValidDate(selectedDate) && (
-              <p className="text-red-400 text-sm mt-2">
+              <p className="text-red-400 text-sm">
                 Bitte geben Sie ein gültiges Datum ein (nicht in der Zukunft).
               </p>
             )}

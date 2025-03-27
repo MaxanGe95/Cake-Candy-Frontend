@@ -5,9 +5,9 @@ import OrderRDP from "../components/Orders/OrderRDP.jsx";
 
 const Orders = () => {
   const [currentView, setCurrentView] = useState(null); // Zustand für die aktuelle Ansicht
-  const [orders, setOrders] = useState([]); // Hier kannst du deine Bestellungen initialisieren
+  const [orders, setOrders] = useState([]); // Bestellungen initialisieren
 
-  // Beispiel-Bestellungen für Kunden und RDP (normalerweise würdest du dies von einem API-Endpunkt abrufen)
+  // Beispiel-Bestellungen für Kunden und RDP (normalerweise vom API-Endpunkt abrufen)
   const customerOrders = [
     { id: 1, date: "2025-10-01", customerId: "C123", product: "Produkt A", quantity: 2 },
     { id: 2, date: "2025-10-02", customerId: "C124", product: "Produkt B", quantity: 1 },
@@ -20,12 +20,12 @@ const Orders = () => {
 
   const handleCustomerOrdersClick = () => {
     setCurrentView("customer");
-    setOrders(customerOrders); // Setze die Bestellungen für Kunden
+    setOrders(customerOrders); //Bestellungen für Kunden
   };
 
   const handleRDPOrdersClick = () => {
     setCurrentView("rdp");
-    setOrders(rdpOrders); // Setze die Bestellungen für RDP
+    setOrders(rdpOrders); // Bestellungen für RDP
   };
 
   return (
