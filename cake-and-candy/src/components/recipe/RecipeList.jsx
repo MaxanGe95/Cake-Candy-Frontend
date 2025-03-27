@@ -127,13 +127,13 @@ const RecipeList = ({ onDelete, onEdit }) => {
           <tr>
             {[
               "name", // statt "rezeptname"
-              "category", // statt "KATEGORIE"
-              "tools", // bleibt gleich
-              "totalAmount", // statt "ausgabe"
+              "kategorie", 
+              "hilfsmittel", 
+              "output", 
               "zutaten",
-              "istlagerbestand", // ohne Bindestriche
-              "solllagerbestand",
-              "zusatz", // falls dies korrekt berechnet wird
+              "ist-bestand", 
+              "soll-bestand",
+              "zusatz", 
             ].map((key) => (
               <th
                 key={key}
