@@ -120,7 +120,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               >
                 {key.toUpperCase()}{" "}
                 {sortConfig.key === key && (
-                  <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span> // Bestehende Icons verwenden
+                  <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span>
                 )}
               </th>
             ))}
