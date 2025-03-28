@@ -107,11 +107,11 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               "name",
               "typ",
               "ek-Preis",
-              "b2b-Preis",
-              "b2c-Preis",
-              "ist-lagerbestand",
-              "soll-lagerbestand",
-              "zusatz",
+              "b2b",
+              "b2c",
+              "ist-bestand",
+              "soll-bestand",
+              "-----zusatz------",
             ].map((key) => (
               <th
                 key={key}
@@ -139,9 +139,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               <td className="p-2 text-center">
                 $ {zutat.ekPreis?.toFixed(2) || "0.00"}
               </td>
-              <td className="p-2 text-center">
+              {/* <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.b2bPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -151,6 +151,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                     )
                   }
                   className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center ${
+
                     zutat.typ?.toLowerCase() !== "endprodukt" ? " border-0" : ""
                   }`}
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
@@ -165,10 +166,10 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                     </span>
                   )}
               </td>
-
-              <td className="p-2 text-center">
+              </td> */}
+              {/* <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.b2cPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -186,6 +187,8 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                 />
                 {zutat.typ?.toLowerCase() === "endprodukt" && (
                     <span className="text-xs text-gray-400 pl-1">
+              </td> */}
+
                       {zutat.ekPreis > 0
                         ? `(${((zutat.b2cPreis / zutat.ekPreis) * 100).toFixed(
                             0
@@ -193,6 +196,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                         : "-"}
                     </span>
                   )}
+                </div>
               </td>
 
               <td className="p-2 text-center">
@@ -201,12 +205,14 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.solllagerbestand || ""}
                   onChange={(e) =>
                     handleUpdate(zutat._id, "solllagerbestand", e.target.value)
                   }
+
                   className="w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center -spinner"
+
                 />
                   <style>{`
         /* Benutzerdefiniertes CSS zum Entfernen der Spinner */

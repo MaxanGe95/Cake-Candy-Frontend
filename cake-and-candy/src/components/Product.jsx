@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { FaShoppingCart, FaEdit } from "react-icons/fa";
 import { PrimaryButton, EditButton } from "../components/form/Buttons";
 import { updateRezept, uploadImage, rezeptImage } from "../api/rezepte";
+import { addToCart } from "../api/cart";
 import { InputString, InputTextarea } from "./form/Inputs";
 
 const Product = ({ product, admin = false }) => {
@@ -11,7 +12,6 @@ const Product = ({ product, admin = false }) => {
     product.productDescription
   );
   const [currentPrice] = useState(product.b2bPreis);
-
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(product.name);
   const [newDescription, setNewDescription] = useState(
@@ -67,6 +67,11 @@ const Product = ({ product, admin = false }) => {
     }
   };
 
+  const handleAddToCart = async () => {
+    await addToCart(product);
+    alert(`${currentTitle} wurde zum Warenkorb hinzugefügt!`);
+  };
+
   return (
     <div className="bg-teal-900/70 text-amber-100 w-sm rounded-xl overflow-hidden shadow-lg">
       <div className="relative">
@@ -102,7 +107,7 @@ const Product = ({ product, admin = false }) => {
         </p>
       </div>
       <div className="px-6 pt-4 pb-2 flex justify-end items-center">
-        <PrimaryButton>
+        <PrimaryButton onClick={handleAddToCart}>
           <div className="flex items-center">
             <FaShoppingCart className="mr-2" /> ${currentPrice?.toFixed(2)}
           </div>

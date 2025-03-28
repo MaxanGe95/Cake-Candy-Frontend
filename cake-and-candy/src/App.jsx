@@ -18,6 +18,7 @@ import Recipes from "./pages/Recipes";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import User from "./pages/User";
+import Cart from "./pages/Cart";
 import Layout from "./components/Layout";
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/user" element={<User />} />
+          <Route path="/cart" element={<Cart />} />
         </Routes>
       </Layout>
     </Router>

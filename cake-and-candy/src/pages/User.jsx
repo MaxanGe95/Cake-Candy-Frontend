@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { updateUser, fetchUsers, deleteUser } from "../api/user";
+import { fetchEmployeeNames } from "../api/salary";
 import { InputString, DropdownInput } from "../components/form/Inputs";
 import { EditButton, DeleteButton } from "../components/form/Buttons";
 
@@ -7,6 +8,7 @@ const User = () => {
   const [users, setUsers] = useState([]); // Zustand für Benutzerdaten
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [employeeNames, setEmployeeNames] = useState([]);
 
   const [newUsername, setNewUsername] = useState("");
   const [newEmail, setNewEmail] = useState("");
@@ -22,8 +24,19 @@ const User = () => {
     }
   };
 
+  // Mitarbeiternamen laden
+  const loadEmployeeNames = async () => {
+    try {
+      const employeeNames = await fetchEmployeeNames();
+      setEmployeeNames(employeeNames); 
+    } catch (error) {
+      console.error("Fehler beim Laden der Benutzer:", error);
+    }
+  };
+
   useEffect(() => {
     loadUsers();
+    loadEmployeeNames();
   }, []); // Nur einmal beim Laden der Komponente aufrufen
 
   const openDialog = (user) => {
@@ -64,6 +77,7 @@ const User = () => {
 
   return (
     <div className="container mx-auto p-6">
+      <h1 className="text-center text-2xl font-bold text-teal-200 mb-4">Nutzerverwaltung</h1>
       {/* Tabelle */}
       <table className="min-w-full text-amber-100 border rounded-md overflow-hidden text-center">
         <thead className="bg-teal-950/80">
@@ -116,8 +130,9 @@ const User = () => {
               value={newRole}
               onChange={(e) => setNewRole(e)}
             />
-            <InputString
+            <DropdownInput
               className="mt-1"
+              options={employeeNames}
               placeholder="Mitarbeiter Name"
               value={newEmployeeName}
               onChange={(e) => setNewEmployeeName(e)}
