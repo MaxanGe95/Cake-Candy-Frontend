@@ -107,11 +107,11 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               "name",
               "typ",
               "ek-Preis",
-              "b2b-Preis",
-              "b2c-Preis",
-              "ist-lagerbestand",
-              "soll-lagerbestand",
-              "zusatz",
+              "b2b",
+              "b2c",
+              "ist-bestand",
+              "soll-bestand",
+              "-----zusatz------",
             ].map((key) => (
               <th
                 key={key}
@@ -139,9 +139,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               <td className="p-2 text-center">
                 $ {zutat.ekPreis?.toFixed(2) || "0.00"}
               </td>
-              <td className="p-2 text-center">
+              {/* <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.b2bPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -166,9 +166,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   )}
               </td>
 
-              <td className="p-2 text-center">
+              {/* <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.b2cPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -201,7 +201,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               <td className="p-2 text-center">
                 <input
-                  type="number"
+                  type="text"
                   value={zutat.solllagerbestand || ""}
                   onChange={(e) =>
                     handleUpdate(zutat._id, "solllagerbestand", e.target.value)

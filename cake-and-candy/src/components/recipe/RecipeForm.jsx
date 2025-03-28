@@ -270,7 +270,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
                       handleIngredientChangeField(index, "amount", v)
                     }
                     error={errors[`ingredient${index}_amount`]}
-                    className="w-36 ml-1"
+                    className="w-35 ml-0.5"
                   />
                   <DeleteButton
                     className=""

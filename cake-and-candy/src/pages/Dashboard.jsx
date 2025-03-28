@@ -3,6 +3,7 @@ import React from "react";
 const Dashboard = () => {
   return (
     <div className="min-h-screen p-6 text-amber-100">
+      <h1 className="text-center text-2xl text-teal-200 font-bold mb-4">Dashboard</h1>
       <div className="container mx-auto">
         <h1 className="text-center text-3xl font-bold mb-6">
      
