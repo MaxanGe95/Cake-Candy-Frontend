@@ -194,7 +194,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                         parseFloat(e.target.value) || 0
                       )
                     }
-                    className={`w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                    className={`w-13 text-center border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
                       zutat.typ?.toLowerCase() !== "endprodukt"
                         ? "border-0"
                         : ""
@@ -225,7 +225,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                         parseFloat(e.target.value) || 0
                       )
                     }
-                    className={`w-16 p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                    className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
                       zutat.typ?.toLowerCase() !== "endprodukt"
                         ? "border-0"
                         : ""
@@ -250,13 +250,25 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               <td className="p-2 text-center">
                 <input
-                  type="text"
+                  type="number"
                   value={zutat.solllagerbestand || ""}
                   onChange={(e) =>
                     handleUpdate(zutat._id, "solllagerbestand", e.target.value)
                   }
-                  className="w-14 text-center p-1 border rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
+                  className="w-13 text-center p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
                 />
+                      <style>{`
+        /* Benutzerdefiniertes CSS zum Entfernen der Spinner */
+        .no-spinner::-webkit-inner-spin-button,
+        .no-spinner::-webkit-outer-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+
+        .no-spinner {
+          -moz-appearance: textfield;
+        }
+      `}</style>
               </td>
 
               {/* //zusatz */}
