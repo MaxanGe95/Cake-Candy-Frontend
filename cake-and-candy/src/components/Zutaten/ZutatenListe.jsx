@@ -107,11 +107,11 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               "name",
               "typ",
               "ek-Preis",
-              "b2b",
-              "b2c",
-              "ist-bestand",
-              "soll-bestand",
-              "-----zusatz------",
+              "b2b-Preis",
+              "b2c-Preis",
+              "ist-lagerbestand",
+              "soll-lagerbestand",
+              "zusatz",
             ].map((key) => (
               <th
                 key={key}
@@ -164,7 +164,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                         : "-"}
                     </span>
                   )}
-              </td>
+              </td>*/}
 
               {/* <td className="p-2 text-center">
                 <input
@@ -193,7 +193,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                         : "-"}
                     </span>
                   )}
-              </td>
+              </td>*/}
 
               <td className="p-2 text-center">
                 {zutat.istlagerbestand ?? "0"}
@@ -201,14 +201,14 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               <td className="p-2 text-center">
                 <input
-                  type="text"
+                  type="number"
                   value={zutat.solllagerbestand || ""}
                   onChange={(e) =>
                     handleUpdate(zutat._id, "solllagerbestand", e.target.value)
                   }
                   className="w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center -spinner"
                 />
-                  <style>{`
+                <style>{`
         /* Benutzerdefiniertes CSS zum Entfernen der Spinner */
         .no-spinner::-webkit-inner-spin-button,
         .no-spinner::-webkit-outer-spin-button {
