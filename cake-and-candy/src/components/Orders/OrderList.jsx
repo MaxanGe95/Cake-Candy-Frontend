@@ -27,10 +27,11 @@
 // export default OrderList;
 
 import React, { useState, useEffect } from "react";
-//  import OrderItem from "../Orders/OrderItem.jsx";
+// import OrderItem from "../Orders/OrderItem.jsx";
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);
+  const [zutaten, setZutaten] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedCustomer, setSelectedCustomer] = useState(null); // Zustand für den ausgewählten Kunden
@@ -39,27 +40,62 @@ const OrderList = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
+        //* Bestellungen laden
         const orderResponse = await fetch("http://localhost:5000/api/orders");
         if (!orderResponse.ok)
           throw new Error("Fehler beim Laden der Bestellungen");
-        const orders = await orderResponse.json();
-        setOrders(orders);
+        const orderData = await orderResponse.json();
+        setOrders(orderData);
+
+        //* Zutaten laden
+        const zutatenResponse = await fetch(
+          "http://localhost:5000/api/zutaten"
+        );
+        if (!zutatenResponse.ok)
+          throw new Error("Fehler beim Laden der Zutaten");
+        const zutatenData = await zutatenResponse.json();
+        setZutaten(zutatenData);
 
         // Bestellungen nach Kunden gruppieren
-        const groupedOrders = orders.reduce((acc, order) => {
-          const { user, _id, date, products } = order;
-
+        const groupedOrders = orderData.reduce((acc, order) => {
+          const { user, _id, date, products, totalPrice } = order;
+          //* Absicherung
+          const safeTotalPrice = totalPrice || 0;
           if (!acc[user]) {
             acc[user] = {
               customerName: user,
               orders: [],
             };
           }
+          //* Zutatendaten für jedes Produkt anreichern
+          const enrichedProducts = products.map((product) => {
+            const zutat = zutaten.find((z) => z.name === product.name);
+            console.log(`Zutat für ${product.name}:`, zutat);
+
+            const ekPreis = zutat ? zutat.ekPreis : 0;
+            const pricePerUnit = product.pricePerUnit || 0;
+            const totalPrice = pricePerUnit * product.quantity;
+
+                      // Konsolenprotokolle für Debugging
+          console.log("Produkt:", product.name);
+          console.log("EK-Preis:", ekPreis);
+          console.log("Preis pro Einheit:", pricePerUnit);
+          console.log("Gesamtpreis:", totalPrice);
+          console.log("Zutaten:", zutatenData);
+
+            return {
+              ...product,
+              ekPreis,
+              pricePerUnit,
+              totalPrice,
+            };
+          });
 
           acc[user].orders.push({
             id: _id,
             date: new Date(date).toLocaleDateString("de-DE"),
-            products,
+            products: enrichedProducts,
+            totalPrice: safeTotalPrice, //*TotalPrice sicher setzen
           });
 
           return acc;
@@ -87,6 +123,7 @@ const OrderList = () => {
   const toggleOrder = (order) => {
     setSelectedOrder((prev) => (prev?.id === order.id ? null : order));
   };
+
   if (loading) return <p className="text-teal-200">Lade Bestellungen...</p>;
   if (error) return <p className="text-red-500">Fehler: {error}</p>;
 
@@ -95,128 +132,117 @@ const OrderList = () => {
       <table className="min-w-full text-amber-100 border rounded-md overflow-hidden">
         <thead className="bg-teal-950">
           <tr>
-            <th className="p-2">Kundename</th>
+            <th className="p-2">Kundenname</th>
             <th className="p-2">Bestellungen</th>
+            <th className="p-2">Gesamtbetrag</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((customer) => (
-            <React.Fragment key={customer.customerName}>
-              <tr
-                className="cursor-pointer hover:bg-teal-950"
-                onClick={() => toggleCustomer(customer)}
-              >
-                <td className="p-2 text-center">{customer.customerName}</td>
-                <td className="p-2 text-center">{customer.orders.length}</td>
-              </tr>
-
-              {/* Bestellungen des Kunden anzeigen, wenn der Kunde ausgewählt ist */}
-              {selectedCustomer === customer && (
-                <tr>
-                  <td colSpan="2" className="p-4">
-                    <table className="w-full bg-teal-950 rounded-md shadow-lg overflow-hidden">
-                      <thead>
-                        <tr className="bg-teal-900 text-amber-100 rounded-md">
-                          <th className="p-2">Datum</th>
-                          <th className="p-2">Produkte</th>
-                          <th className="p-2">Menge</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {customer.orders.map((order) => (
-                          <React.Fragment key={order.id}>
-                            <tr
-                              className="cursor-pointer hover:bg-[#7ec6cc80] shadow-lg rounded-md"
-                              onClick={() => toggleOrder(order)}
-                            >
-                              <td className="p-2 text-center">{order.date}</td>
-                              <td className="p-2 text-center">
-                                {order.products.map((p) => p.name).join(", ")}
-                              </td>
-                              <td className="p-2 text-center">
-                                {order.products.reduce(
-                                  (total, p) => total + p.quantity,
-                                  0
-                                )}
-                              </td>
-                            </tr>
-
-                            {/* Bestelldetails anzeigen */}
-                            {selectedOrder?.id === order.id && (
-                              <tr>
-                                <td
-                                  colSpan="3"
-                                  className="p-4 bg-[#7ec6cc33] shadow-lg"
-                                >
-                                  <table className="w-full bg-teal-950 text-amber-100 rounded-md shadow-lg overflow-hidden">
-                                    <thead>
-                                      <tr className="bg-teal-900">
-                                        <th className="p-2">Produkt</th>
-                                        <th className="p-2">Menge</th>
-                                        <th className="p-2">EK-Preis</th>
-                                        <th className="p-2">Preis/Stück</th>
-                                        <th className="p-2">Gesamt</th>
-                                        <th className="p-2">Gewinn</th>
-                                      </tr>
-                                    </thead>
-                                    <tbody>
-                                      {order.products.map((product) => (
-                                        <tr
-                                          key={product.id}
-                                          className="hover:bg-[#7ec6cc80]"
-                                        >
-                                          <td className="p-2 text-center">
-                                            {product.name}
-                                          </td>
-                                          <td className="p-2 text-center">
-                                            {product.quantity}
-                                          </td>
-                                          <td className="p-2 text-center">
-                                            {product.ekPreis
-                                              ? product.ekPreis.toFixed(2)
-                                              : "N/A"}{" "}
-                                            $
-                                          </td>
-                                          <td className="p-2 text-center">
-                                            {product.pricePerUnit &&
-                                            !isNaN(product.pricePerUnit)
-                                              ? product.pricePerUnit.toFixed(2)
-                                              : "N/A"}{" "}
-                                            $
-                                          </td>
-                                          <td className="p-2 text-center">
-                                            {product.totalPrice &&
-                                            !isNaN(product.totalPrice)
-                                              ? product.totalPrice.toFixed(2)
-                                              : "N/A"}{" "}
-                                            $
-                                          </td>
-                                          <td className="p-2 text-center">
-                                            {product.profit &&
-                                            !isNaN(product.profit)
-                                              ? product.profit.toFixed(2)
-                                              : "N/A"}{" "}
-                                            $
-                                          </td>
-                                        </tr>
-                                      ))}
-                                    </tbody>
-                                  </table>
-                                </td>
-                              </tr>
-                            )}
-                          </React.Fragment>
-                        ))}
-                      </tbody>
-                    </table>
+          {orders.map((customer) => {
+            // Gesamtbetrag für den Kunden
+            const totalAmount = customer.orders.reduce((total, order) => {
+              return total + order.totalPrice; // totalPrice für jede Bestellung
+            }, 0);
+            return (
+              <React.Fragment key={customer.customerName}>
+                <tr
+                  className="cursor-pointer hover:bg-teal-950"
+                  onClick={() => toggleCustomer(customer)}
+                >
+                  <td className="p-2 text-center">{customer.customerName}</td>
+                  <td className="p-2 text-center">{customer.orders.length}</td>
+                  <td className="p-2 text-center">
+                    {customer.orders
+                      .reduce(
+                        (total, order) => total + (order.totalPrice || 0),
+                        0
+                      )
+                      .toFixed(2)}{" "}
+                    $
                   </td>
                 </tr>
-              )}
-            </React.Fragment>
-          ))}
+
+                {/* Bestellungen des Kunden anzeigen, wenn der Kunde ausgewählt ist */}
+                {selectedCustomer?.customerName === customer.customerName && (
+                  <tr>
+                    <td colSpan="3" className="p-4">
+                      <table className="w-full bg-teal-950 rounded-md shadow-lg overflow-hidden">
+                        <thead>
+                          <tr className="bg-teal-900 text-amber-100 rounded-md">
+                            <th className="p-2">Datum</th>
+                            <th className="p-2">Menge</th>
+                            <th className="p-2">Rechnungsbetrag</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {customer.orders
+                            .sort((a, b) => new Date(b.date) - new Date(a.date))
+                            .map((order) => (
+                              <React.Fragment key={order.id}>
+                                <tr
+                                  className="cursor-pointer hover:bg-[#7ec6cc80] shadow-lg rounded-md"
+                                  onClick={() => toggleOrder(order)}
+                                >
+                                  <td className="p-2 text-center">
+                                    {order.date}
+                                  </td>
+                                  <td className="p-2 text-center">
+                                    {order.products.reduce(
+                                      (total, p) => total + p.quantity,
+                                      0
+                                    )}
+                                  </td>
+                                  <td className="p-2 text-center">
+                                    {order.totalPrice.toFixed(2)} $
+                                  </td>
+                                </tr>
+
+                                {/* Bestelldetails anzeigen */}
+                                {selectedOrder?.id === order.id && (
+                                  <tr>
+                                    <td
+                                      colSpan="4"
+                                      className="p-4 bg-[#7ec6cc33] shadow-lg"
+                                    >
+                                      <table className="w-full bg-teal-950 text-amber-100 rounded-md shadow-lg overflow-hidden">
+                                        <thead>
+                                          <tr className="bg-teal-900">
+                                            <th className="p-2">Produkt</th>
+                                            <th className="p-2">Menge</th>
+                                            <th className="p-2">EK-Preis</th>
+                                            <th className="p-2">Preis/Stück</th>
+                                            <th className="p-2">Gesamt</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          {order.products.map((product) => (
+                                            <tr key={product.id} className="hover:bg-[#7ec6cc80]">
+                                              <td className="p-2 text-center">{product.name}</td>
+                                              <td className="p-2 text-center">{product.quantity}</td>
+                                              <td className="p-2 text-center">{product.ekPreis.toFixed(2)} $</td>
+                                              <td className="p-2 text-center">{product.pricePerUnit.toFixed(2)}</td>
+                                              <td className="p-2 text-center">{product.totalPrice.toFixed(2)} $</td>
+                                            </tr>
+                                          ))}
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                )}
+                              </React.Fragment>
+                            ))}
+                        </tbody>
+                      </table>
+                    </td>
+                  </tr>
+                )}
+              </React.Fragment>
+            );
+          })}
         </tbody>
       </table>
     </div>
   );
 };
+
 export default OrderList;
