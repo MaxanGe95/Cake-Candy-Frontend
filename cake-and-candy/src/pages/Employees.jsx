@@ -155,7 +155,7 @@ const MitarbeiterTabelle = () => {
       <table className="container mx-auto border rounded-[10px] overflow-hidden text-center">
         <thead className="bg-teal-950/80 text-amber-100">
           <tr className="">
-            <th className="p-2 w-1/3">Mitarbeiter</th>
+            <th className="p-2 w-1/3 text-left">Mitarbeiter</th>
             <th className="p-2 w-1/3">Gesamtgehalt</th>
             <th className="p-2 w-1/3 ">Gesamtstunden</th>
           </tr>
@@ -343,64 +343,7 @@ const MitarbeiterTabelle = () => {
                                                   </td>
                                                 </tr>
                                               )}
-                                              {/* {selectedWeek[`${employeeName}-${month}`] === week &&
-
-                                              {/*Datum-Übersicht */}
-                                              {selectedWeek[
-                                                `${employeeName}-${month}`
-                                              ] === week && (
-                                                <tr>
-                                                  <td
-                                                    colSpan="3"
-                                                    className="p-4"
-                                                  >
-                                                    <table className="w-full shadow-lg rounded-md overflow-hidden">
-                                                      <thead className="bg-teal-950/60 ">
-                                                        <tr className="container mx-auto shadow-xl">
-                                                          <th className="p-2 text-amber-100">
-                                                            Datum
-                                                          </th>
-                                                          <th className="p-2 text-amber-100">
-                                                            Gesamtgehalt
-                                                          </th>
-                                                          <th className="p-2 text-amber-100">
-                                                            Gesamtstunden
-                                                          </th>
-                                                        </tr>
-                                                        {selectedWeek[
-                                                          `${employeeName}-${month}`
-                                                        ] === week &&
-                                                          employee.months[
-                                                            month
-                                                          ].weeks[week].map(
-                                                            (entry, index) => (
-                                                              <tr
-                                                                key={index}
-                                                                className="shadow-sm bg-[#7ec6cc]/25 cursor-pointer transition duration-200 hover:bg-[#7ec6cc80] rounded-t-md"
-                                                              >
-                                                                <td className="p-2 w-1/3">
-                                                                  {entry.date}
-                                                                </td>
-                                                                <td className="p-2">
-                                                                  {entry.salary.toFixed(
-                                                                    2
-                                                                  )}{" "}
-                                                                  $
-                                                                </td>
-                                                                <td className="p-2">
-                                                                  {entry.workingHours.toFixed(
-                                                                    1
-                                                                  )}{" "}
-                                                                  h
-                                                                </td>
-                                                              </tr>
-                                                            )
-                                                          )}
-                                                      </thead>
-                                                    </table>
-                                                  </td>
-                                                </tr>
-                                              )}
+                                            
                                             </React.Fragment>
                                           ))}
                                       </tbody>
