@@ -156,7 +156,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
                 {zutat.typ?.toLowerCase() === "endprodukt" && (
-                    <span className="text-xs text-gray-400 pl-1">
+                    <span className="text-xs text-gray-200 pl-1">
                       {zutat.ekPreis > 0
                         ? `(${((zutat.b2bPreis / zutat.ekPreis) * 100).toFixed(
                             0
@@ -185,7 +185,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
                 {zutat.typ?.toLowerCase() === "endprodukt" && (
-                    <span className="text-xs text-gray-400 pl-1">
+                    <span className="text-xs text-gray-200 pl-1">
                       {zutat.ekPreis > 0
                         ? `(${((zutat.b2cPreis / zutat.ekPreis) * 100).toFixed(
                             0
