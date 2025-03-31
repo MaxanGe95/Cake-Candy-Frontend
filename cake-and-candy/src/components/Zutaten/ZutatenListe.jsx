@@ -66,8 +66,8 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
           "ek-Preis": "ekPreis",
           "b2b-Preis": "b2bPreis",
           "b2c-Preis": "b2cPreis",
-          "ist-lagerbestand": "istlagerbestand",
-          "soll-lagerbestand": "solllagerbestand",
+          "ist-lager": "istlagerbestand",
+          "soll-lager": "solllagerbestand",
           zusatz: "zusatzWert",
         };
 
@@ -109,8 +109,8 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               "ek-Preis",
               "b2b-Preis",
               "b2c-Preis",
-              "ist-lagerbestand",
-              "soll-lagerbestand",
+              "ist-lager",
+              "soll-lager",
               "zusatz",
             ].map((key) => (
               <th
