@@ -49,57 +49,53 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
   };
 
   const handleSort = (key) => {
-    let direction = "asc";
-    if (sortConfig.key === key && sortConfig.direction === "asc") {
-      direction = "desc";
-    }
+    // Umschalten zwischen "asc" und "desc"
+    const direction =
+      sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
 
-    const sortedData = [...zutatenState].map((zutat) => {
-      // Prozentwert für die Zusatz-Spalte berechnen und hinzufügen
-      const zusatzWert = Math.round(
-        ((zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100)) * 100
-      );
-      return { ...zutat, zusatzWert }; // Prozentwert ins Objekt einfügen
-    });
+    // Sortierte Kopie des Arrays erstellen und zusatzWert mitberechnen
+    const sortedData = [...zutatenState]
+      .map((zutat) => ({
+        ...zutat,
+        zusatzWert: Math.round(
+          ((zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100)) * 100
+        ),
+      }))
+      .sort((a, b) => {
+        const numberKeys = {
+          "ek-Preis": "ekPreis",
+          "b2b-Preis": "b2bPreis",
+          "b2c-Preis": "b2cPreis",
+          "ist-lagerbestand": "istlagerbestand",
+          "soll-lagerbestand": "solllagerbestand",
+          zusatz: "zusatzWert",
+        };
 
-    const finalSortedData = sortedData.sort((a, b) => {
-      const aValue = a[key] ?? "";
-      const bValue = b[key] ?? "";
+        const mappedKey = numberKeys[key] || key;
 
-      const numberKeys = {
-        "ek-Preis": "ekPreis",
-        "b2b-Preis": "b2bPreis",
-        "b2c-Preis": "b2cPreis",
-        "ist-lagerbestand": "istlagerbestand",
-        "soll-lagerbestand": "solllagerbestand",
-        zusatz: "zusatzWert", // Hier der berechnete Prozentwert!
-      };
+        // Sortierung für numerische Felder
+        if (
+          typeof a[mappedKey] === "number" &&
+          typeof b[mappedKey] === "number"
+        ) {
+          return direction === "asc"
+            ? a[mappedKey] - b[mappedKey]
+            : b[mappedKey] - a[mappedKey];
+        }
 
-      const mappedKey = numberKeys[key] || key;
+        // Fehlende Werte auf "" setzen, um stabil zu sortieren
+        const aValue = (a[mappedKey] ?? "").toString().toLowerCase();
+        const bValue = (b[mappedKey] ?? "").toString().toLowerCase();
 
-      // Sortierung nach Zahlenwerten
-      if (numberKeys[key] && typeof a[mappedKey] === "number") {
+        // Alphabetische Sortierung für String-Werte
         return direction === "asc"
-          ? a[mappedKey] - b[mappedKey]
-          : b[mappedKey] - a[mappedKey];
-      }
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      });
 
-      // Allgemeine Zahlenerkennung für andere Felder
-      const isNumber = !isNaN(parseFloat(aValue)) && !isNaN(parseFloat(bValue));
-      if (isNumber) {
-        return direction === "asc"
-          ? parseFloat(aValue) - parseFloat(bValue)
-          : parseFloat(bValue) - parseFloat(aValue);
-      }
-
-      // String-Sortierung für andere Felder
-      return direction === "asc"
-        ? aValue.toString().localeCompare(bValue.toString())
-        : bValue.toString().localeCompare(aValue.toString());
-    });
-
+    // Sortierzustand aktualisieren
     setSortConfig({ key, direction });
-    setZutatenState(finalSortedData);
+    setZutatenState(sortedData);
   };
 
   return (
@@ -111,11 +107,11 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               "name",
               "typ",
               "ek-Preis",
-              "b2b",
-              "b2c",
-              "ist-bestand",
-              "soll-bestand",
-              "-----zusatz------",
+              "b2b-Preis",
+              "b2c-Preis",
+              "ist-lagerbestand",
+              "soll-lagerbestand",
+              "zusatz",
             ].map((key) => (
               <th
                 key={key}
@@ -123,16 +119,15 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                 onClick={() => handleSort(key)}
               >
                 {key.toUpperCase()}{" "}
-                {sortConfig.key === key
-                  ? sortConfig.direction === "asc"
-                    ? "▲"
-                    : "▼"
-                  : ""}
+                {sortConfig.key === key && (
+                  <span>{sortConfig.direction === "asc" ? "▲" : "▼"}</span>
+                )}
               </th>
             ))}
             <th className="p-2">Löschen</th>
           </tr>
         </thead>
+
         <tbody>
           {zutatenState.map((zutat) => (
             <tr
@@ -144,9 +139,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               <td className="p-2 text-center">
                 $ {zutat.ekPreis?.toFixed(2) || "0.00"}
               </td>
-              {/* <td className="p-2 text-center">
+              <td className="p-2 text-center">
                 <input
-                  type="text"
+                  type="number"
                   value={zutat.b2bPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -155,16 +150,25 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className={`w-14 p-1 text-center border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                  className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center ${
                     zutat.typ?.toLowerCase() !== "endprodukt" ? " border-0" : ""
                   }`}
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
-              </td> */}
+                {zutat.typ?.toLowerCase() === "endprodukt" && (
+                    <span className="text-xs text-gray-400 pl-1">
+                      {zutat.ekPreis > 0
+                        ? `(${((zutat.b2bPreis / zutat.ekPreis) * 100).toFixed(
+                            0
+                          )}%)`
+                        : "-"}
+                    </span>
+                  )}
+              </td>
 
-              {/* <td className="p-2 text-center">
+              <td className="p-2 text-center">
                 <input
-                  type="text"
+                  type="number"
                   value={zutat.b2cPreis || ""}
                   onChange={(e) =>
                     handleUpdate(
@@ -173,67 +177,15 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                       parseFloat(e.target.value) || 0
                     )
                   }
-                  className={`w-14 p-1 text-center border rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
+                  className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center ${
                     zutat.typ?.toLowerCase() !== "endprodukt"
                       ? "  border-0"
                       : ""
                   }`}
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
-              </td> */}
-
-              <td className="p-2 text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <input
-                    type="number"
-                    value={zutat.b2bPreis || ""}
-                    onChange={(e) =>
-                      handleUpdate(
-                        zutat._id,
-                        "b2bPreis",
-                        parseFloat(e.target.value) || 0
-                      )
-                    }
-                    className={`w-13 text-center border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
-                      zutat.typ?.toLowerCase() !== "endprodukt"
-                        ? "border-0"
-                        : ""
-                    }`}
-                    disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
-                  />
-                  {zutat.typ?.toLowerCase() === "endprodukt" && (
-                    <span className="text-xs text-gray-400">
-                      {zutat.ekPreis > 0
-                        ? `(${((zutat.b2bPreis / zutat.ekPreis) * 100).toFixed(
-                            0
-                          )}%)`
-                        : "-"}
-                    </span>
-                  )}
-                </div>
-              </td>
-
-              <td className="p-2 text-center">
-                <div className="flex items-center justify-center gap-1">
-                  <input
-                    type="number"
-                    value={zutat.b2cPreis || ""}
-                    onChange={(e) =>
-                      handleUpdate(
-                        zutat._id,
-                        "b2cPreis",
-                        parseFloat(e.target.value) || 0
-                      )
-                    }
-                    className={`w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 ${
-                      zutat.typ?.toLowerCase() !== "endprodukt"
-                        ? "border-0"
-                        : ""
-                    }`}
-                    disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
-                  />
-                  {zutat.typ?.toLowerCase() === "endprodukt" && (
-                    <span className="text-xs text-gray-400">
+                {zutat.typ?.toLowerCase() === "endprodukt" && (
+                    <span className="text-xs text-gray-400 pl-1">
                       {zutat.ekPreis > 0
                         ? `(${((zutat.b2cPreis / zutat.ekPreis) * 100).toFixed(
                             0
@@ -241,7 +193,6 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                         : "-"}
                     </span>
                   )}
-                </div>
               </td>
 
               <td className="p-2 text-center">
@@ -255,9 +206,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   onChange={(e) =>
                     handleUpdate(zutat._id, "solllagerbestand", e.target.value)
                   }
-                  className="w-13 text-center p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100"
+                  className="w-13 p-1 border no-spinner rounded focus:outline-none focus:ring-2 focus:ring-amber-100 text-center -spinner"
                 />
-                      <style>{`
+                  <style>{`
         /* Benutzerdefiniertes CSS zum Entfernen der Spinner */
         .no-spinner::-webkit-inner-spin-button,
         .no-spinner::-webkit-outer-spin-button {
