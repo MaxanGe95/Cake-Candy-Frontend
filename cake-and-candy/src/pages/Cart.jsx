@@ -13,6 +13,7 @@ import { InputNumber } from "../components/form/Inputs";
 
 const Cart = () => {
   const [cart, setCart] = useState([]);
+  const [confirmationMessage, setConfirmationMessage] = useState(""); // Zustand für Bestätigungsnachricht
 
   useEffect(() => {
     loadCart().then(setCart);
@@ -26,6 +27,13 @@ const Cart = () => {
   const handleQuantityChange = async (productId, newQuantity) => {
     const updatedCart = await updateQuantity(productId, newQuantity);
     setCart(updatedCart);
+  };
+
+  const handleBuyCart = async () => {
+   //* API aufrufen, um die Bestellung aufzugeben
+    await buyCart(cart);
+    setConfirmationMessage("Bestellung erfolgreich aufgegeben!"); //* Bestätigung setzen
+    setCart([]); //* Warenkorb zurücksetzen
   };
 
   return (
@@ -60,9 +68,13 @@ const Cart = () => {
           ))}
           <div className="flex justify-end">
             <p className="mt-4 font-bold">Gesamt: ${calculateTotal(cart)}</p>
-            <PrimaryButton className="ml-6 mr-10 mt-2" onClick={buyCart}>bestellen</PrimaryButton>
+            <PrimaryButton className="ml-6 mr-10 mt-2" onClick={handleBuyCart}>bestellen</PrimaryButton>
           </div>
         </div>
+      )}
+
+      {confirmationMessage && (
+        <p className="text-green-500 mt-4">{confirmationMessage}</p> // Bestätigungsnachricht anzeigen
       )}
     </div>
   );
