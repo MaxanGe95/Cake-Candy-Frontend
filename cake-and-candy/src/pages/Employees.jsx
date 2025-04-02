@@ -155,7 +155,7 @@ const MitarbeiterTabelle = () => {
       <table className="container mx-auto border rounded-[10px] overflow-hidden text-center">
         <thead className="bg-teal-950/80 text-amber-100">
           <tr className="">
-            <th className="p-2 w-1/3 text-left">Mitarbeiter</th>
+            <th className="p-2 w-1/3">Mitarbeiter</th>
             <th className="p-2 w-1/3">Gesamtgehalt</th>
             <th className="p-2 w-1/3 ">Gesamtstunden</th>
           </tr>
@@ -171,7 +171,7 @@ const MitarbeiterTabelle = () => {
                   )
                 }
               >
-                <td className="p-2 text-left">{employeeName}</td>
+                <td className="p-2">{employeeName}</td>
                 <td className="p-2">{employee.totalSalary.toFixed(2)}$</td>
                 <td className="p-2">
                   {employee.totalWorkingHours.toFixed(1)} h
