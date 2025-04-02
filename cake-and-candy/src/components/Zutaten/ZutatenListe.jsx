@@ -53,11 +53,11 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
     const direction =
       sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
 
-    // Sortierte Kopie des Arrays erstellen und zusatzWert mitberechnen
+    // Sortierte Kopie des Arrays erstellen und lagerstatusWert mitberechnen
     const sortedData = [...zutatenState]
       .map((zutat) => ({
         ...zutat,
-        zusatzWert: Math.round(
+        lagerstatusWert: Math.round(
           ((zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100)) * 100
         ),
       }))
@@ -66,9 +66,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
           "ek-Preis": "ekPreis",
           "b2b-Preis": "b2bPreis",
           "b2c-Preis": "b2cPreis",
-          "ist-lagerbestand": "istlagerbestand",
-          "soll-lagerbestand": "solllagerbestand",
-          zusatz: "zusatzWert",
+          "ist-lager": "istlagerbestand",
+          "soll-lager": "solllagerbestand",
+          lagerstatus: "lagerstatusWert",
         };
 
         const mappedKey = numberKeys[key] || key;
@@ -109,13 +109,13 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               "ek-Preis",
               "b2b-Preis",
               "b2c-Preis",
-              "ist-lagerbestand",
-              "soll-lagerbestand",
-              "zusatz",
+              "ist-lager",
+              "soll-lager",
+              "lagerstatus",
             ].map((key) => (
               <th
                 key={key}
-                className="p-2 cursor-pointer"
+                className="p-2  cursor-pointer hover:bg-teal-900"
                 onClick={() => handleSort(key)}
               >
                 {key.toUpperCase()}{" "}
@@ -156,7 +156,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
                 {zutat.typ?.toLowerCase() === "endprodukt" && (
-                    <span className="text-xs text-gray-400 pl-1">
+                    <span className="text-xs text-gray-200 pl-1">
                       {zutat.ekPreis > 0
                         ? `(${((zutat.b2bPreis / zutat.ekPreis) * 100).toFixed(
                             0
@@ -185,7 +185,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   disabled={zutat.typ?.toLowerCase() !== "endprodukt"}
                 />
                 {zutat.typ?.toLowerCase() === "endprodukt" && (
-                    <span className="text-xs text-gray-400 pl-1">
+                    <span className="text-xs text-gray-200 pl-1">
                       {zutat.ekPreis > 0
                         ? `(${((zutat.b2cPreis / zutat.ekPreis) * 100).toFixed(
                             0
@@ -222,9 +222,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
       `}</style>
               </td>
 
-              {/* //zusatz */}
+              {/* //lagerstatus */}
 
-              <td className="p-2 text-center text-sm">
+              <td className="p-2 text-center text-sm w-1/8">
                 <div className="relative w-full h-6 bg-gray-300 rounded-lg">
                   <div
                     className={`
@@ -279,6 +279,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="px-3 py-1 rounded hover:bg-teal-800"
                 >
                   ✖
+                  {/* <DeleteButton/> */}
                 </button>
               </td>
             </tr>
