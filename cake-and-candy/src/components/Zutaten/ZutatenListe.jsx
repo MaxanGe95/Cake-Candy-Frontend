@@ -53,11 +53,11 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
     const direction =
       sortConfig.key === key && sortConfig.direction === "asc" ? "desc" : "asc";
 
-    // Sortierte Kopie des Arrays erstellen und zusatzWert mitberechnen
+    // Sortierte Kopie des Arrays erstellen und lagerstatusWert mitberechnen
     const sortedData = [...zutatenState]
       .map((zutat) => ({
         ...zutat,
-        zusatzWert: Math.round(
+        lagerstatusWert: Math.round(
           ((zutat.istlagerbestand || 0) / (zutat.solllagerbestand || 100)) * 100
         ),
       }))
@@ -68,7 +68,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
           "b2c-Preis": "b2cPreis",
           "ist-lager": "istlagerbestand",
           "soll-lager": "solllagerbestand",
-          zusatz: "zusatzWert",
+          lagerstatus: "lagerstatusWert",
         };
 
         const mappedKey = numberKeys[key] || key;
@@ -111,7 +111,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
               "b2c-Preis",
               "ist-lager",
               "soll-lager",
-              "zusatz",
+              "lagerstatus",
             ].map((key) => (
               <th
                 key={key}
@@ -222,9 +222,9 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
       `}</style>
               </td>
 
-              {/* //zusatz */}
+              {/* //lagerstatus */}
 
-              <td className="p-2 text-center text-sm w-1/6">
+              <td className="p-2 text-center text-sm w-1/8">
                 <div className="relative w-full h-6 bg-gray-300 rounded-lg">
                   <div
                     className={`
@@ -279,6 +279,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
                   className="px-3 py-1 rounded hover:bg-teal-800"
                 >
                   ✖
+                  {/* <DeleteButton/> */}
                 </button>
               </td>
             </tr>

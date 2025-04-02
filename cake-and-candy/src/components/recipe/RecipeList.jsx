@@ -48,7 +48,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
     "zutaten": "ingredients",
     "ist-bestand": "istlagerbestand",
     "soll-bestand": "solllagerbestand",
-    "zusatz": "percentage" // Der berechnete Prozentwert
+    "lagerstatus": "percentage" // Der berechnete Prozentwert
   };
 
   const calculateScaledIngredients = (recipe, scale) => {
@@ -126,7 +126,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
         return Array.isArray(value) ? value.join(", ") : "";
       case "zutaten":
         return "Zutaten anzeigen";
-      case "zusatz":
+      case "lagerstatus":
         return (
           <div className="relative w-full h-6 bg-gray-300 rounded-lg">
             <div
@@ -183,7 +183,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
               "zutaten",
               "ist-bestand", 
               "soll-bestand",
-              "zusatz", 
+              "lagerstatus", 
             ].map((key) => (
               <th
                 key={key}
@@ -216,7 +216,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
                   "zutaten",
                   "ist-bestand", 
                   "soll-bestand",
-                  "zusatz", 
+                  "lagerstatus", 
                 ].map((key) => (
                   <td key={key} className="p-2 text-center">
                     {formatCellContent(recipe, key)}
