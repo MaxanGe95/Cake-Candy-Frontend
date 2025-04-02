@@ -131,7 +131,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
           <div className="relative w-full h-6 bg-gray-300 rounded-lg">
             <div
               className={`
-                absolute top-0 left-0 h-6 rounded-lg
+                absolute top-0 left-0  h-6 rounded-lg
                 flex items-center ${
                   (recipe.istlagerbestand || 0) / (recipe.solllagerbestand || 100) < 0.2
                     ? "justify-start pl-2"
@@ -205,7 +205,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
           {recipes.map((recipe) => (
             <React.Fragment key={recipe._id}>
               <tr
-                className="border cursor-pointer hover:bg-[#7ec6cc80]"
+                className="border cursor-pointer hover:bg-[#7ec6cc80] transition duration-200"
                 onClick={() => toggleDropdown(recipe)}
               >
                 {[
