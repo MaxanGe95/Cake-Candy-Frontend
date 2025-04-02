@@ -115,7 +115,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
             ].map((key) => (
               <th
                 key={key}
-                className="p-2 cursor-pointer"
+                className="p-2  cursor-pointer hover:bg-teal-900"
                 onClick={() => handleSort(key)}
               >
                 {key.toUpperCase()}{" "}
@@ -224,7 +224,7 @@ const ZutatenListe = ({ zutaten, onDelete, onUpdate }) => {
 
               {/* //zusatz */}
 
-              <td className="p-2 text-center text-sm">
+              <td className="p-2 text-center text-sm w-1/6">
                 <div className="relative w-full h-6 bg-gray-300 rounded-lg">
                   <div
                     className={`
