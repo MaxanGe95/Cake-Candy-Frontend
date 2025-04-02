@@ -146,7 +146,7 @@ const OrderList = () => {
             return (
               <React.Fragment key={customer.customerName}>
                 <tr
-                  className="cursor-pointer hover:bg-teal-950"
+                  className="border border-amber-100 cursor-pointer hover:bg-teal-950"
                   onClick={() => toggleCustomer(customer)}
                 >
                   <td className="p-2 text-center">{customer.customerName}</td>
