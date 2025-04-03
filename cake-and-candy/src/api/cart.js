@@ -4,27 +4,32 @@ export const loadCart = async () => {
   localStorage.setItem("cart", JSON.stringify(cart));
   return cart;
 };
-
 export const buyCart = async () => {
   const cart = await loadCart();
+  const user = "Max Mustermann"; // Hier später den echten Benutzernamen einfügen (z. B. durch Authentifizierung)
 
-  const response = await fetch("http://localhost:5000/api/cart/buy", {
+  const response = await fetch("http://localhost:5000/api/orders/buy", {  // Route geändert
     method: "POST",
     headers: { "Content-Type": "application/json" },
     credentials: "include", // Sendet Cookies mit der Anfrage
-    body: JSON.stringify(
-      cart.map((item) => {
-        return {
-          id: item._id,
-          name: item.name,
-          quantity: item.quantity,
-        };
-      })
-    ),
+    body: JSON.stringify({
+      user,
+      products: cart.map(({ _id, name, quantity, b2cPreis }) => ({
+        id: _id,
+        name,
+        quantity,
+        price: b2cPreis,
+      })),
+      totalPrice: calculateTotal(cart),
+    }),
   });
 
-  // TODO was passiert danach?
+  if (response.ok) {
+    localStorage.removeItem("cart"); // Warenkorb leeren nach Bestellung
+    window.location.reload(); // Seite neu laden, um den leeren Warenkorb anzuzeigen
+  }
 };
+
 
 // Warenkorb speichern (Local Storage)
 export const saveCart = async (cart) => {
