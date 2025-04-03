@@ -27,7 +27,7 @@ const Login = () => {
 
   return (
     <div className="flex my-20 justify-center items-center w-screen">
-      <div className="w-full max-w-md rounded-lg shadow-md p-8 bg-teal-900">
+      <div className="w-full max-w-md rounded-2xl shadow-xl p-8 bg-teal-900">
         <h2 className="text-2xl font-bold mb-6 text-amber-100 text-center">WELCOME BACK!</h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
         <form>
@@ -39,7 +39,7 @@ const Login = () => {
               Benutzername
             </label>
             <input
-              className="shadow appearance-none bg-teal-800 border rounded w-full py-2 px-3 text-amber-100 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none bg-teal-800 border rounded-xl w-full py-2 px-3 text-amber-100 leading-tight focus:outline-none focus:shadow-outline"
               id="username"
               type="text"
               placeholder="Benutzername"
@@ -60,7 +60,7 @@ const Login = () => {
               Passwort
             </label>
             <input
-              className="shadow appearance-none bg-teal-800 border rounded w-full py-2 px-3 text-amber-100 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+              className="shadow appearance-none bg-teal-800 border rounded-xl w-full py-2 px-3 text-amber-100 mb-3 leading-tight focus:outline-none focus:shadow-outline"
               id="password"
               type="password"
               placeholder="********"
@@ -84,7 +84,7 @@ const Login = () => {
 
           <div className="flex flex-col items-end">
             <button
-              className="bg-teal-950 hover:bg-teal-700 w-full text-amber-100 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-teal-950 shadow-xl  hover:bg-teal-700 w-full text-amber-100 font-bold py-2 px-4 rounded-xl focus:outline-none focus:shadow-outline"
               type="button"
               onClick={handleLogin}
             >
