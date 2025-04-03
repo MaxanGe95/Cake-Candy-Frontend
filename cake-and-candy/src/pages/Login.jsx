@@ -28,10 +28,12 @@ const Login = () => {
   return (
     <div className="flex my-20 justify-center items-center w-screen">
       <div className="w-full max-w-md rounded-2xl shadow-xl p-8 bg-teal-900">
-        <h2 className="text-2xl font-bold mb-6 text-amber-100 text-center">WELCOME BACK!</h2>
+        <h2 className="text-2xl font-bold mb-6 text-amber-100 text-center">
+          WELCOME BACK!
+        </h2>
         {error && <p className="text-red-500 text-center">{error}</p>}
         <form>
-          <div className="mb-6">
+          <div className="mb-5">
             <label
               className="block text-amber-100 text-sm font-bold"
               htmlFor="username"
@@ -46,9 +48,9 @@ const Login = () => {
               value={formData.username}
               onChange={handleChange}
               style={{
-                WebkitBoxShadow: '0 0 0 30px #005f5a inset', // Hintergrundfarbe für Autofill
-                WebkitTextFillColor: '#fef3c6', // Textfarbe für Autofill
-                borderColor: '#fef3c6',
+                WebkitBoxShadow: "0 0 0 30px #005f5a inset", // Hintergrundfarbe für Autofill
+                WebkitTextFillColor: "#fef3c6", // Textfarbe für Autofill
+                borderColor: "#fef3c6",
               }}
             />
           </div>
@@ -67,9 +69,9 @@ const Login = () => {
               value={formData.password}
               onChange={handleChange}
               style={{
-                WebkitBoxShadow: '0 0 0 30px #005f5a inset', // Hintergrundfarbe für Autofill
-                WebkitTextFillColor: '#fef3c6', // Textfarbe für Autofill
-                borderColor: '#fef3c6',
+                WebkitBoxShadow: "0 0 0 30px #005f5a inset", // Hintergrundfarbe für Autofill
+                WebkitTextFillColor: "#fef3c6", // Textfarbe für Autofill
+                borderColor: "#fef3c6",
               }}
             />
           </div>
