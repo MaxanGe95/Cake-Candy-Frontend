@@ -30,7 +30,7 @@ const Cart = () => {
   };
 
   const handleBuyCart = async () => {
-   //* API aufrufen, um die Bestellung aufzugeben
+    //* API aufrufen, um die Bestellung aufzugeben
     await buyCart(cart);
     setConfirmationMessage("Bestellung erfolgreich aufgegeben!"); //* Bestätigung setzen
     setCart([]); //* Warenkorb zurücksetzen
@@ -46,16 +46,20 @@ const Cart = () => {
           {cart.map((item) => (
             <div
               key={item._id}
-              className="flex items-center justify-between border-b pb-2 mb-2"
+              className="flex items-center justify-between border-b  mb-2 hover:bg-[#7ec6cc80] transition duration-200 rounded-2xl"
             >
               <img
                 src={rezeptImage(item)}
-                className="w-16 h-16 object-cover rounded-md"
+                className="w-32 h-32 object-cover rounded-2xl"
               />
               <div className="flex-1 ml-4">
                 <p className="font-bold">{item.name}</p>
-                <p className="text-right mr-5">Stück: ${item.b2cPreis?.toFixed(2)}</p>
-                <p className="text-right mr-5">Gesamt: ${calculateItemTotal(item)}</p>
+                <p className="text-right mr-5 text-sm">
+                  Stück: ${item.b2cPreis?.toFixed(2)}
+                </p>
+                <p className="text-right mr-5 font-semibold">
+                  Gesamt: ${calculateItemTotal(item)}
+                </p>
               </div>
               <InputNumber
                 value={item.quantity}
@@ -68,7 +72,17 @@ const Cart = () => {
           ))}
           <div className="flex justify-end">
             <p className="mt-4 font-bold">Gesamt: ${calculateTotal(cart)}</p>
-            <PrimaryButton className="ml-6 mr-10 mt-2" onClick={handleBuyCart}>bestellen</PrimaryButton>
+            <PrimaryButton
+              className="ml-6 mr-10 mt-2 relative group transform transition-all duration-300 hover:scale-105"
+              onClick={handleBuyCart}
+            >
+              <span className="flex items-center justify-center">
+                <span className="mr-2">bestsellen</span>
+                <span className="opacity-0 translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
+                  🛒
+                </span>
+              </span>
+            </PrimaryButton>
           </div>
         </div>
       )}
