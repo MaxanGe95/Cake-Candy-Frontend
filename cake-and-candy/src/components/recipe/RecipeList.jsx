@@ -172,7 +172,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
   return (
     <div className="mt-10">
       <h4 className="text-2xl font-bold text-teal-200 mb-1">Rezepte-Liste</h4>
-      <table className="min-w-full text-amber-100 border border-teal-950 rounded-md overflow-hidden">
+      <table className="min-w-full  border border-teal-950 rounded-md overflow-hidden">
         <thead className="bg-teal-950">
           <tr>
             {[
@@ -205,7 +205,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
           {recipes.map((recipe) => (
             <React.Fragment key={recipe._id}>
               <tr
-                className="border cursor-pointer hover:bg-[#7ec6cc80] transition duration-200"
+                className=" border-b cursor-pointer hover:bg-[#7ec6cc80] transition duration-200"
                 onClick={() => toggleDropdown(recipe)}
               >
                 {[
@@ -218,7 +218,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
                   "soll-bestand",
                   "lagerstatus", 
                 ].map((key) => (
-                  <td key={key} className="p-2 text-center">
+                  <td key={key} className="p-2 text-center text-white">
                     {formatCellContent(recipe, key)}
                   </td>
                 ))}
@@ -250,7 +250,7 @@ const RecipeList = ({ onDelete, onEdit }) => {
                           </tr>
                         </thead>
                         <tbody>
-                          <tr className="text-center">
+                          <tr className="text-center text-white">
                             <td className="p-2">
                               <ul>
                                 {calculateScaledIngredients(
