@@ -80,7 +80,7 @@ function NavLinks({ isActiveLink }) {
         }`}
         to="/endproducts"
       >
-        -- Kunden Produkte --
+        Confiserie
       </Link>
       {isAdmin() && (
         <Link
