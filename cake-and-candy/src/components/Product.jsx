@@ -8,16 +8,14 @@ import { InputString, InputTextarea } from "./form/Inputs";
 const Product = ({ product, admin = false }) => {
   const [currentImage, setCurrentImage] = useState(product.productImage);
   const [currentTitle, setCurrentTitle] = useState(product.name);
-  const [currentDescription, setCurrentDescription] = useState(
-    product.productDescription
-  );
+  const [currentDescription, setCurrentDescription] = useState(product.productDescription);
   const [currentPrice] = useState(product.b2bPreis);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [newTitle, setNewTitle] = useState(product.name);
-  const [newDescription, setNewDescription] = useState(
-    product.productDescription
-  );
+  const [newDescription, setNewDescription] = useState(product.productDescription);
   const [hasChanges, setHasChanges] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false); // Zustand für das Modal
+  const [addedToCart, setAddedToCart] = useState(false); // Zustand, um das Hinzufügen zu verfolgen
   const dialogRef = useRef(null);
 
   useEffect(() => {
@@ -47,7 +45,7 @@ const Product = ({ product, admin = false }) => {
     fileInput.onchange = async (event) => {
       const file = event.target.files[0];
       await uploadImage(product, file);
-      // seite neu laden, damit man das Bild sieht
+      // Seite neu laden, damit man das Bild sieht
       location.reload();
     };
     fileInput.click();
@@ -67,9 +65,22 @@ const Product = ({ product, admin = false }) => {
     }
   };
 
+  // Funktion zum Hinzufügen eines Produkts zum Warenkorb
   const handleAddToCart = async () => {
     await addToCart(product);
-    alert(`${currentTitle} wurde zum Warenkorb hinzugefügt!`);
+    setAddedToCart(true); // Setzt den Zustand auf 'hinzugefügt'
+    setModalOpen(true); // Öffnet das Modal
+  };
+
+  // Funktion für den Button "Weiter shoppen"
+  const handleContinueShopping = () => {
+    setModalOpen(false); // Schließt das Modal
+  };
+
+  // Funktion für den Button "Zum Warenkorb"
+  const handleGoToCart = () => {
+    setModalOpen(false); // Schließt das Modal
+    window.location.href = "/cart"; // Leitet zur Warenkorb-Seite weiter
   };
 
   return (
@@ -114,7 +125,7 @@ const Product = ({ product, admin = false }) => {
         </PrimaryButton>
       </div>
 
-      {/* Dialog */}
+      {/* Dialog zum Bearbeiten */}
       {dialogOpen && (
         <div className="fixed inset-0 z-100 flex items-center justify-center">
           <div className="p-6 rounded-md shadow-lg w-96 bg-teal-900">
@@ -146,6 +157,31 @@ const Product = ({ product, admin = false }) => {
           </div>
         </div>
       )}
+
+{/* Modal für den Warenkorb */}
+{modalOpen && (
+  <div className="fixed inset-0 z-100 flex items-center justify-center bg-black bg-opacity-75">
+    <div className="p-6 rounded-md shadow-lg w-96 bg-teal-900 text-center">
+      <h2 className="text-lg font-bold mb-4">{`${currentTitle} wurde zum Warenkorb hinzugefügt!`}</h2>
+      <div className="flex justify-center gap-4">
+        <button
+          className="bg-gray-500 text-white px-4 py-2 rounded"
+          onClick={handleContinueShopping}
+        >
+          Weiter shoppen
+        </button>
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={handleGoToCart}
+        >
+          Zum Warenkorb
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
+
     </div>
   );
 };

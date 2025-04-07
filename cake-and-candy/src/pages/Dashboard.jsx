@@ -1,3 +1,58 @@
+// import React, { useState, useEffect } from "react";
+
+// const Dashboard = ({ earnings = [] }) => {
+//   const [selectedRange, setSelectedRange] = useState(7);
+//   const [filteredEarnings, setFilteredEarnings] = useState([]);
+
+//   useEffect(() => {
+//     if (!Array.isArray(earnings)) return; // Sicherheitscheck
+
+//     const now = new Date();
+//     const daysAgo = new Date();
+//     daysAgo.setDate(now.getDate() - selectedRange);
+
+//     const filtered = earnings.filter(({ date }) => {
+//       const earningDate = new Date(date);
+//       return earningDate >= daysAgo && earningDate <= now;
+//     });
+
+//     setFilteredEarnings(filtered);
+//   }, [selectedRange, earnings]);
+
+//   const totalEarnings = filteredEarnings.reduce((sum, { profit }) => sum + profit, 0).toFixed(2);
+
+//   return (
+//     <div className="p-4 bg-gray-900 text-white rounded-lg shadow-lg">
+//       <h2 className="text-2xl font-bold mb-4">Dashboard</h2>
+
+//       <div className="flex gap-4 mb-4">
+//         <button
+//           className={`px-4 py-2 rounded ${selectedRange === 7 ? "bg-teal-500" : "bg-gray-700"}`}
+//           onClick={() => setSelectedRange(7)}
+//         >
+//           Letzte 7 Tage
+//         </button>
+//         <button
+//           className={`px-4 py-2 rounded ${selectedRange === 30 ? "bg-teal-500" : "bg-gray-700"}`}
+//           onClick={() => setSelectedRange(30)}
+//         >
+//           Letzte 30 Tage
+//         </button>
+//       </div>
+
+//       <div className="text-xl bg-teal-800 p-4 rounded shadow-md">
+//         <span className="font-semibold">Einnahmen ({selectedRange} Tage):</span> {totalEarnings} $
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default Dashboard;
+
+
+
+
+
 import React from "react";
 
 const Dashboard = () => {

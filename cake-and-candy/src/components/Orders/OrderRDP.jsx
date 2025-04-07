@@ -7,10 +7,27 @@ const OrderRDP = () => {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [earnings, setEarnings] = useState([]);
 
   // Funktion zum Entfernen des Textes in Klammern
   const removeTextInParentheses = (name) => {
-    return name.replace(/\s*\(.*\)\s*/g, '');
+    return name.replace(/\s*\(.*\)\s*/g, "");
+  };
+
+  // Funktion zum Entfernen doppelter Einträge in earnings
+  const removeDuplicateEarnings = (earningsList) => {
+    const uniqueEarnings = [];
+    const seen = new Set();
+
+    for (const earning of earningsList) {
+      const key = `${earning.date}-${earning.profit}`;
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueEarnings.push(earning);
+      }
+    }
+
+    return uniqueEarnings;
   };
 
   useEffect(() => {
@@ -20,17 +37,16 @@ const OrderRDP = () => {
         const invoiceResponse = await fetch("http://localhost:5000/api/invoices");
         if (!invoiceResponse.ok) throw new Error("Fehler beim Laden der Rechnungen");
         const invoices = await invoiceResponse.json();
+        console.log("Rechnungen geladen:", invoices);
 
         // Zutaten abrufen
         const zutatenResponse = await fetch("http://localhost:5000/api/zutaten");
         if (!zutatenResponse.ok) throw new Error("Fehler beim Laden der Zutaten");
         const zutatenData = await zutatenResponse.json();
+        console.log("Zutaten geladen:", zutatenData);
         setZutaten(zutatenData);
 
-        console.log("Rechnungen:", invoices);
-        console.log("Zutaten:", zutatenData);
-
-        // Firmen nach ID gruppieren
+        // Firmen nach ID gruppieren und Earnings berechnen
         const groupedCompanies = invoices.reduce((acc, invoice) => {
           const { company, _id, totalAmount, products, date, customerType } = invoice;
 
@@ -42,6 +58,7 @@ const OrderRDP = () => {
               totalRevenue: 0,
               totalProfit: 0,
               orders: [],
+              earningsList: [] // Hier eine separate Liste für earnings pro Firma
             };
           }
 
@@ -82,10 +99,30 @@ const OrderRDP = () => {
             products: orderProducts,
           });
 
+          // Earnings für jede Bestellung extrahieren und in earningsList speichern
+          const earningsList = acc[company].orders.map((order) => ({
+            date: order.date,
+            profit: order.profit,
+          }));
+
+          acc[company].earningsList = [...acc[company].earningsList, ...earningsList]; // Hier alle Earnings anhängen
+
           return acc;
         }, {});
 
+        // Entferne doppelte Earnings
+        Object.values(groupedCompanies).forEach((company) => {
+          company.earningsList = removeDuplicateEarnings(company.earningsList);
+        });
+
+        // Nur einmal die companies setzen, nachdem alle Daten verarbeitet sind
         setCompanies(Object.values(groupedCompanies));
+
+        // Jetzt können wir den Gesamt-Earnings-Array setzen
+        const allEarnings = Object.values(groupedCompanies).flatMap((company) => company.earningsList);
+        console.log("Berechnete Earnings:", allEarnings);
+        setEarnings(allEarnings);
+
         setLoading(false);
       } catch (err) {
         console.error("Fehler beim Abrufen:", err);
@@ -93,7 +130,6 @@ const OrderRDP = () => {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -170,7 +206,7 @@ const OrderRDP = () => {
                                           <th className="p-2">Menge</th>
                                           <th className="p-2">EK-Preis</th>
                                           <th className="p-2">Preis/Stück</th>
-                                          <th className="p-2">Gesamt</th>
+                                          <th className="p-2">Gesamtpreis</th>
                                           <th className="p-2">Gewinn</th>
                                         </tr>
                                       </thead>
@@ -180,8 +216,8 @@ const OrderRDP = () => {
                                             <td className="p-2 text-center">{product.name}</td>
                                             <td className="p-2 text-center">{product.quantity}</td>
                                             <td className="p-2 text-center">{product.ekPreis} $</td>
-                                            <td className="p-2 text-center">{product.pricePerUnit.toFixed(2)} $</td>
-                                            <td className="p-2 text-center">{product.totalPrice.toFixed(2)} $</td>
+                                            <td className="p-2 text-center">{product.pricePerUnit} $</td>
+                                            <td className="p-2 text-center">{product.totalPrice} $</td>
                                             <td className="p-2 text-center">{product.profit} $</td>
                                           </tr>
                                         ))}

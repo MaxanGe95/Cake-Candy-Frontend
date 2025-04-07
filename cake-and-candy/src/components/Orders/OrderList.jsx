@@ -107,6 +107,7 @@ const OrderList = () => {
                           <React.Fragment key={order.id}>
                             <tr className="cursor-pointer hover:bg-[#7ec6cc80] transition duration-200 shadow-lg rounded-md" onClick={() => toggleOrder(order)}>
                               <td className="p-2 text-center">{order.date}</td>
+                              
                               <td className="p-2 text-center">{order.totalPrice.toFixed(2)} $</td>
                             </tr>
                             {selectedOrder?.id === order.id && (
