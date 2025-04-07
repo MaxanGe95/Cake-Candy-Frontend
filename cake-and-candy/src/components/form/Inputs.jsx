@@ -51,7 +51,7 @@ const DropdownInput = ({
         className={`border rounded p-2 cursor-pointer flex items-center ${
           error
             ? "border-red-500 bg-red-900 text-white-300"
-            : "border-amber-100 bg-teal-400/10"
+            : "border-white bg-teal-400/10"
         }`}
         onClick={() => setIsOpen(!isOpen)}
       >
@@ -230,8 +230,8 @@ const InputNumber = ({
         min={min}
         onChange={(e) => onChange(Number(e.target.value))}
         placeholder={placeholder}
-        className={`w-full border border-amber-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
-          error ? "border-red-500 bg-red-900 text-white-300" : "border-amber-100"
+        className={`w-full border border-white rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
+          error ? "border-red-500 bg-red-900 text-white-300" : "border-white"
         }`}
       />
       {error && error.length > 0 && (
@@ -255,7 +255,7 @@ const InputString = ({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className={`w-70 border border-amber-100 rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
+        className={`w-70 border border-white rounded p-2 focus:outline-none focus:ring-1 focus:ring-amber-100 ${
           error ? "border-red-500 bg-red-900 text-white-300" : "border-amber-100"
         }`}
       />

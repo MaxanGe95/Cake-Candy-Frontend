@@ -74,7 +74,7 @@ const OrderList = () => {
   return (
     <div className="container mx-auto">
       <table className="min-w-full text-amber-100 border rounded-md overflow-hidden">
-        <thead className="bg-teal-950">
+        <thead className="bg-teal-950/80">
           <tr>
             <th className="p-2">Kundenname</th>
             <th className="p-2">Bestellungen</th>
@@ -85,7 +85,7 @@ const OrderList = () => {
           {orders.map((customer) => (
             <React.Fragment key={customer.customerName}>
               <tr
-                className="cursor-pointer hover:bg-teal-950"
+                className="border border-amber-100 cursor-pointer hover:bg-[#7ec6cc80] shadow-md transition duration-200"
                 onClick={() => toggleCustomer(customer)}
               >
                 <td className="p-2 text-center">{customer.customerName}</td>
@@ -95,9 +95,9 @@ const OrderList = () => {
               {selectedCustomer?.customerName === customer.customerName && (
                 <tr>
                   <td colSpan="3" className="p-4">
-                    <table className="w-full bg-teal-950 rounded-md shadow-lg overflow-hidden">
-                      <thead>
-                        <tr className="bg-teal-900 text-amber-100 rounded-md">
+                    <table className="w-full bg-[#57888c]/50 rounded-[10px] shadow-xl overflow-hidden text-center">
+                      <thead className="bg-teal-950/70 text-amber-100">
+                        <tr className="shadow-xl rounded-md">
                           <th className="p-2">Datum</th>
                           <th className="p-2">Rechnungsbetrag</th>
                         </tr>
@@ -105,17 +105,17 @@ const OrderList = () => {
                       <tbody>
                         {customer.orders.sort((a, b) => new Date(b.date) - new Date(a.date)).map((order) => (
                           <React.Fragment key={order.id}>
-                            <tr className="cursor-pointer hover:bg-[#7ec6cc80] shadow-lg rounded-md" onClick={() => toggleOrder(order)}>
+                            <tr className="cursor-pointer hover:bg-[#7ec6cc80] transition duration-200 shadow-lg rounded-md" onClick={() => toggleOrder(order)}>
                               <td className="p-2 text-center">{order.date}</td>
                               
                               <td className="p-2 text-center">{order.totalPrice.toFixed(2)} $</td>
                             </tr>
                             {selectedOrder?.id === order.id && (
                               <tr>
-                                <td colSpan="3" className="p-4 bg-[#7ec6cc33] shadow-lg">
-                                  <table className="w-full bg-teal-950 text-amber-100 rounded-md shadow-lg overflow-hidden">
-                                    <thead>
-                                      <tr className="bg-teal-900">
+                                <td colSpan="3" className="p-4 shadow-lg">
+                                  <table className="w-full rounded-md shadow-lg overflow-hidden">
+                                    <thead className="bg-teal-950/60 shadow-xl text-amber-100">
+                                      <tr className="shadow-sm rounded-t-md">
                                         <th className="p-2">Produkt</th>
                                         <th className="p-2">Menge</th>
                                         <th className="p-2">EK-Preis</th>
@@ -125,7 +125,7 @@ const OrderList = () => {
                                     </thead>
                                     <tbody>
                                       {order.products.map((product) => (
-                                        <tr key={product._id || product.name} className="hover:bg-[#7ec6cc80]">
+                                        <tr key={product._id || product.name} className="shadow-sm bg-[#7ec6cc]/15 cursor-pointer transition duration-200 hover:bg-[#7ec6cc80] rounded-t-md">
                                           <td className="p-2 text-center">{product.name}</td>
                                           <td className="p-2 text-center">{product.quantity}</td>
                                           <td className="p-2 text-center">{product.ekPreis.toFixed(2)} $</td>

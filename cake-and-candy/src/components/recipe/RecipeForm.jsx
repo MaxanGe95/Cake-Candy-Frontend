@@ -199,7 +199,7 @@ const RecipeForm = ({ recipe, onSave, onCancel }) => {
             value={newRecipe.name}
             onChange={(v) => handleRecipeChange("name", v)}
             error={errors.name}
-            className=""
+            className="border-white"
           />
         </div>
         <div className="col-start-2">
